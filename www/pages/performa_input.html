@@ -1,0 +1,265 @@
+<style>
+  .custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+</style>
+<div class="page" data-name="performa_input" class="theme-dark">
+  <!-- Scrollable page content-->
+  <div class="page-content theme-dark" data-name="performa_input">
+    <!-- In data-popup attribute we specify CSS selector of popup we need to open -->
+    <!-- And somewhere in DOM -->
+    <div class="popup invoice-performa">
+      <div class="view">
+        <div class="page" style="background-color:white;">
+          <div class="page-content">
+            <div class="row">
+              <div class="col-100">
+                <div id="invoice_performa_data" style="overflow-x:auto; width:100%;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="text-align: center;" class="row no-gap bg-dark-gray-young">
+        <div class="col col-border text-bold"><a class="text-add-colour-gray" href="/">Main</a></div>
+        <div class="col col-border text-bold"><a class="text-add-colour-gray" href="/katalog">Katalog</a></div>
+        <div class="col col-border  text-bold"><a class="text-add-colour-gray" href="/kunjungan">Prospek</a></div>
+        <div class="col col-border bg-dark-gray-medium text-bold"><a class="text-add-colour-white"
+            href="/performa">Proforma</a></div>
+        <div class="col col-border text-bold"><a class="text-add-colour-gray" href="/Sales">Sales</a></div>
+      </div>
+    </div>
+    <div class="card-content" style="overflow-x:auto;  height:550px; width:99.6%; margin-top:-12px;">
+      <div class="list no-hairlines-md" style="margin-top:-2px; padding:8px;">
+        Total : Rp <i id="total_performa">0</i>
+        <form id="performa_form">
+          <input type="hidden" id="status_perusahaan" name="status_perusahaan" value="perusahaan_database">
+          <div class="list">
+            <ul>
+              <li class="perusahaan_database margin-12" style="background: linear-gradient(#015cab , #909090);">
+                <a class="item-link smart-select smart-select-init" data-open-in="popup" data-searchbar="true"
+                  data-searchbar-placeholder="Cari Perusahaan">
+                  <select name="client_id" id="client_id" required validate>
+                  </select>
+                  <div class="item-content" style="float:center;">
+                    <div class="item-inner">
+                      <div class="" style="width:100%;">
+                        <div class="item-after" style="font-size:18px; font-weight:bold; float:center; color:#e7edf2;">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li class="perusahaan_tambah item-content item-input" style="display:none;">
+                <div class="item-inner">
+                  <div class="item-input-wrap">
+                    <input class="perusahaan-tambah-input" type="text" id="client_nama" name="client_nama"
+                      placeholder="Perusahaan (Max 15 Character)" value="-" maxlength="15" required validate>
+                    <span class="input-clear-button"></span>
+                  </div>
+                </div>
+              </li>
+              <li class="perusahaan_tambah item-content item-input" style="display:none;">
+                <div class="item-inner">
+                  <div class="item-input-wrap">
+                    <input class="perusahaan-tambah-input" type="text" id="kota" name="kota" placeholder="kota"
+                      value="-" required validate>
+                    <span class="input-clear-button"></span>
+                  </div>
+                </div>
+              </li>
+              <li class="perusahaan_tambah item-content item-input" style="display:none;">
+                <div class="item-inner">
+                  <div class="item-input-wrap">
+                    <input class="perusahaan-tambah-input" type="text" id="alamat" name="alamat" placeholder="alamat"
+                      value="-" required validate>
+                    <span class="input-clear-button"></span>
+                  </div>
+                </div>
+              </li>
+              <li class="perusahaan_tambah item-content item-input" style="display:none;">
+                <div class="item-inner">
+                  <div class="item-input-wrap">
+                    <input class="perusahaan-tambah-input" type="text" id="person" name="person" placeholder="Person"
+                      value="-" required validate>
+                    <span class="input-clear-button"></span>
+                  </div>
+                </div>
+              </li>
+              <li class="perusahaan_tambah item-content item-input" style="display:none;">
+                <div class="item-inner">
+                  <div class="item-input-wrap">
+                    <input class="perusahaan-tambah-input" type="text" id="posisi" name="posisi" placeholder="Posisi"
+                      value="-" required validate>
+                    <span class="input-clear-button"></span>
+                  </div>
+                </div>
+              </li>
+              <li class="perusahaan_tambah item-content item-input" style="display:none;">
+                <div class="item-inner">
+                  <div class="item-input-wrap">
+                    <input class="perusahaan-tambah-input" type="text" id="telepon" name="telepon"
+                      placeholder="Telpon / Wa" value="-" required validate>
+                    <span class="input-clear-button"></span>
+                  </div>
+                </div>
+              </li>
+              <li class="perusahaan_tambah item-content item-input"
+                style="height:20px; background: linear-gradient(#015cab , #909090)">
+                <div class="item-inner">
+                  <div class="item-input-wrap">
+                    <center onclick="inputPerusahaan();">
+                      <i  style=" color:#b2c2d0; font-size:19px;"
+                        class="perusahaan_database f7-icons">plus_app</i>
+                      <font class="perusahaan_database" style="margin-top:6px;  font-size:20px; font-weight:bold;">
+                        Perusahaan </font>
+                    </center>
+                    <center onclick="cariPerusahaan();">
+                      <i  style="color:#b2c2d0;  display:none; font-size:19px;"
+                        class="perusahaan_tambah f7-icons">arrow_uturn_left_circle</i>
+                      <font class="perusahaan_tambah"
+                        style="color:#b2c2d0;  font-weight:bold; display:none; font-size:20px; margin-top:6px;">Cari
+                        Perusahaan </font><br>
+                      <span class="input-clear-button"></span>
+                    </center>
+                  </div>
+                </div>
+              </li>
+
+
+
+            </ul>
+          </div>
+          <input id="count_performa" name="count_performa" type="hidden" />
+          <input id="total_performa_sum" name="total_performa_sum" type="hidden" />
+          <input id="total_performa_qty" name="total_performa_qty" type="hidden" />
+          <h3 id="title_1" class="margin-27 title-performa">Proforma #1</h3>
+          <ul id="performa_1" class="performa_group_field_count"
+            style="background-color:#1c1c1d; border-radius:2px; margin-top:-12px; border:1px solid gray; ">
+            <li class="item-content item-input margin-16">
+              <div class="item-inner">
+                <div class="item-input-wrap">
+                  <br>
+                  <center>
+                    <label style="width:30%; height:30px;  float:left; margin-bottom:11px;" for="file_1"
+                      id="value_performa_1"
+                      class="margin-2 text-add-colour-black-soft bg-dark-gray-young button-small col button text-bold custom-file-upload value_performa">
+                      Gambar
+                    </label>
+                    <input
+                      class="performa-input input-item-file text-add-colour-black-soft bg-dark-gray-young button-small col button popup-open text-bold"
+                      type="file" style="display:none;" onchange="gambarPerforma(1);" name="file_1" id="file_1"
+                      accept="image/*;capture=camera" required validate></center><span
+                    class="input-clear-button"></span>
+                </div>
+              </div>
+            </li>
+            <li class="item-content item-input margin-8">
+              <div class="item-inner" style="height:8px;">
+                <div class="item-input-wrap"><input placeholder="Type" name="jenis_1" id="jenis_1"
+                    class="performa-input input-item-jenis text-add-colour-black-soft bg-dark-gray-young button-small text-bold"
+                    type="text" required validate><span class="input-clear-button"></span></div>
+              </div>
+            </li>
+            <li class="item-content item-input margin-4">
+              <div class="item-inner">
+                <div class="item-input-wrap"><textarea style="border-color:white;" id="keterangan_full_1"
+                    name="keterangan_full_1" class="performa-input input-item-ket-full resizable" placeholder="Detail"
+                    required validate></textarea><span class="input-clear-button"></span></div>
+              </div>
+            </li>
+            <li class="item-content item-input margin-4">
+              <div class="item-inner">
+                <div class="item-input-wrap"><textarea style="border-color:white;" id="keterangan_singkat_1"
+                    name="keterangan_singkat_1" class="performa-input input-item-keterangan-singkat resizable"
+                    placeholder="Keterangan"></textarea><span class="input-clear-button"></span></div>
+              </div>
+            </li>
+            <li class="item-content item-input margin-8">
+              <div class="item-inner" style="height:8px;">
+                <div class="item-input-wrap"><input placeholder="Qty" name="qty_1" id="qty_1"
+                    onchange="changeTotalValue(1);" min="1"
+                    class="performa-input input-item-qty text-add-colour-black-soft bg-dark-gray-young button-small text-bold"
+                    type="number" required validate><span class="input-clear-button"></span></div>
+              </div>
+            </li>
+            <li class="item-content item-input margin-5">
+              <div class="item-inner">
+                <div class="item-input-wrap"><input placeholder="Harga" name="price_1" id="price_1"
+                    onchange="changeTotalValue(1);"
+                    class="performa-input input-item-price text-add-colour-black-soft bg-dark-gray-young button-small text-bold"
+                    type="text" required validate><span class="input-clear-button"></span></div>
+              </div>
+            </li>
+            <li class="item-content item-input margin-8">
+              <div class="item-inner">
+                <div class="item-input-wrap" style="margin-bottom:5px;"><input placeholder="Total" name="total_1"
+                    id="total_1"
+                    class="performa-input input-item-total total-value text-add-colour-black-soft bg-dark-gray-young button-small text-bold"
+                    type="text" readonly><span class="input-clear-button"></span></div>
+              </div>
+            </li>
+            <p style="padding-top:5px;"><a id="add_performa" onclick="addPerforma();"
+                style="float:right; font-size:39px;  margin-bottom:10px; margin-right:14px; margin-top:-27px;  color:forestgreen;"
+                class="add_performa f7-icons">plus_rectangle_fill</a> </p>
+
+
+          </ul>
+          <div class="performa_group_field">
+          </div>
+          <ul style="margin-top:10px;">
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-input-wrap">
+                  <input placeholder="Biaya Kirim (Kosongkan Jika Tidak Perlu)" name="biaya_kirim" id="biaya_kirim"
+                    class="performa-input input-item-biaya-kirim" type="text"><span class="input-clear-button"></span>
+                </div>
+              </div>
+            </li>
+          </ul>
+          <h3 style="margin-top:6px;">Logo</h3>
+          <center>
+            <label style="width:35%;" for="customer_logo" id="value_customer_logo"
+              class="margin-12 text-add-colour-black-soft bg-dark-gray-young button-small col button text-bold custom-file-upload">
+              Logo Emblem
+            </label>
+            <input onchange="logoPerusahaan();" style="display:none;" id="customer_logo" type="file"
+              name="customer_logo" id="customer_logo" accept="image/*;capture=camera" required validate />
+            <br>
+            <label style="width:35%;" for="customer_logo_bordir" id="value_customer_logo_bordir"
+              class="margin-12 text-add-colour-black-soft bg-dark-gray-young button-small col button text-bold custom-file-upload">
+              Logo Bordir
+            </label>
+            <input onchange="logoPerusahaanBordir();" style="display:none;" id="customer_logo_bordir" type="file"
+              name="customer_logo_bordir" id="customer_logo_bordir" accept="image/*;capture=camera" required validate />
+            <br>
+
+            <label style="width:35%;" for="customer_logo_tambahan" id="value_customer_logo_tambahan"
+              class="margin-12 text-add-colour-black-soft bg-dark-gray-young button-small col button text-bold custom-file-upload">
+              Logo Tambah
+            </label>
+            <input onchange="logoPerusahaanTambahan();" style="display:none;" id="customer_logo_tambahan" type="file"
+              name="customer_logo_tambahan" id="customer_logo_tambahan" accept="image/*;capture=camera" />
+          </center>
+        </form>
+        <center>
+          <br><br>
+          <button onclick="performaProcess();" style="width:25%;"
+            class="margin-12 text-add-colour-black-soft bg-dark-gray-young button-small col button text-bold"
+            id="performa_button_save">Simpan
+          </button>
+        </center>
+        <div id="cetak_invoice" style="display:none;">
+          <h4> Proforma Berhasil Di Inputkan, Klik <i id="alert_performa_invoice"></i> Untuk Cetak Invoice</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

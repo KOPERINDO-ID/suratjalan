@@ -1,0 +1,229 @@
+<div class="page" data-name="produksi-selesai" class="theme-dark">
+  <!-- Scrollable page content-->
+  <div class="page-content theme-dark">
+    <!-- In data-popup attribute we specify CSS selector of popup we need to open -->
+    <!-- And somewhere in DOM -->
+
+    <div class="popup detail-sales-produksi-selesai">
+      <div class="view">
+        <div class="page">
+          <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner bg-dark-gray-medium">
+              <div class="title">Detail SPK</div>
+              <div class="right">
+                <!-- Link to close popup -->
+                <p class="text-add-colour-white link popup-close"><i style="margin-right:5px;" class="f7-icons">xmark_rectangle_fill</i></p>
+              </div>
+            </div>
+          </div>
+          <div class="page-content">
+            <div class="card card-outline margin-top">
+              <div class="card-content">
+                <div class="row">
+                  <div class="col-100">
+                    <div class="card-content" style="overflow-x:auto; width:100%;">
+                      <table width="450px">
+                        <tbody>
+                          <div class="card" id="detail_sales_data_produksi_selesai">           
+                          </div>
+                        </tbody>
+                      </table>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="popup detail-custom-keterangan3">
+      <div class="view">
+        <div class="page">
+          <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner bg-dark-gray-medium">
+              <div class="right">
+                <!-- Link to close popup -->
+                <p id="backbutton" class="text-add-colour-white link popup-close"><i style="margin-right:5px;" class="f7-icons">xmark_rectangle_fill</i></p>
+              </div>
+            </div>
+          </div>
+          <div class="page-content">
+            <div class="card card-outline margin-top bg-dark-gray-medium">
+              <div class="card-content">
+                <div class="row">
+                  <div class="col-100">
+                   <div class="card">       
+                     <h3 class="text-align-center">Spesifikasi<div id="product-detail-id"></div></h3>
+                     <div class="card-content" style="overflow-x:auto; width:100%;">
+                       <table  align="center" width="700px" border="0" style="border-collapse: collapse;">
+                         <tbody> 
+                          <tr>
+                            <td id="detail_custom_keterangan3">
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <br>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="popup detail-keterangan3">
+    <div class="view">
+      <div class="page">
+        <div class="navbar">
+          <div class="navbar-bg"></div>
+          <div class="navbar-inner bg-dark-gray-medium">
+            <div class="right">
+              <!-- Link to close popup -->
+              <p id="backbutton" class="text-add-colour-white link popup-close"><i style="margin-right:5px;" class="f7-icons">xmark_rectangle_fill</i></p>
+            </div>
+          </div>
+        </div>
+        <div class="page-content">
+          <div class="card card-outline margin-top bg-dark-gray-medium">
+            <div class="card-content">
+              <div class="row">
+                <div class="col-100">
+                 <div class="card">       
+                   <h3 class="text-align-center">Keterangan<div id="product-detail-id"></div></h3>
+                   <div class="card-content" style="overflow-x:auto; width:100%;">
+                     <table  align="center" width="700px" border="0" style="border-collapse: collapse;">
+                       <tbody> 
+                        <tr>
+                          <td id="detail_keterangan3">
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <br>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card table-color-red border-actived" style="height:30px;">
+  <marquee direction="left" style="vertical-align:middle; " id="data_produksi_telat4">
+  </marquee>
+</div>
+<div class="card  margin-3">
+  <div style="text-align: center;" class="row no-gap bg-dark-gray-young">
+    <div class="col col-border text-bold"><a class="text-add-colour-gray" href="/produksi">SPK</a></div>
+    <div class="col col-border  text-bold"><a class="text-add-colour-gray" href="/produksi-proses">Proses</a></div>
+    <div class="col col-border bg-dark-gray-medium  text-bold"><a class="text-add-colour-white" href="/produksi-selesai">Hasil Selesai</a></div>
+    <div class="col col-border text-bold"><a class="text-add-colour-gray" href="/produksi-harian">Hasil Harian</a></div>
+  </div>
+</div>
+
+<div class="list no-hairlines-md margin-1" style="z-index: 0 !important;">
+  <ul>
+    <li  style="padding-left:16px; margin-bottom:-25px; margin-top:-5px;">
+      <h3></h3>
+    </li>
+    <li>
+      <div class="item-content item-input">
+        <div class="item-inner">
+          <div class="item-input-wrap" style="margin-top:-10px; width:100%;">
+            <table  width="100%">
+              <tr>
+                <td width="81%">
+                  <input   type="text" placeholder=" Range Tanggal" readonly="readonly" id="range-produksi-selesai" name="range-produksi-selesai"/>
+                </td>
+                <td width="19%">
+                  <img onclick="reportProduksiSelesai();" style="border-radius:10px;" src="img/logo/logo_download.jpg" width="100%"/>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </li> 
+    <li class="item-content item-input">
+      <div class="item-inner">
+      <div class="item-input-wrap" style="margin-bottom:9px; margin-top:-15px;">
+         <table  width="100%">
+          <tr>
+            <td width="81%">
+              <input type="text" id="perusahaan_produksi_selesai_filter" name="perusahaan_produksi_selesai_filter" placeholder=" Cari Perusahaan">
+            </td>
+            <td width="19%" align="right">
+             <i class="f7-icons" onclick="doSearchProduksiSelesaiByPerusahaan();" style="font-size:30px;">search_circle</i>
+           </td>
+         </tr>
+       </table>
+     </div>
+   </div>
+ </li>
+</ul>
+</div>
+
+
+
+<div class="card" style="margin-top:-47px;">
+  <table width="100%;" cellspacing="0"  cellpadding="1" style="border-color:gray; margin-bottom:10px;">
+    <tr class="bg-dark-gray-young">
+      <th style="padding:4px;" colspan="9" align="left">
+        Data Produksi Selesai
+      </th>
+    </tr>
+  </table>
+  <div class="card-content" style="overflow-x:auto;  height:415px; width:99.6%; margin-top:-12px;">
+
+    <table cellspacing="1"  cellpadding="1" style="border-collapse: collapse; border-color:gray;"  width="800px" >
+      <thead class="bg-dark-gray-medium text-align-center">
+
+        <!-- <tr>
+          <th colspan="14" style="padding-left:10px;" class="text-align-left label-cell">
+           Halaman : <i  id="current_page"> </i>
+           <br>
+           Data Ke : <i  id="from_data"> </i> - <i  id="to_data"> </i>
+         </th> -->
+         
+         <tr style="background:linear-gradient(#067afb , #002b46); /* Standard syntax */ background: -webkit-linear-gradient(#067afb , #002b46); /* For Safari 5.1 to 6.0 */ background: -o-linear-gradient(#067afb , #002b46); /* For Opera 11.1 to 12.0 */ background: -moz-linear-gradient(#067afb , #002b46); /* For Firefox 3.6 to 15 */ color:white;">
+          <th class="label-cell" style="border-top: solid 1px; border-left: solid 1px;  border-color:black; font-weight:bold;" align="center" width="5%">No</th>
+          <th class="label-cell" style="border-top: solid 1px; border-left: solid 1px;  border-color:black; font-weight:bold;" width="9%">Dateline</th>
+          <th class="label-cell"  style="border-top: solid 1px; border-left: solid 1px;  border-color:black; font-weight:bold;"width="9%">SPK</th>
+          <th class="label-cell" style="border-top: solid 1px; border-left: solid 1px;  border-color:black; font-weight:bold;" width="15%">Nama</th>
+          <th class="label-cell" style="border-top: solid 1px; border-left: solid 1px;  border-color:black; font-weight:bold;" width="13%">Type</th>
+          <th class="label-cell" style="border-top: solid 1px; border-left: solid 1px;  border-color:black; font-weight:bold;" width="5%">Jumlah</th>
+          <th class="label-cell" style="border-top: solid 1px; border-left: solid 1px;  border-color:black; font-weight:bold;" width="16%">Spesifikasi</th>
+          <th class="label-cell" style="border-top: solid 1px; border-left: solid 1px;  border-color:black; font-weight:bold;" width="17%">Keterangan</th>
+        </tr>
+      </thead>
+      <tbody class="text-align-center" id="produk_data_selesai">
+      </tbody>
+    </table>
+
+
+        <!-- <tfoot class="bg-dark-gray-medium text-align-center">
+          <tr>
+            <th id="html-content-holder" colspan="14" class="label-cell">
+              Total Data : <i class="text-align-center" id="total_data"> </i>
+            </th>
+          </tr>
+        </tfoot> -->
+      </table>
+      <div style="margin:5px; font-size:20px;" id="pagination_button" class="text-align-center">
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>

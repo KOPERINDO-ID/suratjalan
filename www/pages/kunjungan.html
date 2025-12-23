@@ -1,0 +1,385 @@
+<div class="page" data-name="kunjungan" class="theme-dark">
+  <!-- Scrollable page content-->
+  <div class="page-content theme-dark">
+    <!-- In data-popup attribute we specify CSS selector of popup we need to open -->
+    <!-- And somewhere in DOM -->
+    <div class="popup update-prospek">
+      <div class="view">
+        <div class="page">
+          <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner bg-dark-gray-medium">
+              <div class="title">Update Prospek</div>
+              <div class="right">
+                <!-- Link to close popup -->
+                <p class="text-add-colour-white link popup-close">
+                  <i style="margin-right:5px;" class="f7-icons">xmark_rectangle_fill</i>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="page-content">
+            <div class="card card-outline margin-top bg-dark-gray-medium">
+              <div class="card-content">
+                <div class="row">
+                  <div class="col-100">
+                    <div class="card">
+                      <form id="update_prospek_form">
+                        <input style="width:100%;" id="kunjungan_detail_id_update" name="kunjungan_detail_id_update"
+                          class="prospek-update textbox-n" type="text">
+                        <div class="card-content" style="overflow-x:auto; width:100%;">
+                          <table width="320px" style="border-spacing: 0;">
+                            <tbody>
+                              <tr>
+                                <td style="border-bottom: 1px solid gray;" class="numeric-cell text-align-left">
+                                  Perusahaan
+                                </td>
+                                <td style="border-bottom: 1px solid gray;" class="numeric-cell">:</td>
+                                <td align="right" style="border-bottom: 1px solid gray;"
+                                  id="popup-prospek-td-client_nama" class="numeric-cell"></td>
+                              </tr>
+                              <tr>
+                                <td style="border-bottom: 1px solid gray;" class="numeric-cell text-align-left">Kota
+                                </td>
+                                <td style="border-bottom: 1px solid gray;" class="numeric-cell">:</td>
+                                <td align="right" style="border-bottom: 1px solid gray;" id="popup-prospek-client_kota"
+                                  class="numeric-cell"></td>
+                              </tr>
+                              <tr>
+                                <td style="border-bottom: 1px solid gray;" class="numeric-cell text-align-left">Person
+                                </td>
+                                <td style="border-bottom: 1px solid gray;" class="numeric-cell">:</td>
+                                <td align="right" style="border-bottom: 1px solid gray;"
+                                  id="popup-prospek-client_person" class="numeric-cell"></td>
+                              </tr>
+                              <tr>
+                                <td style="border-bottom: 1px solid gray;" class="numeric-cell text-align-left">Posisi
+                                </td>
+                                <td style="border-bottom: 1px solid gray;" class="numeric-cell">:</td>
+                                <td align="right" style="border-bottom: 1px solid gray;"
+                                  id="popup-prospek-client_posisi" class="numeric-cell"></td>
+                              </tr>
+                              <tr>
+                                <td style="border-bottom: 1px solid gray;" class="numeric-cell text-align-left">Telpon /
+                                  Wa</td>
+                                <td style="border-bottom: 1px solid gray;" class="numeric-cell">:</td>
+                                <td align="right" style="border-bottom: 1px solid gray;"
+                                  id="popup-prospek-client_telpon" class="numeric-cell"></td>
+                              </tr>
+                              <tr>
+                                <td style="border-bottom: 1px solid gray;" class="numeric-cell text-align-left">
+                                  Komunikasi
+                                </td>
+                                <td style="border-bottom: 1px solid gray;" class="numeric-cell">:</td>
+                                <td align="right" style="border-bottom: 1px solid gray;" class="numeric-cell"
+                                  id="popup-prospek-tgl-komunikasi"></td>
+                              </tr>
+                              <tr>
+                                <td colspan="3" class="numeric-cell text-align-left">
+                                  <textarea style="padding:10px; width:100%; background-color:lightgray; color:black;"
+                                    id="popup-prospek-hasil-komunikasi" class="input-item-keterangan resizable"
+                                    readonly></textarea>
+                                </td>
+                              </tr>
+                              <div class="pertemuan_1_section">
+                                <tr>
+                                  <td style=" padding-top:9px; padding-bottom:9px;"
+                                    class="numeric-cell text-align-left">
+                                    Pertemuan 1</td>
+                                  <td class="numeric-cell">:</td>
+                                  <td class="numeric-cell" style="border:1px solid white;">
+                                    <input style="  text-align: center; width:100%;" placeholder="Tidak Ada"
+                                      id="tanggal_status1_update" class="data-table numeric-cell prospek-update"
+                                      type="date" name="tanggal_status1_update">
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    <center>
+                                      <label onclick="openCamera('file_selfie_card_1');"
+                                        style="width:80%; height:30px;  float:left; margin-bottom:11px;"
+                                        id="file_selfie_card_1"
+                                        class="margin-2 text-add-colour-black-soft bg-dark-gray-young button-small col button text-bold custom-file-upload">
+                                        Foto Selfie
+                                      </label>
+                                    </center>
+                                    <center>
+                                      <img onclick="zoom_view(this.src);" width="100px" style="border-radius:10px;"
+                                        id="file_selfie_card_1_view" />
+                                      <br>
+                                      <font class="keterangan_foto1" style="display:none;">Selfie</font>
+                                    </center>
+                                  </td>
+                                  <td>
+                                  </td>
+                                  <td>
+                                    <center>
+                                      <label onclick="openCamera('file_id_card_1');"
+                                        style="width:75%; height:30px;  float:left; margin-bottom:11px;"
+                                        id="file_id_card_1"
+                                        class="margin-2 text-add-colour-black-soft bg-dark-gray-young button-small col button text-bold custom-file-upload">
+                                        Foto ID Card
+                                      </label>
+                                    </center>
+                                    <center>
+                                      <img onclick="zoom_view(this.src);" width="100px" style="border-radius:10px;"
+                                        id="file_id_card_1_view" />
+                                      <br>
+                                      <font class="keterangan_foto1" style="display:none;">ID Card</font>
+                                    </center>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td colspan="3" class="numeric-cell text-align-left">
+                                    <textarea style="padding:10px; width:100%; background-color:lightgray; color:black;"
+                                      name="hasil_pertemuan1_update" id="hasil_pertemuan1_update"
+                                      class="prospek-update input-item-keterangan-update resizable"></textarea>
+                                  </td>
+                                </tr>
+                              </div>
+
+                              <div>
+                                <tr class="pertemuan_2_section">
+                                  <td style="padding-top:9px; padding-bottom:9px;" class="numeric-cell text-align-left">
+                                    Pertemuan 2</td>
+                                  <td class="numeric-cell">:</td>
+                                  <td align="right" class="numeric-cell" style="border:1px solid white;">
+                                    <input name="tanggal_status2_update" style="text-align: center; width:100%;"
+                                      placeholder="Tidak Ada" id="tanggal_status2_update"
+                                      class="prospek-update textbox-n" type="date">
+                                  </td>
+                                </tr>
+                                <tr class="pertemuan_2_section">
+                                  <td>
+                                    <center>
+                                      <label onclick="openCamera('file_selfie_card_2');"
+                                        style="width:80%; height:30px;  float:left; margin-bottom:11px;"
+                                        id="file_selfie_card_2"
+                                        class="margin-2 text-add-colour-black-soft bg-dark-gray-young button-small col button text-bold custom-file-upload">
+                                        Foto Selfie
+                                      </label>
+                                    </center>
+                                    <center>
+                                      <img onclick="zoom_view(this.src);" width="100px" style="border-radius:10px;"
+                                        id="file_selfie_card_2_view" />
+                                      <br>
+                                      <font class="keterangan_foto2" style="display:none;">Selfie</font>
+                                    </center>
+                                  </td>
+                                  <td>
+                                  </td>
+                                  <td>
+                                    <center>
+                                      <label onclick="openCamera('file_id_card_2');"
+                                        style="width:75%; height:30px;  float:left; margin-bottom:11px;"
+                                        id="file_id_card_2"
+                                        class="margin-2 text-add-colour-black-soft bg-dark-gray-young button-small col button text-bold custom-file-upload">
+                                        Foto ID Card
+                                      </label>
+                                    </center>
+                                    <center>
+                                      <img onclick="zoom_view(this.src);" width="100px" style="border-radius:10px;"
+                                        id="file_id_card_2_view" />
+                                      <br>
+                                      <font class="keterangan_foto2" style="display:none;">ID Card</font>
+                                    </center>
+                                  </td>
+                                </tr>
+                                <tr class="pertemuan_2_section">
+                                  <td colspan="3" class="numeric-cell text-align-left">
+                                    <textarea name="hasil_pertemuan2_update"
+                                      style="padding:10px; width:100%; background-color:lightgray; color:black;"
+                                      id="hasil_pertemuan2_update"
+                                      class="prospek-update input-item-keterangan-update resizable"></textarea>
+                                  </td>
+                                </tr>
+                              </div>
+
+                              <div>
+                                <tr class="pertemuan_3_section">
+                                  <td style="padding-top:9px; padding-bottom:9px;" class="numeric-cell text-align-left">
+                                    Pertemuan 3</td>
+                                  <td class="numeric-cell">:</td>
+                                  <td align="right" class="numeric-cell" style="border:1px solid white;">
+                                    <input style="width:100%; text-align: center;" placeholder="Tidak Ada"
+                                      id="tanggal_status3_update" name="tanggal_status3_update"
+                                      class="prospek-update textbox-n" type="date">
+                                  </td>
+                                </tr>
+                                <tr class="pertemuan_3_section">
+                                  <td>
+                                    <center>
+                                      <label onclick="openCamera('file_selfie_card_3');"
+                                        style="width:80%; height:30px;  float:left; margin-bottom:11px;"
+                                        id="file_selfie_card_3"
+                                        class="margin-2 text-add-colour-black-soft bg-dark-gray-young button-small col button text-bold custom-file-upload">
+                                        Foto Selfie
+                                      </label>
+                                    </center>
+                                    <center>
+                                      <img onclick="zoom_view(this.src);" width="100px" style="border-radius:10px;"
+                                        id="file_selfie_card_3_view" />
+                                      <br>
+                                      <font class="keterangan_foto3" style="display:none;">Selfie</font>
+                                    </center>
+                                  </td>
+                                  <td>
+                                  </td>
+                                  <td>
+                                    <center>
+                                      <label onclick="openCamera('file_id_card_3');"
+                                        style="width:75%; height:30px;  float:left; margin-bottom:11px;"
+                                        id="file_id_card_3"
+                                        class="margin-2 text-add-colour-black-soft bg-dark-gray-young button-small col button text-bold custom-file-upload">
+                                        Foto ID Card
+                                      </label>
+                                    </center>
+                                    <center>
+                                      <img onclick="zoom_view(this.src);" width="100px" style="border-radius:10px;"
+                                        id="file_id_card_3_view" />
+                                      <br>
+                                      <font class="keterangan_foto3" style="display:none;">ID Card</font>
+                                    </center>
+                                  </td>
+                                </tr>
+                                <tr class="pertemuan_3_section">
+                                  <td colspan="3" class="numeric-cell text-align-left">
+                                    <textarea style="padding:10px; width:100%; background-color:lightgray; color:black;"
+                                      name="hasil_pertemuan3_update" id="hasil_pertemuan3_update"
+                                      class="input-item-keterangan-update resizable"></textarea>
+                                  </td>
+                                </tr>
+                              </div>
+
+                            </tbody>
+                          </table>
+                        </div>
+                        <br>
+                        <table width="320px" style="margin-top:-20px;" class="div_janjian">
+                          <tr>
+                            <td width="30%">
+                              Tgl Janjian
+                            </td>
+                            <td width="10%" align="right">
+                              :
+                            </td>
+                            <td width="60%" style="border:1px solid white; padding:8px;">
+                              <input style="width:100%;" class="prospek-input" name="tanggal_janjian_update"
+                                placeholder="Tanggal Janjian" id="tanggal_janjian_update" class="textbox-n" type="text"
+                                onfocus="(this.type='date')" required validate>
+                            </td>
+                          </tr>
+                        </table>
+                      </form>
+                      <br>
+                      <button id="btn_update_proses" onclick="updateProspekProcess()"
+                        class="text-add-colour-black-soft bg-dark-gray-young button-small col button popup-open text-bold">Update</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="text-align: center;" class="row no-gap bg-dark-gray-young">
+        <div class="col col-border text-bold"><a class="text-add-colour-gray" href="/">Main</a></div>
+        <div class="col col-border text-bold"><a class="text-add-colour-gray" href="/katalog">Katalog</a></div>
+        <div class="col col-border text-bold bg-dark-gray-medium"><a class="text-add-colour-white"
+            href="/kunjungan">Prospek</a></div>
+        <div class="col col-border text-bold"><a class="text-add-colour-gray" href="/performa">Proforma</a></div>
+        <div class="col col-border text-bold"><a class="text-add-colour-gray" href="/Sales">Sales</a></div>
+      </div>
+    </div>
+    <div class="card-content" style="overflow-x:auto;  height:550px; width:99.6%; margin-top:-12px;">
+      <div class="list no-hairlines-md margin-1">
+        <ul>
+          <li>
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-input-wrap" style="width:100%;">
+                  <table width="100%">
+                    <tr>
+                      <td width="81%">
+                        <input type="text" placeholder="Range Tanggal" readonly="readonly" id="range-prospek"
+                          name="range-prospek" />
+                      </td>
+                      <td width="19%">
+                        <img onclick="exportProspekReport();" style="border-radius:10px;"
+                          src="img/logo/logo_download.jpg" width="100%" />
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-input-wrap" style="margin-top:-12px;">
+                <table width="100%">
+                  <tr>
+                    <td width="81%">
+                      <input type="text" style="width:75%;" id="perusahaan_prospek_filter"
+                        name="perusahaan_prospek_filter" placeholder=" Perusahaan">
+                    </td>
+                    <td width="19%" align="right">
+                      <i class="f7-icons" onclick="doSearchByPerusahaanKunjungan();"
+                        style="font-size:30px;">search_circle</i>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="card margin-23 border-actived">
+        <div class="card-header bg-dark-gray-young">
+          <div class="data-table-title" style="height:5px; margin-left:6px;">
+            <h3 class="margin-15">Data Prospek</h3>
+          </div>
+          <a href="/kunjungan-input" style="font-size:39px; color:forestgreen;" class="f7-icons">plus_rectangle_fill</a>
+        </div>
+        <div class="card-content" style="overflow-x:auto; width:100%; height:360px;">
+          <table cellspacing="1" cellpadding="1" width="725px" style="border-color:#1c1c1d;">
+            <thead class="bg-dark-gray-medium text-align-center">
+              <tr>
+                <th colspan="9" style="padding-left:10px;" class="text-align-left label-cell">
+                  Halaman : <i id="current_page"> </i>
+                </th>
+              </tr>
+              <tr>
+                <th class="" style="border-bottom :1px solid gray;" width="20%">Perusahaan</th>
+                <th class="" style="border-bottom :1px solid gray;" width="12%">Prospek</th>
+                <!--
+        <th class="" width="20%"><h3>Perusahaan</h3></th>
+      -->
+                <th class="" width="13%" style="border-bottom :1px solid gray;">*</th>
+                <th class="" width="13%" style="border-bottom :1px solid gray;">1</th>
+                <th class="" width="13%" style="border-bottom :1px solid gray;">2</th>
+                <th class="" width="13%" style="border-bottom :1px solid gray;">3</th>
+                <th class="" width="7%" style="border-bottom :1px solid gray;">Status</th>
+                <th class="" width="13%" style="border-bottom :1px solid gray;" colspan="2"> Opsi
+                </th>
+              </tr>
+            </thead>
+            <tbody class="text-align-center" id="prospek_value">
+            </tbody>
+            <tfoot class="bg-dark-gray-medium text-align-center">
+              <tr>
+                <th id="html-content-holder" colspan="9" class="label-cell">
+                  Total Data : <i class="text-align-center" id="total_data"> </i>
+                </th>
+              </tr>
+            </tfoot>
+          </table>
+          <div style="margin:5px; font-size:20px;" id="pagination_button" class="text-align-center">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

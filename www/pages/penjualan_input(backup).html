@@ -1,0 +1,102 @@
+
+<div class="page" data-name="penjualan_input" class="theme-dark">
+ <!-- Scrollable page content-->
+ <div class="page-content theme-dark">
+   <div class="popup detail-performa">
+    <div class="view">
+      <div class="page">
+        <div class="navbar">
+          <div class="navbar-bg"></div>
+          <div class="navbar-inner bg-dark-gray-medium">
+            <div class="title">Detail Performa</div>
+            <div class="right">
+              <!-- Link to close popup -->
+              <p class="text-add-colour-white link popup-close">
+                <i style="margin-right:5px;" class="f7-icons">xmark_rectangle_fill</i>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="page-content">
+          <div class="card card-outline margin-top">
+            <div class="card-content card-content-padding">
+              <div class="row">
+                <div class="col-100">
+                  <h2 class="text-add-colour-white text-align-center margin-10" style="margin-bottom: 0;">
+                    Detail Performa
+                  </h2>
+                  <div class="card data-table" id="performa_data">
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- In data-popup attribute we specify CSS selector of popup we need to open -->
+  <!-- And somewhere in DOM -->
+  <div class="card" >
+   <div style="text-align: center;" class="row no-gap bg-dark-gray-young">
+    <div class="col col-border text-bold"><a class="text-add-colour-gray" href="/">Main</a></div>
+    <div class="col col-border text-bold"><a class="text-add-colour-gray" href="/katalog">Katalog</a></div>
+    <div class="col col-border  text-bold"><a class="text-add-colour-gray" href="/kunjungan">Prospek</a></div>
+    <div class="col col-border text-bold"><a class="text-add-colour-gray" href="/performa">Performa</a></div>
+    <div class="col col-border bg-dark-gray-medium text-bold"><a class="text-add-colour-white" href="/Sales">Sales</a></div>
+  </div>
+</div>
+<div class="card" >
+  <div style="text-align: center;" class="row no-gap">
+    <div class="bg-dark-gray-young  col col-border text-bold text-add-colour-white"><a class="text-add-colour-gray" href="/penjualan-input">Performa</a></div>
+    <div class="col col-border text-bold"><a class="text-add-colour-gray" href="/penjualan-input-non-performa">Non Performa</a></div>
+  </div>
+</div>
+<div class="list no-hairlines-md margin-3">
+  <ul>
+    <form id="penjualan_form">
+      <li class="item-content item-input">
+        <div class="item-inner">
+          <div class="item-input-wrap">
+            <input id="jenis_penjualan" name="jenis_penjualan" value="performa" type="hidden"/>
+            <input type="text" id="performa" name="performa" placeholder="Masukan Kode Performa" required validate>
+            <span class="input-clear-button"></span>
+            <center>
+              <i  style="width:50%;" class="text-add-colour-black-soft bg-dark-gray-young button-small popup-open col button popup-open text-bold" id="performa_search" data-popup=".detail-performa">Lihat Performa</i>
+            </center>
+          </div>
+        </div>
+      </li>
+      <li class="item-content item-input">
+        <div class="item-inner">
+          <div class="item-input-wrap">
+            <input placeholder="Tanggal Pemesanan" id="tanggal_pemesanan"  class="performa-input textbox-n" type="text" onfocus="(this.type='date')"  name="tanggal_pemesanan" required validate> 
+            <span class="input-clear-button"></span>
+          </div>
+        </div>
+      </li>
+      <li class="item-content item-input">
+        <div class="item-inner">
+          <div class="item-input-wrap">
+            <input placeholder="Tanggal Kirim" id="tanggal_kirim" class="performa-input textbox-n" type="text" onfocus="(this.type='date')"  name="tanggal_kirim"> 
+            <span class="input-clear-button"></span>
+          </div>
+        </div>
+      </li>
+    </form>
+    <li class="item-content item-input">
+      <div class="item-inner">
+        <div class="item-input-wrap">
+          <center>
+            <button  onclick="penjualanProcess();" style="width:50%;" class="text-add-colour-black-soft bg-dark-gray-young button-small col button text-bold" id="penjualan_save">Simpan
+            </button>
+          </center>
+          <span class="input-clear-button"></span>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+</div>
+</div>

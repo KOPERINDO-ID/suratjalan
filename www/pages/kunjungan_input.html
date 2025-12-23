@@ -1,0 +1,149 @@
+<div class="page" data-name="prospek_input" class="theme-dark">
+  <!-- Scrollable page content-->
+
+  <div class="page-content theme-dark">
+    <!-- In data-popup attribute we specify CSS selector of popup we need to open -->
+    <!-- And somewhere in DOM -->
+    <div class="card">
+      <div style="text-align: center;" class="row no-gap bg-dark-gray-young">
+        <div class="col col-border text-bold"><a class="text-add-colour-gray" href="/">Main</a></div>
+        <div class="col col-border text-bold"><a class="text-add-colour-gray" href="/katalog">Katalog</a></div>
+        <div class="col col-border bg-dark-gray-medium  text-bold"><a class="text-add-colour-white"
+            href="/kunjungan">Prospek</a></div>
+        <div class="col col-border text-bold"><a class="text-add-colour-gray" href="/performa">Proforma</a></div>
+        <div class="col col-border text-bold"><a class="text-add-colour-gray" href="/Sales">Sales</a></div>
+      </div>
+    </div>
+    <form id="prospek_form">
+      <input type="hidden" id="status_perusahaan" name="status_perusahaan" value="perusahaan_database">
+      <div class="list">
+        <ul>
+          <li class="perusahaan_database margin-12">
+            <a class="item-link smart-select smart-select-init" data-open-in="popup" data-searchbar="true"
+              data-searchbar-placeholder="Cari Perusahaan">
+              <select name="client_id_kunjungan" id="client_id_kunjungan" required validate>
+              </select>
+              <div class="item-content" style="float:center;">
+                <div class="item-inner">
+                  <div class="" style="width:100%;">
+                    <div class="item-after-kunjungan" style="font-size:17px; font-weight:bold; float:left;"></div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li class="perusahaan_tambah item-content item-input margin-10" style="display:none;">
+            <div class="item-inner">
+              <div class="item-input-wrap">
+                <input class="perusahaan-tambah-input" type="text" id="client_nama" name="client_nama"
+                  placeholder="Perusahaan (Max 15 Character)" maxlength="15" value="-" required validate>
+                <span class="input-clear-button"></span>
+              </div>
+            </div>
+          </li>
+          <li class="perusahaan_tambah item-content item-input margin-10" style="display:none;">
+            <div class="item-inner">
+              <div class="item-input-wrap">
+                <input class="perusahaan-tambah-input" type="text" id="kota" name="kota" placeholder="kota" value="-"
+                  required validate>
+                <span class="input-clear-button"></span>
+              </div>
+            </div>
+          </li>
+          <li class="perusahaan_tambah item-content item-input margin-10" style="display:none;">
+            <div class="item-inner">
+              <div class="item-input-wrap">
+                <input class="perusahaan-tambah-input" type="text" id="alamat" name="alamat" placeholder="alamat"
+                  value="-" required validate>
+                <span class="input-clear-button"></span>
+              </div>
+            </div>
+          </li>
+          <li class="perusahaan_tambah item-content item-input margin-10" style="display:none;">
+            <div class="item-inner">
+              <div class="item-input-wrap">
+                <input class="perusahaan-tambah-input" type="text" id="person" name="person" placeholder="Person"
+                  value="-" required validate>
+                <span class="input-clear-button"></span>
+              </div>
+            </div>
+          </li>
+          <li class="perusahaan_tambah item-content item-input margin-10" style="display:none;">
+            <div class="item-inner">
+              <div class="item-input-wrap">
+                <input class="perusahaan-tambah-input" type="text" id="posisi" name="posisi" placeholder="Posisi"
+                  value="-" required validate>
+                <span class="input-clear-button"></span>
+              </div>
+            </div>
+          </li>
+          <li class="perusahaan_tambah item-content item-input margin-10" style="display:none;">
+            <div class="item-inner">
+              <div class="item-input-wrap">
+                <input class="perusahaan-tambah-input" type="text" id="telepon" name="telepon" placeholder="Telpon / Wa"
+                  value="-" required validate>
+                <span class="input-clear-button"></span>
+              </div>
+            </div>
+          </li>
+          <li class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-input-wrap" >
+                <p style="margin-bottom:5px;">
+
+                  <i onclick="inputPerusahaan();" style="margin-left:8px; font-size:19px;"
+                    class="perusahaan_database f7-icons">plus_app</i><i class="perusahaan_database"
+                    style="margin-top:6px;  font-size:20px; font-weight:bold;"> Perusahaan </i>
+                  <i onclick="cariPerusahaan();" style=" margin-left:8px; display:none; font-size:19px;"
+                    class="perusahaan_tambah f7-icons">arrow_uturn_left_circle</i> <i class="perusahaan_tambah"
+                    style="font-weight:bold; display:none; font-size:20px; margin-top:6px;">Cari Perusahaan </i><br>
+
+
+                </p>
+                <span class="input-clear-button"></span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="list no-hairlines-md margin-37">
+        <ul>
+          <input class="karyawan_id" type="hidden" id="karyawan_id" name="karyawan_id">
+          <li class="item-content item-input margin-10">
+            <div class="item-inner">
+              <div class="item-input-wrap">
+                Hasil Komunikasi
+                <textarea style="padding:10px; height:70px; width:100%; background-color:lightgray; color:black;"
+                  name="hasil_pertemuan1" id="hasil_pertemuan1" class="input-item-keterangan resizable" required
+                  validate></textarea>
+              </div>
+            </div>
+          </li>
+          <li class="item-content item-input margin-10">
+            <div class="item-inner">
+              <div class="item-input-wrap">
+                Next Meeting
+                <input style="background-color:lightgray; color:black;" class="prospek-input" name="tanggal_janjian" id="tanggal_janjian"
+                  class="textbox-n" type="date"  required validate>
+                <span class="input-clear-button"></span>
+              </div>
+            </div>
+          </li>
+          <li class="item-content item-input margin-10">
+            <div class="item-inner">
+              <div class="item-input-wrap">
+                <center>
+                  <i onclick="prospekProcess();" style="width:25%;"
+                    class="text-add-colour-black-soft bg-dark-gray-young button-small col button text-bold"
+                    id="prospek_save">Simpan
+                  </i>
+                </center>
+                <span class="input-clear-button"></span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </form>
+  </div>
+</div>
