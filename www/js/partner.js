@@ -163,29 +163,29 @@ function createMaterialRow(material, index) {
 function createPaginationButtons(currentPage, totalPages) {
     if (totalPages <= 1) return '';
 
-    let html = '<div class="segmented segmented-raised" style="margin: 10px 0; min-width: max-content; display: inline-flex;">';
+    let html = '<div class="segmented segmented-raised" style="margin: 10px 0; width: 100%; display: flex; justify-content: space-between;">';
 
     // Tombol Previous
     if (currentPage > 1) {
-        html += `<button class="button button-outline text-add-colour-white" style="display: flex; align-items: center; border-color: #686665 !important;" onclick="goToPage(${currentPage - 1})">
+        html += `<button class="button button-outline text-add-colour-white" style="display: flex; align-items: center; border-color: #686665 !important; flex: 1;" onclick="goToPage(${currentPage - 1})">
             <i class="f7-icons">chevron_left</i> Previous
         </button>`;
     } else {
-        html += `<button class="button button-outline text-add-colour-white disabled" style="opacity: 0.3; display: flex; align-items: center; border-color: #686665 !important;">
+        html += `<button class="button button-outline text-add-colour-white disabled" style="opacity: 0.3; display: flex; align-items: center; border-color: #686665 !important; flex: 1;">
             <i class="f7-icons">chevron_left</i> Previous
         </button>`;
     }
 
     // Info halaman
-    html += `<button class="button text-add-colour-white" style="background-color: #686665;">${currentPage} / ${totalPages}</button>`;
+    html += `<button class="button text-add-colour-white" style="background-color: #686665; flex: 1;">${currentPage} / ${totalPages}</button>`;
 
     // Tombol Next
     if (currentPage < totalPages) {
-        html += `<button class="button button-outline text-add-colour-white" style="display: flex; align-items: center; border-color: #686665 !important;" onclick="goToPage(${currentPage + 1})">
+        html += `<button class="button button-outline text-add-colour-white" style="display: flex; align-items: center; border-color: #686665 !important; flex: 1;" onclick="goToPage(${currentPage + 1})">
             Next <i class="f7-icons">chevron_right</i>
         </button>`;
     } else {
-        html += `<button class="button button-outline text-add-colour-white disabled" style="opacity: 0.3; display: flex; align-items: center; border-color: #686665 !important;">
+        html += `<button class="button button-outline text-add-colour-white disabled" style="opacity: 0.3; display: flex; align-items: center; border-color: #686665 !important; flex: 1;">
             Next <i class="f7-icons">chevron_right</i>
         </button>`;
     }
