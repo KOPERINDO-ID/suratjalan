@@ -12,6 +12,7 @@ const CONFIG = {
     apiEndpoint: '/api/partner',
     apiMaterialEndpoint: '/api/partner/material',
     apiDeleteEndpoint: '/api/partner/delete',
+    apiAddMaterialEndpoint: '/api/partner/material/add',
     refreshInterval: 30000,
     maxPaginationButtons: 5
 };
@@ -23,7 +24,13 @@ let STATE = {
     filteredData: [],
     isLoading: false,
     currentPartnerId: null,
-    materialData: []
+    materialData: [],
+    // State untuk form tambah material
+    materialForm: {
+        id_partner_transaksi: null,
+        nama_partner: null,
+        spk: null
+    }
 };
 
 // =========================================
@@ -50,7 +57,7 @@ function formatNumber(num) {
  */
 function removePrefix(str, prefix = 'INV_') {
     if (!str) return '-';
-    return str.toString().replace(prefix, '');
+    return str.toString().replace(prefix, '').replace(/^0/, '');
 }
 
 /**
@@ -70,23 +77,65 @@ function formatCurrency(amount) {
 }
 
 /**
+ * Format tanggal ke format Indonesia: "10 Des 2024"
+ * @param {string|Date} date - Tanggal yang akan diformat (format: YYYY-MM-DD atau Date object)
+ * @returns {string} Tanggal dalam format "10 Des 2024"
+ */
+function formatDateIndonesia(date) {
+    if (!date) return '-';
+
+    // Array nama bulan dalam bahasa Indonesia (singkat)
+    const bulanIndonesia = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+        'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
+    ];
+
+    try {
+        // Parse tanggal menggunakan moment.js jika tersedia
+        if (typeof moment !== 'undefined') {
+            const m = moment(date);
+            if (!m.isValid()) return '-';
+
+            const tanggal = m.date();
+            const bulan = bulanIndonesia[m.month()];
+            const tahun = m.year();
+
+            return `${tanggal} ${bulan} ${tahun}`;
+        }
+
+        // Fallback jika moment.js tidak tersedia
+        const d = new Date(date);
+        if (isNaN(d.getTime())) return '-';
+
+        const tanggal = d.getDate();
+        const bulan = bulanIndonesia[d.getMonth()];
+        const tahun = d.getFullYear();
+
+        return `${tanggal} ${bulan} ${tahun}`;
+    } catch (error) {
+        console.error('Error formatting date:', error);
+        return '-';
+    }
+}
+
+/**
  * Membuat HTML untuk baris tabel
  */
 function createTableRow(data, index) {
     return `
         <tr>
-            <td class="label-cell">${removePrefix(data.penjualan_id) || '-'}</td>
+            <td class="label-cell text-align-left text-no-wrap" style="min-width: 100px !important;">${(moment(data.penjualan_tanggal).format('DDMMYY') + '-' + removePrefix(data.penjualan_id)) || '-'}</td>
             <td class="label-cell">${data.nama_partner || '-'}</td>
-            <td class="label-cell">${data.kota || '-'}</td>
-            <td class="label-cell row resizable">
-                <button class="popup-open text-add-colour-black-soft bg-dark-gray-young button-small button text-bold col" 
-                    data-popup=".popup-material"  style="width: 85px; margin-right: 2px;"
+            <td class="label-cell text-no-wrap" style="min-width: 100px !important;">${formatDateIndonesia(data.tgl_deadline)}</td>
+            <td class="label-cell display-flex justify-content-space-between align-items-center">
+                <button class="popup-open text-add-colour-black-soft bg-dark-gray-young button-small button text-bold" 
+                    data-popup=".popup-material" style="width: 116px; margin-right: 4px;"
                     onclick="lihatMaterial('${data.id_partner_transaksi}', '${data.nama_partner}', '${removePrefix(data.penjualan_id)}')">
                     Material
                 </button>
-                <button class="text-add-colour-white bg-color-red button-small button text-bold col" style="width: 85px;"
+                <button class="text-add-colour-black-soft bg-dark-gray-young button-small button text-bold" style="width: 116px;"
                     onclick="hapusData('${data.id_partner_transaksi}', '${data.nama_partner}')">
-                    Hapus
+                    Penerimaan
                 </button>
             </td>
         </tr>
@@ -114,7 +163,7 @@ function createMaterialRow(material, index) {
 function createPaginationButtons(currentPage, totalPages) {
     if (totalPages <= 1) return '';
 
-    let html = '<div class="segmented segmented-raised" style="margin: 10px 0;">';
+    let html = '<div class="segmented segmented-raised" style="margin: 10px 0; min-width: max-content; display: inline-flex;">';
 
     // Tombol Previous
     if (currentPage > 1) {
@@ -187,7 +236,7 @@ function fetchPartnerData() {
     showLoading(true);
 
     jQuery.ajax({
-        url: DEV_API + CONFIG.apiEndpoint,
+        url: BASE_API_DEV + CONFIG.apiEndpoint,
         method: 'GET',
         contentType: 'application/json',
         success: function (result) {
@@ -221,7 +270,7 @@ function fetchMaterialData(partnerId) {
     showLoading(true);
 
     jQuery.ajax({
-        url: DEV_API + CONFIG.apiMaterialEndpoint + '/' + partnerId,
+        url: BASE_API_DEV + CONFIG.apiMaterialEndpoint + '/' + partnerId,
         method: 'GET',
         contentType: 'application/json',
         success: function (result) {
@@ -408,7 +457,8 @@ function renderMaterialPopup() {
             </li>
         </ul>
         
-        <div class="card-content" style="margin-top: 20px; overflow-x: auto;">
+        <div class="card-content margin-half" style="overflow-x: auto;">
+            <button class="popup-open button button-small text-add-colour-black-soft bg-dark-gray-young text-bold margin-bottom-half" style="height: 36px !important;" data-popup=".popup-tambah-material">Tambah Material</button>
             <table align="center" cellspacing="1" cellpadding="1" style="width: 100%;">
                 <thead class="bg-dark-gray-medium text-align-center">
                     <tr>
@@ -435,7 +485,7 @@ function renderMaterialPopup() {
  * Update marquee
  */
 function initMarqueeText() {
-    // Cek apakah BASE_API terdefinisi, jika tidak gunakan DEV_API
+    // Cek apakah BASE_API terdefinisi, jika tidak gunakan BASE_API_DEV
     const apiUrl = typeof BASE_API !== 'undefined';
 
     jQuery.ajax({
@@ -558,9 +608,6 @@ function goToPage(page) {
  * Handler untuk melihat material partner
  */
 function lihatMaterial(partnerId, namaPartner, spk) {
-    console.log('Lihat material partner:', partnerId);
-    console.log("TEST: ", namaPartner, spk);
-
     STATE.currentPartnerId = partnerId;
 
     // Fetch data material dan update popup
@@ -572,6 +619,276 @@ function lihatMaterial(partnerId, namaPartner, spk) {
         $$('#popup_spk_partner').text(spk || '-');
     }, 1000);
 }
+
+// =========================================
+// POPUP CONTROL FUNCTIONS
+// =========================================
+
+/**
+ * Tutup popup material detail (parent popup)
+ */
+function tutupPopupMaterial() {
+    if (typeof app !== 'undefined') {
+        // Tutup hanya popup material
+        app.popup.close('.popup-material', true);
+        console.log('Popup material ditutup');
+    }
+}
+
+/**
+ * Tutup popup tambah material (child popup)
+ */
+function tutupPopupTambahMaterial() {
+    if (typeof app !== 'undefined') {
+        // Tutup hanya popup tambah material
+        app.popup.close('.popup-tambah-material', true);
+        console.log('Popup tambah material ditutup');
+    }
+}
+
+/**
+ * Tutup semua popup yang terbuka
+ */
+function tutupSemuaPopup() {
+    if (typeof app !== 'undefined') {
+        // Tutup popup tambah material dulu (yang paling atas)
+        app.popup.close('.popup-tambah-material', false);
+        // Kemudian tutup popup material
+        setTimeout(() => {
+            app.popup.close('.popup-material', false);
+        }, 300); // Delay untuk smooth animation
+        console.log('Semua popup ditutup');
+    }
+}
+
+// =========================================
+// TAMBAH MATERIAL FUNCTIONS
+// =========================================
+
+/**
+ * Buka popup tambah material
+ */
+function bukaFormTambahMaterial(partnerId, namaPartner, spk) {
+    console.log('Buka form tambah material:', { partnerId, namaPartner, spk });
+
+    // Simpan state
+    STATE.materialForm.id_partner_transaksi = partnerId;
+    STATE.materialForm.nama_partner = namaPartner;
+    STATE.materialForm.spk = spk;
+
+    // Update info partner di form
+    $$('#form_nama_partner').text(namaPartner || '-');
+    $$('#form_spk_partner').text(spk || '-');
+
+    // Reset form
+    resetFormMaterial();
+
+    // Buka popup
+    if (typeof app !== 'undefined') {
+        app.popup.open('.popup-tambah-material');
+    }
+}
+
+/**
+ * Reset form tambah material
+ */
+function resetFormMaterial() {
+    $$('#input_nama_material').val('');
+    $$('#input_jumlah_material').val('1');
+    $$('#input_harga_material').val('0');
+    $$('#input_kategori_material').val('');
+    $$('#preview_total_harga').text('Rp 0');
+}
+
+/**
+ * Hitung dan update preview total harga
+ */
+function updatePreviewTotalHarga() {
+    const jumlah = parseInt($$('#input_jumlah_material').val()) || 0;
+    const harga = parseInt($$('#input_harga_material').val()) || 0;
+    const total = jumlah * harga;
+
+    $$('#preview_total_harga').text(formatCurrency(total));
+}
+
+/**
+ * Validasi form material
+ */
+function validateFormMaterial() {
+    const namaMaterial = $$('#input_nama_material').val().trim();
+    const jumlah = parseInt($$('#input_jumlah_material').val()) || 0;
+    const harga = parseInt($$('#input_harga_material').val()) || 0;
+
+    const errors = [];
+
+    if (!namaMaterial) {
+        errors.push('Nama material harus diisi');
+    }
+
+    if (namaMaterial.length > 255) {
+        errors.push('Nama material maksimal 255 karakter');
+    }
+
+    if (jumlah < 1) {
+        errors.push('Jumlah minimal 1');
+    }
+
+    if (harga < 0) {
+        errors.push('Harga tidak boleh negatif');
+    }
+
+    return {
+        valid: errors.length === 0,
+        errors: errors
+    };
+}
+
+/**
+ * Simpan material baru
+ */
+function simpanMaterial() {
+    console.log('Simpan material...');
+
+    // Validasi form
+    const validation = validateFormMaterial();
+
+    if (!validation.valid) {
+        showNotification(validation.errors.join('<br>'), 'error');
+        return;
+    }
+
+    // Pastikan id_partner_transaksi ada
+    if (!STATE.materialForm.id_partner_transaksi) {
+        showNotification('ID Partner Transaksi tidak ditemukan', 'error');
+        return;
+    }
+
+    // Ambil data dari form
+    const namaMaterial = $$('#input_nama_material').val().trim();
+    const jumlah = parseInt($$('#input_jumlah_material').val());
+    const harga = parseInt($$('#input_harga_material').val());
+    const kategori = $$('#input_kategori_material').val().trim();
+
+    // Prepare data untuk dikirim
+    const postData = {
+        id_partner_transaksi: STATE.materialForm.id_partner_transaksi,
+        nama: namaMaterial,
+        jumlah: jumlah,
+        harga: harga
+    };
+
+    // Tambahkan kategori jika ada
+    if (kategori && !isNaN(parseInt(kategori))) {
+        postData.id_kategori_material = parseInt(kategori);
+    }
+
+    console.log('Data yang akan dikirim:', postData);
+
+    // Konfirmasi sebelum simpan
+    if (typeof app !== 'undefined') {
+        app.dialog.confirm(
+            `Simpan material: <strong>${namaMaterial}</strong><br>` +
+            `Jumlah: ${formatNumber(jumlah)}<br>` +
+            `Harga: ${formatCurrency(harga)}<br>` +
+            `Total: ${formatCurrency(jumlah * harga)}`,
+            'Konfirmasi Simpan',
+            function () {
+                // User klik OK
+                executeSaveMaterial(postData);
+            }
+        );
+    } else {
+        executeSaveMaterial(postData);
+    }
+}
+
+/**
+ * Eksekusi penyimpanan material ke server
+ */
+function executeSaveMaterial(postData) {
+    showLoading(true);
+
+    jQuery.ajax({
+        url: BASE_API_DEV + CONFIG.apiAddMaterialEndpoint,
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(postData),
+        success: function (result) {
+            console.log('Save material response:', result);
+
+            if (result.success) {
+                showNotification('Material berhasil ditambahkan', 'success');
+
+                // Reset form terlebih dahulu
+                resetFormMaterial();
+
+                // Tutup popup tambah material dengan benar
+                tutupPopupTambahMaterial();
+
+                // Refresh data material di popup detail setelah popup ditutup
+                setTimeout(() => {
+                    if (STATE.materialForm.id_partner_transaksi) {
+                        fetchMaterialData(STATE.materialForm.id_partner_transaksi);
+                    }
+                }, 400); // Delay untuk menunggu popup close animation selesai
+            } else {
+                showNotification(result.message || 'Gagal menyimpan material', 'error');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error saving material:', error);
+            console.error('Response:', xhr.responseText);
+
+            let errorMessage = 'Gagal menyimpan material';
+
+            try {
+                const response = JSON.parse(xhr.responseText);
+                if (response.message) {
+                    errorMessage = response.message;
+                }
+                if (response.errors) {
+                    const errorList = Object.values(response.errors).flat();
+                    errorMessage += '<br>' + errorList.join('<br>');
+                }
+            } catch (e) {
+                console.error('Error parsing response:', e);
+            }
+
+            showNotification(errorMessage, 'error');
+        },
+        complete: function () {
+            showLoading(false);
+        }
+    });
+}
+
+/**
+ * Setup event listeners untuk form material
+ */
+function setupMaterialFormListeners() {
+    // Auto calculate total harga saat input berubah
+    $$('#input_jumlah_material, #input_harga_material').on('input', function () {
+        updatePreviewTotalHarga();
+    });
+
+    // Prevent negative values
+    $$('#input_jumlah_material').on('input', function () {
+        const val = parseInt($$(this).val());
+        if (val < 1) {
+            $$(this).val(1);
+        }
+    });
+
+    $$('#input_harga_material').on('input', function () {
+        const val = parseInt($$(this).val());
+        if (val < 0) {
+            $$(this).val(0);
+        }
+    });
+
+    console.log('Material form listeners setup complete');
+}
+
 /**
  * Handler untuk hapus data partner
  */
@@ -605,7 +922,7 @@ function executeDelete(partnerId, namaPartner) {
     showLoading(true);
 
     jQuery.ajax({
-        url: DEV_API + CONFIG.apiDeleteEndpoint + '/' + partnerId,
+        url: BASE_API_DEV + CONFIG.apiDeleteEndpoint + '/' + partnerId,
         method: 'DELETE',
         contentType: 'application/json',
         success: function (result) {
@@ -645,6 +962,11 @@ function initPartnerPage() {
     STATE.totalData = 0;
     STATE.currentPartnerId = null;
     STATE.materialData = [];
+    STATE.materialForm = {
+        id_partner_transaksi: null,
+        nama_partner: null,
+        spk: null
+    };
 
     // Update marquee
     initMarqueeText();
@@ -658,7 +980,9 @@ function initPartnerPage() {
         searchInput.off('keyup').on('keyup', cariPerusahaan);
     }
 
-    // TIDAK perlu render popup di sini karena sudah ada di HTML
+    // Setup material form listeners
+    setupMaterialFormListeners();
+
     console.log('Partner Page initialized successfully');
 }
 

@@ -24,12 +24,10 @@ function checkConnection() {
 	}
 }
 
-
-var DEV_API = 'http://127.0.0.1:8000'
-
 var BASE_API = 'https://tasindo-sale-webservice.digiseminar.id/api';
+var BASE_API_STAG = 'https://tasindo-service-staging.digiseminar.id/api';
+var BASE_API_DEV = 'http://127.0.0.1:8000'
 
-var BASE_API2 = 'https://tasindo-sale-webservice.digiseminar.id/api';
 var BASE_PATH_IMAGE = 'https://tasindo-sale-webservice.digiseminar.id/kunjungan';
 var BASE_PATH_IMAGE_PERFORMA = 'https://tasindo-sale-webservice.digiseminar.id/performa_image';
 var BASE_PATH_IMAGE_CUSTOMER = 'https://tasindo-sale-webservice.digiseminar.id/customer_logo';
@@ -42,7 +40,6 @@ var BASE_PATH_IMAGE_BUKTI_PRODUKSI = 'https://tasindo-sale-webservice.digisemina
 function refreshPage() {
 	return app.views.main.router.navigate(app.views.main.router.currentRoute.url, { reloadCurrent: true, ignoreCache: true, });
 }
-
 
 function checkInternet() {
 	console.log(app.views.main.router.currentRoute.url);

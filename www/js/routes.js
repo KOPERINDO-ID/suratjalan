@@ -18,7 +18,7 @@ var routes = [
   },
   {
     path: '/partner',
-    url: './pages/partner/index.html',
+    url: './pages/partner.html',
   },
   {
     path: '/produksi',
