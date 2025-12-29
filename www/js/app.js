@@ -101,7 +101,6 @@ var app = new Framework7({
   },
 });
 
-
 // Page Kunjungan On load
 $$(document).on('page:afterin', '.page[data-name="kunjungan"]', function (e) {
   checkLogin();
@@ -245,7 +244,6 @@ $$(document).on('page:afterin', '.page[data-name="performa_input"]', function (e
   checkConnection();
 });
 
-
 // Page Non performa input On load
 $$(document).on('page:afterin', '.page[data-name="penjualan_input_non_performa"]', function (e) {
   checkLogin();
@@ -253,4 +251,10 @@ $$(document).on('page:afterin', '.page[data-name="penjualan_input_non_performa"]
   checkConnection();
 });
 
+//* PARTNER PAGE
+$$(document).on('page:afterin', '.page[data-name="partner-page"]', function (e) {
+  checkLogin();
+  initPartnerPage();
+  checkConnection();
+});
 

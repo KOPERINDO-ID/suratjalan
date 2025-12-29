@@ -25,7 +25,7 @@ function checkConnection() {
 }
 
 
-
+var DEV_API = 'http://127.0.0.1:8000'
 
 var BASE_API = 'https://tasindo-sale-webservice.digiseminar.id/api';
 
@@ -237,4 +237,3 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 setInterval(function () {
 	checkInternet();
 }, 3000);
- 
