@@ -77,30 +77,251 @@
         </div>
 
         <!-- Popup Material -->
-        <div class="popup popup-material popup-tablet-fullscreen">
+        <div class="popup popup-material">
             <div class="view view-init">
                 <div class="page">
                     <div class="navbar">
                         <div class="navbar-bg"></div>
                         <div class="navbar-inner bg-dark-gray-medium">
-                            <div class="title">Detail Material Partner</div>
+                            <div class="title">Material</div>
                             <div class="right">
-                                <a href="#" class="link" onclick="tutupPopupMaterial(); return false;">
-                                    <i class="f7-icons text-add-colour-white">xmark_circle_fill</i>
+                                <!-- Link to close popup -->
+                                <a class="link popup-close" id="close_material_modal" data-popup=".popup-material">
+                                    <i class="f7-icons" style="margin-right:5px; color: #fff;">xmark_rectangle_fill</i>
                                 </a>
                             </div>
                         </div>
                     </div>
+
                     <div class="page-content">
-                        <div class="card card-outline margin-top bg-dark-gray-medium">
+                        <div class="card card-outline margin-top">
                             <div class="card-content">
                                 <div class="row">
                                     <div class="col-100">
                                         <div class="card">
-                                            <div class="card-content">
-                                                <div class="list no-hairlines-md">
-                                                    <!-- Konten akan diisi oleh JavaScript -->
+
+                                            <!-- Header Information -->
+                                            <div class="information-card-header col-100"
+                                                style="margin-bottom: 10px; padding: 10px;">
+                                                <div class="spk-info">
+                                                    <div class="spk-code" id="material-spk-code"
+                                                        style="font-weight: bold; font-size: 16px;">-
+                                                    </div>
+                                                    <div class="client-name" id="material-partner-name"
+                                                        style="color: #1C1C1D;">-</div>
                                                 </div>
+                                                <div class="quantity-badge" id="material-quantity">
+                                                    0 pcs
+                                                </div>
+                                            </div>
+
+                                            <!-- Header Action -->
+                                            <div class="col-100"
+                                                style="background-color: #CFECFE; overflow-x: auto; padding: 10px; margin-bottom: 10px; border-radius: 4px;">
+                                                <div
+                                                    style="display: flex; justify-content: space-between; align-items: center;">
+                                                    <!-- Left: Material Title & Count -->
+                                                    <div
+                                                        style="display: flex; align-items: center; gap: 10px; color: #1C1C1D;">
+                                                        <div
+                                                            style="font-weight: bold; font-size: 16px; padding-right: 10px; border-right: 1px solid #1C1C1D;">
+                                                            Material</div>
+                                                        <div style="font-size: 14px;" id="material_count">0 item</div>
+                                                    </div>
+
+                                                    <!-- Right: Action Buttons -->
+                                                    <div style="display: flex; gap: 8px;">
+                                                        <!-- Refresh Button -->
+                                                        <button
+                                                            class="button button-small button-fill color-green display-flex justify-content-end align-items-center"
+                                                            id="btn_refresh_material" onclick="refreshMaterialData();"
+                                                            style="height: 32px;">
+                                                            <i class="f7-icons"
+                                                                style="font-size: 18px;">arrow_clockwise</i>
+                                                        </button>
+
+                                                        <!-- Add Button -->
+                                                        <button
+                                                            class="button button-small button-fill color-green display-flex justify-content-end align-items-center"
+                                                            id="btn_add_material" onclick="addMaterialRow();"
+                                                            style="height: 32px;">
+                                                            <i class="f7-icons" style="font-size: 18px;">plus</i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Material Table -->
+                                            <div class="col-100" style="overflow-x: auto;">
+                                                <table width="100%"
+                                                    style="border-collapse: collapse; border: 1px solid #ddd;"
+                                                    id="material_table">
+                                                    <thead class="table-header-theme">
+                                                        <tr>
+                                                            <th
+                                                                style="padding: 12px; text-align: center; border: 1px solid #1C1C1D; min-width: 25px;">
+                                                                No
+                                                            </th>
+                                                            <th
+                                                                style="padding: 12px; text-align: center; border: 1px solid #1C1C1D; min-width: 100px;">
+                                                                Tanggal
+                                                            </th>
+                                                            <th
+                                                                style="padding: 12px; text-align: center; border: 1px solid #1C1C1D; min-width: 120px;">
+                                                                Material
+                                                            </th>
+                                                            <th
+                                                                style="padding: 12px; text-align: center; border: 1px solid #1C1C1D; min-width: 100px;">
+                                                                Jumlah
+                                                            </th>
+                                                            <th
+                                                                style="padding: 12px; text-align: center; border: 1px solid #1C1C1D; min-width: 120px;">
+                                                                Harga
+                                                            </th>
+                                                            <th
+                                                                style="padding: 12px; text-align: center; border: 1px solid #1C1C1D; min-width: 100px;">
+                                                                Aksi
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="table-body-theme" id="material_table_body">
+                                                        <!-- Data will be rendered by JavaScript -->
+                                                        <tr>
+                                                            <td colspan="6" align="center"
+                                                                style="padding: 20px; border: 1px solid #ddd;">
+                                                                <i class="f7-icons"
+                                                                    style="font-size: 40px; color: #999;">cube_box</i>
+                                                                <p style="color: #999; margin-top: 10px;">Belum ada data
+                                                                    material</p>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Photo Upload Popup -->
+        <div class="popup popup-photo-upload">
+            <div class="view view-init">
+                <div class="page">
+                    <div class="navbar">
+                        <div class="navbar-bg"></div>
+                        <div class="navbar-inner bg-dark-gray-medium">
+                            <div class="title">Upload Bukti Kirim</div>
+                            <div class="right">
+                                <a class="link popup-close" data-popup=".popup-photo-upload">
+                                    <i class="f7-icons" style="color: #fff;">xmark_rectangle_fill</i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="page-content">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="row">
+                                    <div class="col-100">
+                                        <div class="card">
+                                            <!-- Header Information -->
+                                            <div class="information-card-header col-100"
+                                                style="margin-bottom: 10px; padding: 10px;">
+                                                <div class="spk-info">
+                                                    <div class="spk-code" id="photo-spk-code"
+                                                        style="font-weight: bold; font-size: 16px;">-</div>
+                                                    <div class="client-name" id="photo-partner-name"
+                                                        style="color: #666;">-</div>
+                                                </div>
+                                                <div class="quantity-badge" id="photo-purchase-qty">
+                                                    0 pcs
+                                                </div>
+                                            </div>
+
+                                            <!-- Table Summary -->
+                                            <div style="overflow-x: auto; width: 100%; margin-bottom: 10px;">
+                                                <table align="center" width="100%"
+                                                    style="border-collapse: collapse; border:1px solid gray;"
+                                                    border="1">
+                                                    <thead class="table-header-theme text-align-center">
+                                                        <tr>
+                                                            <td align="center" width="40%"
+                                                                style="padding: 8px; font-weight: bold;">
+                                                                Tipe
+                                                            </td>
+                                                            <td align="center" width="20%"
+                                                                style="padding: 8px; font-weight: bold;">
+                                                                Jumlah
+                                                            </td>
+                                                            <td align="center" width="20%"
+                                                                style="padding: 8px; font-weight: bold;">
+                                                                SPK
+                                                            </td>
+                                                            <td align="center" width="20%"
+                                                                style="padding: 8px; font-weight: bold;">
+                                                                Sisa
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="table-body-theme">
+                                                        <tr>
+                                                            <td class="label-cell text-align-left"
+                                                                id="photo_type_purchase_tbl" style="padding: 8px;">
+                                                                -
+                                                            </td>
+                                                            <td class="label-cell text-align-right"
+                                                                id="photo_qty_purchase_tbl" style="padding: 8px;">
+                                                                0
+                                                            </td>
+                                                            <td class="label-cell text-align-right"
+                                                                id="photo_selesai_purchase_tbl" style="padding: 8px;">
+                                                                0
+                                                            </td>
+                                                            <td class="label-cell text-align-right"
+                                                                id="photo_sisa_purchase_tbl" style="padding: 8px;">0
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <!-- Photo Upload Area -->
+                                            <div style="border: 1px solid #fff; border-radius: 4px; padding: 8px;">
+                                                <input type="file" id="photo_upload_input" accept="image/*"
+                                                    capture="camera" style="display: none;">
+
+                                                <div id="photo_empty_placeholder" class="col-100"
+                                                    style="display: none; padding: 32px 0px;">
+                                                    <div class="display-flex flex-direction-column justify-content-space-between align-items-center"
+                                                        style="color: #008000;">
+                                                        <i class="f7-icons" style="font-size: 48px;">camera</i>
+                                                        <h3 class="">BUKTI MATERIAL</h3>
+                                                    </div>
+                                                </div>
+
+                                                <div id="photo_preview_area" style="display: none; margin: 8px 0px;">
+                                                    <img id="photo_preview" src=""
+                                                        style="width: 100%; max-height: 300px; object-fit: contain; border-radius: 8px;">
+                                                </div>
+
+                                                <button class="button button-fill button-large color-green"
+                                                    id="btn_choose_photo" onclick="$('#photo_upload_input').click();"
+                                                    style="width: 100%; margin-bottom: 10px;">
+                                                    PILIH FOTO
+                                                </button>
+
+                                                <button class="button button-fill button-large color-blue"
+                                                    id="btn_upload_photo" onclick="uploadMaterialPhoto();"
+                                                    style="width: 100%; display: none;">
+                                                    UNGGAH
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -112,137 +333,436 @@
             </div>
         </div>
 
-        <!-- Popup Tambah Material -->
-        <div class="popup popup-tambah-material popup-tablet-fullscreen">
+        <!-- Photo Viewer Popup -->
+        <div class="popup popup-photo-viewer">
             <div class="view view-init">
                 <div class="page">
                     <div class="navbar">
                         <div class="navbar-bg"></div>
                         <div class="navbar-inner bg-dark-gray-medium">
-                            <div class="title">Tambah Material Partner</div>
+                            <div class="title">Bukti Kirim Material</div>
                             <div class="right">
-                                <a href="#" class="link" onclick="tutupPopupTambahMaterial(); return false;">
-                                    <i class="f7-icons text-add-colour-white">xmark_circle_fill</i>
+                                <a class="link popup-close" data-popup=".popup-photo-viewer">
+                                    <i class="f7-icons" style="color: #fff;">xmark_rectangle_fill</i>
                                 </a>
                             </div>
                         </div>
                     </div>
+
                     <div class="page-content">
-                        <div class="card card-outline margin-top bg-dark-gray-medium">
+                        <div class="card">
+                            <div class="card-content" style="padding: 0;">
+                                <img id="photo_viewer_image" src="" style="width: 100%; height: auto;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Goods Receive Modal -->
+        <div class="popup popup-penerimaan">
+            <div class="view view-init">
+                <div class="page">
+                    <div class="navbar">
+                        <div class="navbar-bg"></div>
+                        <div class="navbar-inner bg-dark-gray-medium">
+                            <div class="title">Penerimaan</div>
+                            <div class="right">
+                                <!-- Link to close popup -->
+                                <a class="link popup-close" id="close_penerimaan_modal" data-popup=".popup-penerimaan">
+                                    <i class="f7-icons" style="margin-right:5px; color: #fff;">xmark_rectangle_fill</i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="page-content">
+                        <div class="card card-outline margin-top">
                             <div class="card-content">
                                 <div class="row">
                                     <div class="col-100">
                                         <div class="card">
-                                            <div class="card-header bg-dark-gray-young">
-                                                <h3 style="margin: 5px 0;">Info Partner</h3>
-                                            </div>
-                                            <div class="card-content">
-                                                <div class="list no-hairlines-md">
-                                                    <ul>
-                                                        <li>
-                                                            <div class="item-content">
-                                                                <div class="item-inner">
-                                                                    <div class="item-title text-bold">Partner</div>
-                                                                    <div class="item-after" id="form_nama_partner">-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="item-content">
-                                                                <div class="item-inner">
-                                                                    <div class="item-title text-bold">SPK</div>
-                                                                    <div class="item-after" id="form_spk_partner">-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
+
+                                            <!-- Header Information -->
+                                            <div class="information-card-header col-100"
+                                                style="margin-bottom: 10px; padding: 10px;">
+                                                <div class="spk-info">
+                                                    <div class="spk-code" id="receiving-spk-code"
+                                                        style="font-weight: bold; font-size: 16px;">-
+                                                    </div>
+                                                    <div class="client-name" id="receiving-partner-name"
+                                                        style="color: #1C1C1D;">-</div>
+                                                </div>
+                                                <div class="quantity-badge" id="receiving-quantity">
+                                                    0 pcs
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="card">
-                                            <div class="card-header bg-dark-gray-young">
-                                                <h3 style="margin: 5px 0;">Form Material</h3>
-                                            </div>
-                                            <div class="card-content">
-                                                <div class="list no-hairlines-md">
-                                                    <ul>
-                                                        <li class="item-content item-input">
-                                                            <div class="item-inner">
-                                                                <div class="item-title item-label">Nama Material <span
-                                                                        class="text-color-red">*</span></div>
-                                                                <div class="item-input-wrap">
-                                                                    <input type="text" id="input_nama_material"
-                                                                        placeholder="Contoh: Semen 50kg" />
-                                                                    <span class="input-clear-button"></span>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li class="item-content item-input">
-                                                            <div class="item-inner">
-                                                                <div class="item-title item-label">Jumlah <span
-                                                                        class="text-color-red">*</span></div>
-                                                                <div class="item-input-wrap">
-                                                                    <input type="number" id="input_jumlah_material"
-                                                                        placeholder="0" min="1" value="1" />
-                                                                    <span class="input-clear-button"></span>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li class="item-content item-input">
-                                                            <div class="item-inner">
-                                                                <div class="item-title item-label">Harga Satuan <span
-                                                                        class="text-color-red">*</span></div>
-                                                                <div class="item-input-wrap">
-                                                                    <input type="number" id="input_harga_material"
-                                                                        placeholder="0" min="0" value="0" />
-                                                                    <span class="input-clear-button"></span>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li class="item-content item-input">
-                                                            <div class="item-inner">
-                                                                <div class="item-title item-label">Kategori (Opsional)
-                                                                </div>
-                                                                <div class="item-input-wrap">
-                                                                    <input type="number" id="input_kategori_material"
-                                                                        placeholder="ID Kategori (Kosongkan jika tidak ada)"
-                                                                        min="1" />
-                                                                    <span class="input-clear-button"></span>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="item-content">
-                                                                <div class="item-inner">
-                                                                    <div class="item-title text-bold">Total Harga</div>
-                                                                    <div class="item-after text-color-green text-bold"
-                                                                        id="preview_total_harga"
-                                                                        style="font-size: 16px;">Rp 0</div>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
+                                            <!-- Header Action -->
+                                            <div class="col-100"
+                                                style="background-color: #CFECFE; overflow-x: auto; padding: 10px; margin-bottom: 10px; border-radius: 4px;">
+                                                <div
+                                                    style="display: flex; justify-content: space-between; align-items: center;">
+                                                    <!-- Left: receiving Title & Count -->
+                                                    <div
+                                                        style="display: flex; align-items: center; gap: 10px; color: #1C1C1D;">
+                                                        <div
+                                                            style="font-weight: bold; font-size: 16px; padding-right: 10px; border-right: 1px solid #1C1C1D;">
+                                                            Penerimaan</div>
+                                                        <div style="font-size: 14px;" id="receiving_count">0 item</div>
+                                                    </div>
+
+                                                    <!-- Right: Action Buttons -->
+                                                    <div style="display: flex; gap: 8px;">
+                                                        <!-- Refresh Button -->
+                                                        <button
+                                                            class="button button-small button-fill color-green display-flex justify-content-end align-items-center"
+                                                            id="btn_refresh_receiving" onclick="refreshReceivingData();"
+                                                            style="height: 32px;">
+                                                            <i class="f7-icons"
+                                                                style="font-size: 18px;">arrow_clockwise</i>
+                                                        </button>
+
+                                                        <!-- Add Button -->
+                                                        <button
+                                                            class="button button-small button-fill color-green display-flex justify-content-end align-items-center"
+                                                            id="btn_add_receiving" onclick="addReceivingRow();"
+                                                            style="height: 32px;">
+                                                            <i class="f7-icons" style="font-size: 18px;">plus</i>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
+                                            <!-- receiving Table -->
+                                            <div class="col-100" style="overflow-x: auto;">
+                                                <table width="100%"
+                                                    style="border-collapse: collapse; border: 1px solid #ddd;"
+                                                    id="receiving_table">
+                                                    <thead class="table-header-theme">
+                                                        <tr>
+                                                            <th
+                                                                style="padding: 12px; text-align: center; border: 1px solid #1C1C1D; min-width: 25px;">
+                                                                No
+                                                            </th>
+                                                            <th
+                                                                style="padding: 12px; text-align: center; border: 1px solid #1C1C1D; min-width: 100px;">
+                                                                Tanggal
+                                                            </th>
+                                                            <th
+                                                                style="padding: 12px; text-align: center; border: 1px solid #1C1C1D; min-width: 100px;">
+                                                                Jumlah
+                                                            </th>
+                                                            <th
+                                                                style="padding: 12px; text-align: center; border: 1px solid #1C1C1D; min-width: 120px;">
+                                                                Kurang
+                                                            </th>
+                                                            <th
+                                                                style="padding: 12px; text-align: center; border: 1px solid #1C1C1D;">
+                                                                Aksi
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="table-body-theme" id="receiving_table_body">
+                                                        <!-- Data will be rendered by JavaScript -->
+                                                        <tr>
+                                                            <td colspan="5" align="center"
+                                                                style="padding: 20px; border: 1px solid #ddd;">
+                                                                <i class="f7-icons"
+                                                                    style="font-size: 40px; color: #999;">cube_box</i>
+                                                                <p style="color: #999; margin-top: 10px;">Belum ada data
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popup Upload Bukti Penerimaan -->
+        <div class="popup popup-upload-penerimaan">
+            <div class="view view-init">
+                <div class="page">
+                    <div class="navbar">
+                        <div class="navbar-bg"></div>
+                        <div class="navbar-inner bg-dark-gray-medium">
+                            <div class="title">Upload Bukti Penerimaan</div>
+                            <div class="right">
+                                <a class="link popup-close" data-popup=".popup-upload-penerimaan">
+                                    <i class="f7-icons" style="margin-right:5px; color: #fff;">xmark_rectangle_fill</i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="page-content">
+                        <div class="card card-outline margin-top">
+                            <div class="card-content">
+                                <div class="row">
+                                    <div class="col-100">
                                         <div class="card">
-                                            <div class="card-content">
-                                                <button class="button button-fill bg-color-green text-bold"
-                                                    style="width: 100%;" onclick="simpanMaterial()">
-                                                    <i class="f7-icons"
-                                                        style="margin-right: 5px;">checkmark_circle_fill</i>
-                                                    Simpan Material
+                                            <!-- Info Penerimaan -->
+                                            <div class="col-100"
+                                                style="padding: 15px; background-color: #f5f5f5; border-radius: 8px; margin-bottom: 15px;">
+                                                <div
+                                                    style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                                    <span style="font-weight: bold;">Tanggal:</span>
+                                                    <span id="upload_tanggal_display">-</span>
+                                                </div>
+                                                <div
+                                                    style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                                    <span style="font-weight: bold;">Jumlah Diterima:</span>
+                                                    <span id="upload_jumlah_display">-</span>
+                                                </div>
+                                                <div style="display: flex; justify-content: space-between;">
+                                                    <span style="font-weight: bold;">Penerima:</span>
+                                                    <span id="upload_penerima_display">-</span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Upload Bukti Penerimaan -->
+                                            <div class="col-100" style="margin-bottom: 20px;">
+                                                <div style="font-weight: bold; margin-bottom: 10px; font-size: 16px;">
+                                                    Bukti Penerimaan
+                                                </div>
+
+                                                <div
+                                                    style="border: 2px dashed #ddd; border-radius: 8px; padding: 20px; text-align: center; background-color: #fafafa;">
+                                                    <input type="file" id="input_bukti_penerimaan"
+                                                        accept="image/jpeg,image/jpg,image/png"
+                                                        style="display: none;" />
+
+                                                    <div id="preview_bukti_penerimaan_empty" style="cursor: pointer;"
+                                                        onclick="$('#input_bukti_penerimaan').click();">
+                                                        <i class="f7-icons"
+                                                            style="font-size: 48px; color: #999;">camera_fill</i>
+                                                        <p style="color: #999; margin-top: 10px;">Klik untuk pilih foto
+                                                        </p>
+                                                        <p style="color: #999; font-size: 12px;">JPG, JPEG, PNG (Max
+                                                            5MB)</p>
+                                                    </div>
+
+                                                    <div id="preview_bukti_penerimaan_area" style="display: none;">
+                                                        <img id="preview_bukti_penerimaan_img"
+                                                            style="max-width: 100%; max-height: 300px; border-radius: 8px;" />
+                                                        <div style="margin-top: 10px;">
+                                                            <button
+                                                                class="button button-small button-fill bg-color-orange"
+                                                                onclick="clearBuktiPenerimaan()">
+                                                                <i class="f7-icons">trash</i> Hapus
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Upload Bukti Dokumen Penerimaan -->
+                                            <div class="col-100" style="margin-bottom: 20px;">
+                                                <div style="font-weight: bold; margin-bottom: 10px; font-size: 16px;">
+                                                    Bukti Dokumen Penerimaan (Opsional)
+                                                </div>
+
+                                                <div
+                                                    style="border: 2px dashed #ddd; border-radius: 8px; padding: 20px; text-align: center; background-color: #fafafa;">
+                                                    <input type="file" id="input_bukti_dokumen_penerimaan"
+                                                        accept="image/jpeg,image/jpg,image/png,application/pdf"
+                                                        style="display: none;" />
+
+                                                    <div id="preview_bukti_dokumen_empty" style="cursor: pointer;"
+                                                        onclick="$('#input_bukti_dokumen_penerimaan').click();">
+                                                        <i class="f7-icons"
+                                                            style="font-size: 48px; color: #999;">doc_fill</i>
+                                                        <p style="color: #999; margin-top: 10px;">Klik untuk pilih file
+                                                        </p>
+                                                        <p style="color: #999; font-size: 12px;">JPG, PNG, PDF (Max 5MB)
+                                                        </p>
+                                                    </div>
+
+                                                    <div id="preview_bukti_dokumen_area" style="display: none;">
+                                                        <div id="preview_bukti_dokumen_info"
+                                                            style="padding: 15px; background-color: #e8f5e9; border-radius: 8px;">
+                                                            <i class="f7-icons"
+                                                                style="color: #4caf50;">checkmark_circle_fill</i>
+                                                            <span id="preview_bukti_dokumen_name"
+                                                                style="margin-left: 10px;">-</span>
+                                                        </div>
+                                                        <div style="margin-top: 10px;">
+                                                            <button
+                                                                class="button button-small button-fill bg-color-orange"
+                                                                onclick="clearBuktiDokumen()">
+                                                                <i class="f7-icons">trash</i> Hapus
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Action Buttons -->
+                                            <div class="col-100" style="margin-top: 20px;">
+                                                <button class="button button-large button-fill bg-color-green"
+                                                    id="btn_submit_penerimaan" onclick="submitPenerimaanWithFiles()"
+                                                    style="width: 100%;">
+                                                    <i class="f7-icons">checkmark_circle_fill</i> Simpan Penerimaan
                                                 </button>
-                                                <button class="button button-outline text-bold"
-                                                    style="width: 100%; margin-top: 10px;"
-                                                    onclick="tutupPopupTambahMaterial()">
-                                                    <i class="f7-icons" style="margin-right: 5px;">xmark_circle</i>
+
+                                                <button class="button button-large button-outline popup-close"
+                                                    data-popup=".popup-upload-penerimaan"
+                                                    style="width: 100%; margin-top: 10px;">
                                                     Batal
                                                 </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popup Viewer Bukti Penerimaan -->
+        <div class="popup popup-viewer-penerimaan">
+            <div class="view view-init">
+                <div class="page">
+                    <div class="navbar">
+                        <div class="navbar-bg"></div>
+                        <div class="navbar-inner bg-dark-gray-medium">
+                            <div class="title">Bukti Penerimaan</div>
+                            <div class="right">
+                                <a class="link popup-close" data-popup=".popup-viewer-penerimaan">
+                                    <i class="f7-icons" style="margin-right:5px; color: #fff;">xmark_rectangle_fill</i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="page-content">
+                        <div class="card card-outline margin-top">
+                            <div class="card-content">
+                                <div class="row">
+                                    <div class="col-100">
+                                        <div class="card">
+                                            <!-- Info Penerimaan -->
+                                            <div class="col-100" style="margin-bottom: 15px;">
+                                                <table width="100%"
+                                                    style="border-collapse: collapse; background-color: #CFECFE; border-radius: 8px; overflow: hidden;">
+                                                    <thead class="table-header-theme">
+                                                        <tr>
+                                                            <td
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border-bottom: 1px solid #B3E0FA; width: 40%;">
+                                                                Tanggal
+                                                            </td>
+                                                            <td
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;">
+                                                                Jumlah
+                                                            </td>
+                                                            <td
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D;">
+                                                                Penerima
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="table-body-theme">
+                                                        <tr>
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;"
+                                                                id="viewer_tanggal_penerimaan">
+                                                                -
+                                                            </td>
+                                                            <td style="padding: 12px; text-align: right; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;"
+                                                                id="viewer_jumlah_penerimaan">
+                                                                -
+                                                            </td>
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D;"
+                                                                id="viewer_nama_penerima">
+                                                                -
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <!-- Bukti Penerimaan (Foto) -->
+                                            <div class="col-100" style="margin-bottom: 20px;">
+                                                <div style="font-weight: bold; margin-bottom: 10px; font-size: 16px;">
+                                                    Bukti Penerimaan
+                                                </div>
+
+                                                <!-- Empty State -->
+                                                <div id="viewer_bukti_penerimaan_empty"
+                                                    style="border: 2px dashed #ddd; border-radius: 8px; padding: 30px; text-align: center; background-color: #fafafa;">
+                                                    <i class="f7-icons" style="font-size: 48px; color: #ccc;">photo</i>
+                                                    <p style="color: #999; margin-top: 10px;">Tidak ada bukti penerimaan
+                                                    </p>
+                                                </div>
+
+                                                <!-- Image Area -->
+                                                <div id="viewer_bukti_penerimaan_area" style="display: none;">
+                                                    <div
+                                                        style="border: 1px solid #ddd; border-radius: 8px; padding: 10px; background-color: #fff; text-align: center;">
+                                                        <img id="viewer_bukti_penerimaan_img"
+                                                            style="max-width: 100%; max-height: 400px; border-radius: 8px; cursor: pointer;"
+                                                            onclick="window.open(this.src, '_blank')" />
+                                                    </div>
+                                                    <div style="margin-top: 10px;">
+                                                        <a id="viewer_bukti_penerimaan_download"
+                                                            class="display-flex justify-content-center align-items-center btn-primary-theme"
+                                                            style="margin: 8px 0px;" download target="_blank">
+                                                            <i class="f7-icons"
+                                                                style="margin-right: 4px;">arrow_down_doc</i> UNDUH
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Bukti Dokumen Penerimaan -->
+                                            <div class="col-100" style="margin-bottom: 20px;">
+                                                <div style="font-weight: bold; margin-bottom: 10px; font-size: 16px;">
+                                                    Bukti Dokumen Penerimaan
+                                                </div>
+
+                                                <!-- Empty State -->
+                                                <div id="viewer_bukti_dokumen_empty"
+                                                    style="border: 2px dashed #ddd; border-radius: 8px; padding: 30px; text-align: center; background-color: #fafafa;">
+                                                    <i class="f7-icons" style="font-size: 48px; color: #ccc;">doc</i>
+                                                    <p style="color: #999; margin-top: 10px;">Tidak ada dokumen</p>
+                                                </div>
+
+                                                <!-- Document Area -->
+                                                <div id="viewer_bukti_dokumen_area" style="display: none;">
+                                                    <div
+                                                        style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; background-color: #fff;">
+                                                        <!-- Preview for images -->
+                                                        <div style="text-align: center; margin-bottom: 10px;">
+                                                            <img id="viewer_bukti_dokumen_img"
+                                                                style="max-width: 100%; max-height: 300px; border-radius: 8px; display: none;" />
+                                                            <i id="viewer_bukti_dokumen_icon" class="f7-icons"
+                                                                style="font-size: 64px; color: #e53935; display: none;">doc_text_fill</i>
+                                                        </div>
+                                                        <div
+                                                            style="text-align: center; padding: 10px; background-color: #f5f5f5; border-radius: 4px;">
+                                                            <span id="viewer_bukti_dokumen_name"
+                                                                style="font-size: 14px; color: #333;">-</span>
+                                                        </div>
+                                                    </div>
+                                                    <div style="margin-top: 10px;">
+                                                        <a id="viewer_bukti_dokumen_download"
+                                                            class="display-flex justify-content-center align-items-center btn-primary-theme"
+                                                            style="padding: 8px 0px;" download target="_blank">
+                                                            <i class="f7-icons"
+                                                                style="margin-right: 4px;">arrow_down_doc</i> UNDUH
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

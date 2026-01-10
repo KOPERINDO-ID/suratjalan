@@ -5,14 +5,13 @@
  */
 
 // =========================================
-// VARIABLES & CONSTANTS
+// GLOBAL VARIABLES & CONSTANTS
 // =========================================
 const CONFIG = {
     itemsPerPage: 20,
-    apiEndpoint: '/api/partner',
-    apiMaterialEndpoint: '/api/partner/material',
-    apiDeleteEndpoint: '/api/partner/delete',
-    apiAddMaterialEndpoint: '/api/partner/material/add',
+    apiEndpoint: '/partner',
+    apiMaterialEndpoint: '/material',
+    apiAddMaterialEndpoint: '/material/add-partner-material',
     refreshInterval: 30000,
     maxPaginationButtons: 5
 };
@@ -25,12 +24,12 @@ let STATE = {
     isLoading: false,
     currentPartnerId: null,
     materialData: [],
-    // State untuk form tambah material
     materialForm: {
         id_partner_transaksi: null,
         nama_partner: null,
         spk: null
-    }
+    },
+    materialSementara: []
 };
 
 // =========================================
@@ -122,19 +121,20 @@ function formatDateIndonesia(date) {
  * Membuat HTML untuk baris tabel
  */
 function createTableRow(data, index) {
+    console.log('Creating table row for data:', data);
     return `
         <tr>
             <td class="label-cell text-align-left text-no-wrap" style="min-width: 100px !important;">${(moment(data.penjualan_tanggal).format('DDMMYY') + '-' + removePrefix(data.penjualan_id)) || '-'}</td>
-            <td class="label-cell">${data.nama_partner || '-'}</td>
+            <td class="label-cell text-no-wrap" style="min-width: 100px !important;">${data.nama_partner || '-'}</td>
             <td class="label-cell text-no-wrap" style="min-width: 100px !important;">${formatDateIndonesia(data.tgl_deadline)}</td>
             <td class="label-cell display-flex justify-content-space-between align-items-center">
                 <button class="popup-open text-add-colour-black-soft bg-dark-gray-young button-small button text-bold" 
                     data-popup=".popup-material" style="width: 116px; margin-right: 4px;"
-                    onclick="lihatMaterial('${data.id_partner_transaksi}', '${data.nama_partner}', '${removePrefix(data.penjualan_id)}')">
+                    onclick="openMaterialModal('${data.id_partner_transaksi}', '${data.nama_partner}')">
                     Material
                 </button>
                 <button class="text-add-colour-black-soft bg-dark-gray-young button-small button text-bold" style="width: 116px;"
-                    onclick="hapusData('${data.id_partner_transaksi}', '${data.nama_partner}')">
+                    onclick="openReceivingModal('${data.id_partner_transaksi}', '${data.nama_partner}')">
                     Penerimaan
                 </button>
             </td>
@@ -236,7 +236,7 @@ function fetchPartnerData() {
     showLoading(true);
 
     jQuery.ajax({
-        url: BASE_API_DEV + CONFIG.apiEndpoint,
+        url: BASE_API + CONFIG.apiEndpoint,
         method: 'GET',
         contentType: 'application/json',
         success: function (result) {
@@ -270,7 +270,7 @@ function fetchMaterialData(partnerId) {
     showLoading(true);
 
     jQuery.ajax({
-        url: BASE_API_DEV + CONFIG.apiMaterialEndpoint + '/' + partnerId,
+        url: BASE_API + CONFIG.apiMaterialEndpoint + '/' + partnerId,
         method: 'GET',
         contentType: 'application/json',
         success: function (result) {
@@ -464,7 +464,7 @@ function renderMaterialPopup() {
                     <tr>
                         <th class="label-cell text-align-center" style="width: 60px;">No</th>
                         <th class="label-cell text-align-center">Material</th>
-                        <th class="label-cell text-align-center" style="width: 100px;">Qty</th>
+                        <th class="label-cell text-align-center" style="width: 100px;">Jumlah</th>
                         <th class="label-cell text-align-center" style="width: 150px;">Harga</th>
                         <th class="label-cell text-align-center" style="width: 150px;">Total</th>
                     </tr>
@@ -485,7 +485,7 @@ function renderMaterialPopup() {
  * Update marquee
  */
 function initMarqueeText() {
-    // Cek apakah BASE_API terdefinisi, jika tidak gunakan BASE_API_DEV
+    // Cek apakah BASE_API terdefinisi, jika tidak gunakan BASE_API
     const apiUrl = typeof BASE_API !== 'undefined';
 
     jQuery.ajax({
@@ -680,8 +680,10 @@ function bukaFormTambahMaterial(partnerId, namaPartner, spk) {
     $$('#form_nama_partner').text(namaPartner || '-');
     $$('#form_spk_partner').text(spk || '-');
 
-    // Reset form
+    // Reset form dan material sementara
     resetFormMaterial();
+    STATE.materialSementara = [];
+    renderMaterialSementara();
 
     // Buka popup
     if (typeof app !== 'undefined') {
@@ -696,7 +698,7 @@ function resetFormMaterial() {
     $$('#input_nama_material').val('');
     $$('#input_jumlah_material').val('1');
     $$('#input_harga_material').val('0');
-    $$('#input_kategori_material').val('');
+    $$('#input_keterangan_material').val('');
     $$('#preview_total_harga').text('Rp 0');
 }
 
@@ -809,7 +811,7 @@ function executeSaveMaterial(postData) {
     showLoading(true);
 
     jQuery.ajax({
-        url: BASE_API_DEV + CONFIG.apiAddMaterialEndpoint,
+        url: BASE_API + CONFIG.apiAddMaterialEndpoint,
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(postData),
@@ -922,7 +924,7 @@ function executeDelete(partnerId, namaPartner) {
     showLoading(true);
 
     jQuery.ajax({
-        url: BASE_API_DEV + CONFIG.apiDeleteEndpoint + '/' + partnerId,
+        url: BASE_API + CONFIG.apiDeleteEndpoint + '/' + partnerId,
         method: 'DELETE',
         contentType: 'application/json',
         success: function (result) {
@@ -943,6 +945,248 @@ function executeDelete(partnerId, namaPartner) {
             showLoading(false);
         }
     });
+}
+
+// =========================================
+// MATERIAL SEMENTARA FUNCTIONS
+// =========================================
+
+/**
+ * Tambah material ke list sementara
+ */
+function tambahKeListSementara() {
+    console.log('Tambah ke list sementara...');
+
+    // Validasi form
+    const validation = validateFormMaterial();
+
+    if (!validation.valid) {
+        showNotification(validation.errors.join('<br>'), 'error');
+        return;
+    }
+
+    // Ambil data dari form
+    const namaMaterial = $$('#input_nama_material').val().trim();
+    const jumlah = parseInt($$('#input_jumlah_material').val());
+    const harga = parseInt($$('#input_harga_material').val());
+    const keterangan = $$('#input_keterangan_material').val().trim();
+    const total = jumlah * harga;
+
+    // Buat object material
+    const material = {
+        id: Date.now(), // Temporary ID
+        nama: namaMaterial,
+        jumlah: jumlah,
+        harga: harga,
+        total: total,
+        keterangan: keterangan
+    };
+
+    // Tambahkan ke array sementara
+    STATE.materialSementara.push(material);
+
+    console.log('Material ditambahkan ke list sementara:', material);
+    console.log('Total material sementara:', STATE.materialSementara.length);
+
+    // Render ulang tabel
+    renderMaterialSementara();
+
+    // Reset form untuk input berikutnya
+    resetFormMaterial();
+
+    // Fokus ke input nama material
+    $$('#input_nama_material').focus();
+
+    showNotification('Material ditambahkan ke list', 'success');
+}
+
+/**
+ * Render tabel material sementara
+ */
+function renderMaterialSementara() {
+    const tbody = $$('#tbody_material_sementara');
+    const totalCounter = $$('#total_material_sementara');
+    const grandTotal = $$('#grand_total_material');
+
+    if (STATE.materialSementara.length === 0) {
+        tbody.html(`
+            <tr>
+                <td colspan="6" style="padding: 20px; color: #999;">
+                    Belum ada material ditambahkan
+                </td>
+            </tr>
+        `);
+        totalCounter.text('0 item');
+        grandTotal.text('Rp 0');
+        return;
+    }
+
+    let html = '';
+    let totalKeseluruhan = 0;
+
+    STATE.materialSementara.forEach((material, index) => {
+        totalKeseluruhan += material.total;
+
+        html += `
+            <tr>
+                <td style="padding: 8px;">${index + 1}</td>
+                <td style="padding: 8px; text-align: left;">
+                    ${material.nama}
+                    ${material.keterangan ? '<br><small style="color: #999;">' + material.keterangan + '</small>' : ''}
+                </td>
+                <td style="padding: 8px;">${formatNumber(material.jumlah)}</td>
+                <td style="padding: 8px; text-align: right;">${formatCurrency(material.harga)}</td>
+                <td style="padding: 8px; text-align: right;">${formatCurrency(material.total)}</td>
+                <td style="padding: 8px;">
+                    <button class="button button-small button-fill bg-color-red" 
+                        onclick="hapusMaterialSementara(${material.id})" 
+                        style="margin: 0;">
+                        <i class="f7-icons">trash</i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+
+    tbody.html(html);
+    totalCounter.text(`${STATE.materialSementara.length} item`);
+    grandTotal.text(formatCurrency(totalKeseluruhan));
+}
+
+/**
+ * Hapus material dari list sementara
+ */
+function hapusMaterialSementara(materialId) {
+    console.log('Hapus material sementara:', materialId);
+
+    // Cari index material
+    const index = STATE.materialSementara.findIndex(m => m.id === materialId);
+
+    if (index === -1) {
+        showNotification('Material tidak ditemukan', 'error');
+        return;
+    }
+
+    // Hapus dari array
+    STATE.materialSementara.splice(index, 1);
+
+    // Render ulang
+    renderMaterialSementara();
+
+    showNotification('Material dihapus dari list', 'success');
+}
+
+/**
+ * Simpan semua material sementara ke server
+ */
+function simpanSemuaMaterial() {
+    console.log('Simpan semua material...');
+
+    // Cek apakah ada material
+    if (STATE.materialSementara.length === 0) {
+        showNotification('Belum ada material yang ditambahkan', 'error');
+        return;
+    }
+
+    // Pastikan id_partner_transaksi ada
+    if (!STATE.materialForm.id_partner_transaksi) {
+        showNotification('ID Partner Transaksi tidak ditemukan', 'error');
+        return;
+    }
+
+    // Hitung grand total
+    const grandTotal = STATE.materialSementara.reduce((sum, m) => sum + m.total, 0);
+
+    // Konfirmasi sebelum simpan
+    if (typeof app !== 'undefined') {
+        app.dialog.confirm(
+            `Simpan ${STATE.materialSementara.length} material ke database?<br>` +
+            `Grand Total: ${formatCurrency(grandTotal)}`,
+            'Konfirmasi Simpan',
+            function () {
+                // User klik OK
+                executeSaveSemuaMaterial();
+            }
+        );
+    } else {
+        executeSaveSemuaMaterial();
+    }
+}
+
+/**
+ * Eksekusi penyimpanan semua material ke server
+ */
+function executeSaveSemuaMaterial() {
+    showLoading(true);
+
+    // Prepare data untuk dikirim (kirim satu per satu)
+    const promises = STATE.materialSementara.map(material => {
+        const postData = {
+            id_partner_transaksi: STATE.materialForm.id_partner_transaksi,
+            nama: material.nama,
+            jumlah: material.jumlah,
+            harga: material.harga
+        };
+
+        // Tambahkan keterangan jika ada
+        if (material.keterangan) {
+            postData.keterangan = material.keterangan;
+        }
+
+        return jQuery.ajax({
+            url: BASE_API + CONFIG.apiAddMaterialEndpoint,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(postData)
+        });
+    });
+
+    // Tunggu semua request selesai
+    Promise.all(promises)
+        .then(results => {
+            console.log('All materials saved:', results);
+
+            const successCount = results.filter(r => r.success).length;
+
+            showNotification(
+                `${successCount} dari ${STATE.materialSementara.length} material berhasil disimpan`,
+                'success'
+            );
+
+            // Reset state
+            STATE.materialSementara = [];
+            resetFormMaterial();
+            renderMaterialSementara();
+
+            // Tutup popup tambah material
+            tutupPopupTambahMaterial();
+
+            // Refresh data material di popup detail setelah popup ditutup
+            setTimeout(() => {
+                if (STATE.materialForm.id_partner_transaksi) {
+                    fetchMaterialData(STATE.materialForm.id_partner_transaksi);
+                }
+            }, 400);
+        })
+        .catch(error => {
+            console.error('Error saving materials:', error);
+
+            let errorMessage = 'Gagal menyimpan beberapa material';
+
+            try {
+                const response = JSON.parse(error.responseText);
+                if (response.message) {
+                    errorMessage = response.message;
+                }
+            } catch (e) {
+                console.error('Error parsing response:', e);
+            }
+
+            showNotification(errorMessage, 'error');
+        })
+        .finally(() => {
+            showLoading(false);
+        });
 }
 
 // =========================================
@@ -967,6 +1211,7 @@ function initPartnerPage() {
         nama_partner: null,
         spk: null
     };
+    STATE.materialSementara = [];
 
     // Update marquee
     initMarqueeText();

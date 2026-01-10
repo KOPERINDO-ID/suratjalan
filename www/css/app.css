@@ -319,15 +319,16 @@ div[class*="col-border"] {
 }
 
 .bg-dark-gray-medium {
-  background: linear-gradient(#015cab, #909090);
+  background: linear-gradient(315deg, #14418F, #056BBC);
   /* Standard syntax */
-  background: -webkit-linear-gradient(#015cab, #909090);
+  background: -webkit-linear-gradient(315deg, #14418F, #056BBC);
   /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(#015cab, #909090);
+  background: -o-linear-gradient(315deg, #14418F, #056BBC);
   /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(#015cab, #909090);
+  background: -moz-linear-gradient(315deg, #14418F, #056BBC);
   /* For Firefox 3.6 to 15 */
 }
+
 
 .bg-dark-gray-black {
   background: linear-gradient(#3d3d3d, black);
@@ -509,3 +510,79 @@ div[class*="col-border"] {
 }
 
 /*end additional css by aris*/
+
+/* Custom CSS by Aryakk */
+
+.table-header-theme {
+  color: #1C1C1D;
+  background-color: #CFECFE;
+  border-top: solid 1px;
+  border-left: solid 1px;
+  border-color: #737373;
+  font-weight: bold;
+}
+
+.table-body-theme {
+  color: #1C1C1D;
+  background-color: #FFFFFF;
+}
+
+.btn-primary-theme {
+  width: 100%;
+  height: 42px;
+  padding: 0 10px;
+  background: linear-gradient(315deg, #14418F, #056BBC);
+  color: #fff;
+  border-radius: 4px;
+  border: none;
+  box-sizing: border-box;
+}
+
+.information-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 16px;
+  border-bottom: 2px solid #e0e0e0;
+  background: #CFECFE;
+  border: 1px solid #727272;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.spk-info {
+  flex: 1;
+  padding-right: 16px;
+  border-right: 2px solid #727272;
+}
+
+.quantity-badge {
+  flex: 1;
+  padding-left: 16px;
+}
+
+.spk-code {
+  font-size: 16px;
+  color: #555;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid #727272;
+}
+
+.client-name {
+  font-size: 16px;
+  color: #222;
+  font-weight: 700;
+}
+
+.quantity-badge {
+  color: #222;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* End of custom CSS by Aryakk */
