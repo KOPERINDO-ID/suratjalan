@@ -29,7 +29,6 @@ let RECEIVING_STATE = {
  * Membuka modal penerimaan dengan data dari API
  */
 function openReceivingModal(id_partner_transaksi, partner_name = '') {
-    console.log('Opening receiving modal for partner transaksi:', id_partner_transaksi);
 
     if (!id_partner_transaksi) {
         showAlert('ID Partner Transaksi tidak valid', 'Error');
@@ -49,7 +48,6 @@ function openReceivingModal(id_partner_transaksi, partner_name = '') {
  * Load data penerimaan dari API
  */
 function loadReceivingData(id_partner_transaksi) {
-    console.log('Loading receiving data for ID:', id_partner_transaksi);
 
     RECEIVING_STATE.currentPartnerTransaksiId = id_partner_transaksi;
 
@@ -64,7 +62,6 @@ function loadReceivingData(id_partner_transaksi) {
             showLoading(true);
         },
         success: function (response) {
-            console.log('Receiving data loaded:', response);
 
             if (response.success === true && response.data) {
                 // Populate header info
@@ -85,7 +82,6 @@ function loadReceivingData(id_partner_transaksi) {
             console.error('Error loading receiving data:', error);
 
             if (xhr.status === 404) {
-                console.log('No receiving data found - rendering empty table');
                 renderEmptyReceivingTable();
                 updateReceivingCount(0);
             } else {
@@ -102,7 +98,6 @@ function loadReceivingData(id_partner_transaksi) {
  * Populate receiving header information
  */
 function populateReceivingHeader(data) {
-    console.log('Populating receiving header:', data);
 
     // Data adalah array dari response.data
     const headerData = data[0] || {};
@@ -129,7 +124,6 @@ function populateReceivingHeader(data) {
  * Render receiving table
  */
 function renderReceivingTable(receivings) {
-    console.log('Rendering receiving table:', receivings);
 
     const tbody = $('#receiving_table_body');
     tbody.empty();
@@ -141,14 +135,12 @@ function renderReceivingTable(receivings) {
 
     RECEIVING_STATE.receivingList = receivings;
 
-    console.log('Populating', RECEIVING_STATE.receivingList);
 
     receivings.forEach((item, index) => {
         const row = createReceivingRow(item, index + 1);
         tbody.append(row);
     });
 
-    console.log('Receiving table rendered with', receivings.length, 'rows');
 }
 
 /**
@@ -214,7 +206,6 @@ function updateReceivingCount(count) {
  * Refresh receiving data
  */
 function refreshReceivingData() {
-    console.log('Refreshing receiving data...');
 
     if (!RECEIVING_STATE.currentPartnerTransaksiId) {
         showAlert('ID Partner Transaksi tidak tersedia', 'Error');
@@ -229,7 +220,6 @@ function refreshReceivingData() {
  * Add new receiving row
  */
 function addReceivingRow() {
-    console.log('Adding new receiving row...');
 
     // Remove any existing editing row
     $('.editing-row').remove();
@@ -296,7 +286,6 @@ function cancelReceivingRow() {
  * Save new receiving row - Open upload popup
  */
 function saveReceivingRow() {
-    console.log('Preparing receiving data for upload...');
 
     const tanggal = $('#input_tanggal_terima').val();
     const jumlah = $('#input_jumlah_terima').val();
@@ -344,7 +333,6 @@ function saveReceivingRow() {
         nama_penerima: namaPenerima
     };
 
-    console.log('Temp data stored:', RECEIVING_STATE.tempReceivingData);
 
     // Populate upload popup
     $('#upload_tanggal_display').text(formatDateShow(tanggal));
@@ -375,7 +363,6 @@ $(document).on('change', '#input_bukti_penerimaan', function (e) {
         return;
     }
 
-    console.log('Bukti penerimaan selected:', file.name);
 
     // Validate file type
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
@@ -413,7 +400,6 @@ $(document).on('change', '#input_bukti_dokumen_penerimaan', function (e) {
         return;
     }
 
-    console.log('Bukti dokumen selected:', file.name);
 
     // Validate file type
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
@@ -461,7 +447,6 @@ function clearBuktiDokumen() {
  * Submit penerimaan with files using FormData
  */
 function submitPenerimaanWithFiles() {
-    console.log('Submitting penerimaan with files...');
 
     if (!RECEIVING_STATE.tempReceivingData) {
         showAlert('Data penerimaan tidak ditemukan', 'Error');
@@ -482,14 +467,12 @@ function submitPenerimaanWithFiles() {
     const buktiFotoInput = document.getElementById('input_bukti_penerimaan');
     if (buktiFotoInput && buktiFotoInput.files[0]) {
         formData.append('bukti_penerimaan', buktiFotoInput.files[0]);
-        console.log('Bukti penerimaan attached:', buktiFotoInput.files[0].name);
     }
 
     // Add bukti dokumen if selected
     const buktiDokumenInput = document.getElementById('input_bukti_dokumen_penerimaan');
     if (buktiDokumenInput && buktiDokumenInput.files[0]) {
         formData.append('bukti_dokumen_penerimaan', buktiDokumenInput.files[0]);
-        console.log('Bukti dokumen attached:', buktiDokumenInput.files[0].name);
     }
 
     // Disable submit button
@@ -505,7 +488,6 @@ function submitPenerimaanWithFiles() {
             showLoading(true);
         },
         success: function (response) {
-            console.log('Save response:', response);
 
             if (response.success === true) {
                 showNotification('Penerimaan berhasil ditambahkan', 'success');
@@ -562,8 +544,6 @@ function submitPenerimaanWithFiles() {
  * View bukti penerimaan
  */
 function viewBuktiPenerimaan(id_detail_pengiriman) {
-    console.log('Viewing bukti penerimaan for ID:', id_detail_pengiriman);
-    console.log('Current receiving list:', RECEIVING_STATE.receivingList);
 
     // Find the delivery data
     const delivery = RECEIVING_STATE.receivingList.find(r => r.id == id_detail_pengiriman);

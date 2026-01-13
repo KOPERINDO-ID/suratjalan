@@ -233,4 +233,4 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 
 setInterval(function () {
 	checkInternet();
-}, 3000);
+}, 10000);

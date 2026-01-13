@@ -121,7 +121,6 @@ function formatDateIndonesia(date) {
  * Membuat HTML untuk baris tabel
  */
 function createTableRow(data, index) {
-    console.log('Creating table row for data:', data);
     return `
         <tr>
             <td class="label-cell text-align-left text-no-wrap" style="min-width: 100px !important;">${(moment(data.penjualan_tanggal).format('DDMMYY') + '-' + removePrefix(data.penjualan_id)) || '-'}</td>
@@ -222,7 +221,6 @@ function showNotification(message, type = 'success') {
             cssClass: `bg-color-${color}`
         }).open();
     } else {
-        console.log(`[${type.toUpperCase()}] ${message}`);
     }
 }
 
@@ -241,13 +239,11 @@ function fetchPartnerData() {
         method: 'GET',
         contentType: 'application/json',
         success: function (result) {
-            console.log("Raw Response:", result);
 
             STATE.partnerData = result.data || [];
             STATE.filteredData = [...STATE.partnerData];
             STATE.totalData = STATE.partnerData.length;
 
-            console.log("Partner Data Length:", STATE.partnerData.length);
 
             renderData();
             showNotification('Data berhasil dimuat', 'success');
@@ -275,7 +271,6 @@ function fetchMaterialData(partnerId) {
         method: 'GET',
         contentType: 'application/json',
         success: function (result) {
-            console.log("Material Response:", result);
 
             STATE.materialData = result.data || [];
             renderMaterialPopup();
@@ -405,7 +400,6 @@ function renderData() {
         }
     }
 
-    console.log(`Rendered page ${STATE.currentPage}/${totalPages} with ${pageData.length} items`);
 }
 
 /**
@@ -502,7 +496,6 @@ function initMarqueeText() {
             jQuery("#data_surat_jalan_berjalan").html('Memuat data...');
         },
         success: function (data) {
-            console.log("Marquee Data Response:", data);
 
             var data_produksi = '';
 
@@ -632,7 +625,6 @@ function tutupPopupMaterial() {
     if (typeof app !== 'undefined') {
         // Tutup hanya popup material
         app.popup.close('.popup-material', true);
-        console.log('Popup material ditutup');
     }
 }
 
@@ -643,7 +635,6 @@ function tutupPopupTambahMaterial() {
     if (typeof app !== 'undefined') {
         // Tutup hanya popup tambah material
         app.popup.close('.popup-tambah-material', true);
-        console.log('Popup tambah material ditutup');
     }
 }
 
@@ -658,7 +649,6 @@ function tutupSemuaPopup() {
         setTimeout(() => {
             app.popup.close('.popup-material', false);
         }, 300); // Delay untuk smooth animation
-        console.log('Semua popup ditutup');
     }
 }
 
@@ -670,7 +660,6 @@ function tutupSemuaPopup() {
  * Buka popup tambah material
  */
 function bukaFormTambahMaterial(partnerId, namaPartner, spk) {
-    console.log('Buka form tambah material:', { partnerId, namaPartner, spk });
 
     // Simpan state
     STATE.materialForm.id_partner_transaksi = partnerId;
@@ -750,7 +739,6 @@ function validateFormMaterial() {
  * Simpan material baru
  */
 function simpanMaterial() {
-    console.log('Simpan material...');
 
     // Validasi form
     const validation = validateFormMaterial();
@@ -785,7 +773,6 @@ function simpanMaterial() {
         postData.id_kategori_material = parseInt(kategori);
     }
 
-    console.log('Data yang akan dikirim:', postData);
 
     // Konfirmasi sebelum simpan
     if (typeof app !== 'undefined') {
@@ -817,7 +804,6 @@ function executeSaveMaterial(postData) {
         contentType: 'application/json',
         data: JSON.stringify(postData),
         success: function (result) {
-            console.log('Save material response:', result);
 
             if (result.success) {
                 showNotification('Material berhasil ditambahkan', 'success');
@@ -889,14 +875,12 @@ function setupMaterialFormListeners() {
         }
     });
 
-    console.log('Material form listeners setup complete');
 }
 
 /**
  * Handler untuk hapus data partner
  */
 function hapusData(partnerId, namaPartner) {
-    console.log('Hapus data partner:', partnerId);
 
     if (typeof app === 'undefined') {
         console.error('Framework7 app tidak tersedia');
@@ -913,7 +897,6 @@ function hapusData(partnerId, namaPartner) {
         },
         function () {
             // User klik Cancel
-            console.log('Hapus dibatalkan');
         }
     );
 }
@@ -929,8 +912,6 @@ function executeDelete(partnerId, namaPartner) {
         method: 'DELETE',
         contentType: 'application/json',
         success: function (result) {
-            console.log('Delete response:', result);
-
             showNotification(`Data partner ${namaPartner} berhasil dihapus`, 'success');
 
             // Refresh data
@@ -956,7 +937,6 @@ function executeDelete(partnerId, namaPartner) {
  * Tambah material ke list sementara
  */
 function tambahKeListSementara() {
-    console.log('Tambah ke list sementara...');
 
     // Validasi form
     const validation = validateFormMaterial();
@@ -986,8 +966,6 @@ function tambahKeListSementara() {
     // Tambahkan ke array sementara
     STATE.materialSementara.push(material);
 
-    console.log('Material ditambahkan ke list sementara:', material);
-    console.log('Total material sementara:', STATE.materialSementara.length);
 
     // Render ulang tabel
     renderMaterialSementara();
@@ -1058,7 +1036,6 @@ function renderMaterialSementara() {
  * Hapus material dari list sementara
  */
 function hapusMaterialSementara(materialId) {
-    console.log('Hapus material sementara:', materialId);
 
     // Cari index material
     const index = STATE.materialSementara.findIndex(m => m.id === materialId);
@@ -1081,7 +1058,6 @@ function hapusMaterialSementara(materialId) {
  * Simpan semua material sementara ke server
  */
 function simpanSemuaMaterial() {
-    console.log('Simpan semua material...');
 
     // Cek apakah ada material
     if (STATE.materialSementara.length === 0) {
@@ -1145,7 +1121,6 @@ function executeSaveSemuaMaterial() {
     // Tunggu semua request selesai
     Promise.all(promises)
         .then(results => {
-            console.log('All materials saved:', results);
 
             const successCount = results.filter(r => r.success).length;
 
@@ -1198,7 +1173,6 @@ function executeSaveSemuaMaterial() {
  * Inisialisasi halaman partner
  */
 function initPartnerPage() {
-    console.log('Initializing Partner Page...');
 
     // Reset state
     STATE.currentPage = 1;
@@ -1229,7 +1203,6 @@ function initPartnerPage() {
     // Setup material form listeners
     setupMaterialFormListeners();
 
-    console.log('Partner Page initialized successfully');
 }
 
 // Auto initialize jika DOM sudah ready

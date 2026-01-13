@@ -41,7 +41,6 @@ let MATERIAL_STATE = {
  * Membuka modal material dengan data dari API
  */
 function openMaterialModal(id_partner_transaksi, partner_name = '') {
-    console.log('Opening material modal for partner transaksi:', id_partner_transaksi);
 
     // Validasi
     if (!id_partner_transaksi) {
@@ -62,7 +61,6 @@ function openMaterialModal(id_partner_transaksi, partner_name = '') {
  * Load data material dari API
  */
 function loadMaterialData(id_partner_transaksi) {
-    console.log('Loading material data for ID:', id_partner_transaksi);
 
     MATERIAL_STATE.currentPartnerTransaksiId = id_partner_transaksi;
 
@@ -77,7 +75,6 @@ function loadMaterialData(id_partner_transaksi) {
             showLoading(true);
         },
         success: function (response) {
-            console.log('Material data loaded:', response);
 
             PURCHASE_STATE.currentItem = response.data.partner_info?.item || '-';
             PURCHASE_STATE.currentQuantity = response.data.partner_info?.penjualan_qty || 0;
@@ -104,7 +101,6 @@ function loadMaterialData(id_partner_transaksi) {
 
             // Check if 404 (no data found)
             if (xhr.status === 404) {
-                console.log('No material data found - rendering empty table');
                 renderEmptyMaterialTable();
                 updateMaterialCount(0);
             } else {
@@ -121,12 +117,10 @@ function loadMaterialData(id_partner_transaksi) {
  * Populate material header information
  */
 function populateMaterialHeader(data) {
-    console.log('Populating material header:', data);
 
     if (data.partner_info) {
         const partnerInfo = data.partner_info;
 
-        console.log('Partner Info:', partnerInfo);
 
         MATERIAL_STATE.currentPartnerName = partnerInfo.nama_partner || '-';
         PURCHASE_STATE.currentItem = partnerInfo.item || '-';
@@ -136,10 +130,7 @@ function populateMaterialHeader(data) {
 
         // Set SPK code from penjualan_id
         if (partnerInfo.penjualan_id) {
-            // Assuming you have the date from somewhere, otherwise use today's date
-            const spkCode = formatSPKCode(partnerInfo.penjualan_id, new Date());
-
-            PURCHASE_STATE.currentSpkCode = spkCode;
+            const spkCode = formatSPKCode(partnerInfo.penjualan_id, partnerInfo.penjualan_tanggal);
 
             $('#material-spk-code').text(spkCode);
         }
@@ -155,7 +146,6 @@ function populateMaterialHeader(data) {
  * Render material table
  */
 function renderMaterialTable(materials) {
-    console.log('Rendering material table:', materials);
 
     const tbody = $('#material_table_body');
     tbody.empty();
@@ -170,7 +160,6 @@ function renderMaterialTable(materials) {
         tbody.append(row);
     });
 
-    console.log('Material table rendered with', materials.length, 'rows');
 }
 
 /**
@@ -242,7 +231,6 @@ function updateMaterialCount(count) {
  * Add new material row (inline editing)
  */
 function addMaterialRow() {
-    console.log('Adding new material row');
 
     // Validasi
     if (!MATERIAL_STATE.currentPartnerTransaksiId) {
@@ -270,7 +258,6 @@ function addMaterialRow() {
     // Focus on first input
     $('#input_material_nama').focus();
 
-    console.log('Editable row added');
 }
 
 /**
@@ -343,7 +330,6 @@ function createEditableMaterialRow(item = null) {
  * Save material row (add new or update existing)
  */
 function saveMaterialRow() {
-    console.log('Saving material row');
 
     // Get values
     const nama = $('#input_material_nama').val().trim();
@@ -381,7 +367,6 @@ function saveMaterialRow() {
         total_harga: total_harga
     };
 
-    console.log('Material data to save:', materialData);
 
     // Check if editing existing row
     const rowId = $('.editing-row').data('id');
@@ -398,7 +383,6 @@ function saveMaterialRow() {
  * Open photo upload popup
  */
 function openPhotoUploadPopup(materialData) {
-    console.log('Opening photo upload popup');
 
     // Save temp data
     MATERIAL_STATE.tempMaterialRow = materialData;
@@ -430,7 +414,6 @@ function openPhotoUploadPopup(materialData) {
  * Cancel material row editing
  */
 function cancelMaterialRow() {
-    console.log('Canceling material row');
 
     showConfirm(
         'Batalkan penambahan material?',
@@ -443,7 +426,6 @@ function cancelMaterialRow() {
                 renderEmptyMaterialTable();
             }
 
-            console.log('Material row cancelled');
         }
     );
 }
@@ -452,7 +434,6 @@ function cancelMaterialRow() {
  * Edit material row
  */
 function editMaterialRow(id) {
-    console.log('Editing material row:', id);
 
     // Check if there's already an editing row
     if ($('.editing-row').length > 0) {
@@ -468,7 +449,6 @@ function editMaterialRow(id) {
         return;
     }
 
-    console.log('Material to edit:', material);
 
     // Find and replace the row
     const targetRow = $(`#material_table_body tr[data-id="${id}"]`);
@@ -483,7 +463,6 @@ function editMaterialRow(id) {
  * Update material to server
  */
 function updateMaterialToServer(materialData) {
-    console.log('Updating material to server:', materialData);
 
     $.ajax({
         type: 'POST',
@@ -494,7 +473,6 @@ function updateMaterialToServer(materialData) {
             showLoading(true);
         },
         success: function (response) {
-            console.log('Update response:', response);
 
             if (response.status == 1 || response.success === true) {
                 showNotification('Material berhasil diupdate', 'success');
@@ -522,7 +500,6 @@ function updateMaterialToServer(materialData) {
  * Delete material row
  */
 function deleteMaterialRow(id) {
-    console.log('Deleting material row:', id);
 
     showConfirm(
         'Hapus material ini?',
@@ -539,7 +516,6 @@ function deleteMaterialRow(id) {
                     showLoading(true);
                 },
                 success: function (response) {
-                    console.log('Delete response:', response);
 
                     if (response.status == 1 || response.success === true) {
                         showNotification('Material berhasil dihapus', 'success');
@@ -570,21 +546,17 @@ function deleteMaterialRow(id) {
  * Handle photo selection
  */
 $(document).on('change', '#photo_upload_input', function (e) {
-    console.log('=== PHOTO SELECTED ===');
 
     const file = e.target.files[0];
 
     if (!file) {
-        console.log('✗ No file selected');
         return;
     }
 
-    console.log('File:', file.name, file.size, file.type);
 
     // Validate file type
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     if (!validTypes.includes(file.type)) {
-        console.log('✗ Invalid file type:', file.type);
         showAlert('File harus berformat JPG, JPEG, atau PNG', 'Error');
         $(this).val('');
         return;
@@ -593,24 +565,20 @@ $(document).on('change', '#photo_upload_input', function (e) {
     // Validate file size (max 5MB)
     const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
-        console.log('✗ File too large:', file.size);
         showAlert('Ukuran file maksimal 5MB', 'Error');
         $(this).val('');
         return;
     }
 
-    console.log('✓ File validation passed');
 
     // Preview image
     const reader = new FileReader();
 
     reader.onload = function (e) {
-        console.log('✓ File loaded for preview');
         $('#photo_preview').attr('src', e.target.result);
         $('#photo_empty_placeholder').hide();
         $('#photo_preview_area').show();
         $('#btn_upload_photo').show();
-        console.log('✓ Preview displayed');
     };
 
     reader.onerror = function (e) {
@@ -619,20 +587,17 @@ $(document).on('change', '#photo_upload_input', function (e) {
     };
 
     reader.readAsDataURL(file);
-    console.log('Reading file...');
 });
 
 /**
  * Upload material with photo
  */
 function uploadMaterialPhoto() {
-    console.log('=== UPLOAD MATERIAL PHOTO ===');
 
     const fileInput = document.getElementById('photo_upload_input');
     const file = fileInput ? fileInput.files[0] : null;
 
     if (!file) {
-        console.log('✗ No file selected');
         showAlert('Pilih foto terlebih dahulu', 'Perhatian');
         return;
     }
@@ -643,8 +608,6 @@ function uploadMaterialPhoto() {
         return;
     }
 
-    console.log('File:', file.name);
-    console.log('Temp data:', MATERIAL_STATE.tempMaterialRow);
 
     // Prepare form data
     const formData = new FormData();
@@ -655,7 +618,6 @@ function uploadMaterialPhoto() {
     formData.append('total_harga', MATERIAL_STATE.tempMaterialRow.total_harga);
     formData.append('foto_bukti_material', file);
 
-    console.log('FormData prepared');
 
     // Upload
     $.ajax({
@@ -666,34 +628,26 @@ function uploadMaterialPhoto() {
         contentType: false,
         dataType: 'json',
         beforeSend: function (xhr) {
-            console.log('Sending upload request...');
             showLoading(true);
             $('#btn_upload_photo').prop('disabled', true).text('Uploading...');
         },
         success: function (response) {
-            console.log('=== UPLOAD SUCCESS ===');
-            console.log('Response:', response);
 
             if (response.status == 1 || response.success === true) {
-                console.log('✓ Material saved successfully');
                 showNotification('Material berhasil ditambahkan', 'success');
 
                 // Close upload popup
                 if (typeof app !== 'undefined' && app.popup) {
-                    console.log('Closing upload popup...');
                     app.popup.close('.popup-photo-upload');
                 }
 
                 // Remove editing row
                 $('.editing-row').remove();
-                console.log('✓ Editing row removed');
 
                 // Clear temp data
                 MATERIAL_STATE.tempMaterialRow = null;
-                console.log('✓ Temp data cleared');
 
                 // Refresh material data
-                console.log('Refreshing material data...');
                 refreshMaterialData();
 
             } else {
@@ -710,7 +664,6 @@ function uploadMaterialPhoto() {
             showAlert('Terjadi kesalahan saat upload', 'Error');
         },
         complete: function () {
-            console.log('Upload request complete');
             showLoading(false);
             $('#btn_upload_photo').prop('disabled', false).text('Upload Foto');
         }
@@ -721,8 +674,6 @@ function uploadMaterialPhoto() {
  * View material photo
  */
 function viewMaterialPhoto(photoUrl) {
-    console.log('=== VIEW MATERIAL PHOTO ===');
-    console.log('Photo URL:', photoUrl);
 
     if (!photoUrl) {
         showAlert('Foto tidak tersedia', 'Info');
@@ -749,7 +700,6 @@ function viewMaterialPhoto(photoUrl) {
  * VERSI YANG SUDAH DIPERBAIKI
  */
 function refreshMaterialData() {
-    console.log('=== REFRESH MATERIAL DATA ===');
 
     if (!MATERIAL_STATE.currentPartnerTransaksiId) {
         console.error('✗ No currentPartnerTransaksiId');
@@ -757,7 +707,6 @@ function refreshMaterialData() {
         return;
     }
 
-    console.log('Refreshing for ID:', MATERIAL_STATE.currentPartnerTransaksiId);
 
     // Call loadMaterialData
     loadMaterialData(MATERIAL_STATE.currentPartnerTransaksiId);
@@ -765,5 +714,4 @@ function refreshMaterialData() {
     // Show notification
     showNotification('Data material diperbarui', 'success');
 
-    console.log('=== REFRESH MATERIAL DATA COMPLETE ===');
 }
