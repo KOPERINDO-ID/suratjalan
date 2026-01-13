@@ -125,7 +125,7 @@ function createTableRow(data, index) {
     return `
         <tr>
             <td class="label-cell text-align-left text-no-wrap" style="min-width: 100px !important;">${(moment(data.penjualan_tanggal).format('DDMMYY') + '-' + removePrefix(data.penjualan_id)) || '-'}</td>
-            <td class="label-cell text-no-wrap" style="text-align: left !important; min-width: 100px !important;">${data.client_nama || '-'}</td>
+            <td class="label-cell text-no-wrap" style="text-align: left !important; min-width: 150px !important;">${data.client_nama || '-'}</td>
             <td class="label-cell text-no-wrap" style="text-align: left !important; min-width: 150px !important;">${data.nama_partner || '-'}</td>
             <td class="label-cell text-no-wrap" style="min-width: 100px !important;">${formatDateIndonesia(data.tgl_deadline)}</td>
             <td class="label-cell display-flex justify-content-space-between align-items-center">
