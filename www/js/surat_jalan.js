@@ -1,8 +1,7 @@
-
 function getSuratJalanProduksi() {
 	jQuery.ajax({
 		type: 'POST',
-		url: "" + BASE_API + "/get-surat-jalan-produksi",
+		url: BASE_API + "/get-surat-jalan-produksi",
 		dataType: 'JSON',
 		data: {
 			karyawan_id: localStorage.getItem("user_id"),
@@ -12,7 +11,7 @@ function getSuratJalanProduksi() {
 		},
 		success: function (data) {
 			var data_produksi = '';
-			console.log(data);
+
 			if (data.data.length != 0) {
 				var nota = '';
 				var idx = 0;
@@ -56,7 +55,6 @@ function SJValue() {
 }
 
 function SJEmptyValue(id) {
-	console.log(id);
 	jQuery('#jumlah_' + id + '').val('');
 }
 
@@ -64,7 +62,7 @@ function detailPenjualanProduksiSj(penjualan_id) {
 	detail_sales_data = '';
 	jQuery.ajax({
 		type: 'POST',
-		url: "" + BASE_API + "/get-penjualan-detail-performa",
+		url: BASE_API + "/get-penjualan-detail-performa",
 		dataType: 'JSON',
 		data: {
 			karyawan_id: localStorage.getItem("user_id"),
@@ -76,9 +74,8 @@ function detailPenjualanProduksiSj(penjualan_id) {
 		},
 		success: function (data) {
 
-
 			app.dialog.close();
-			console.log(data.data.length);
+
 			if (data.data.length != 0) {
 				jQuery.each(data.data, function (i, val) {
 					var no = i + 1;
@@ -145,9 +142,8 @@ function detailPenjualanProduksiSj(penjualan_id) {
 					detail_sales_data += ' </td>';
 					detail_sales_data += '</tr>';
 				}
+
 				detail_sales_data += '</table>';
-
-
 
 				$$('#detail_sales_data_produksi').html(detail_sales_data);
 			} else {
@@ -155,7 +151,6 @@ function detailPenjualanProduksiSj(penjualan_id) {
 			}
 
 			$$('.pb-popup-dark').on('click', function () {
-				console.log($$(this).attr("data-image-src"));
 				var gambar_zoom = $$(this).attr("data-image-src");
 				var myPhotoBrowserPopupDark = app.photoBrowser.create({
 					photos: [
@@ -173,7 +168,6 @@ function detailPenjualanProduksiSj(penjualan_id) {
 }
 
 function retur(kode_retur1, tgl_retur1, penerima1, keterangan1, retur1, kode_retur2, tgl_retur2, penerima2, keterangan2, retur2, kode_retur3, tgl_retur3, penerima3, keterangan3, retur3, kode_retur4, tgl_retur4, penerima4, keterangan4, retur4, kode_retur5, tgl_retur5, penerima5, keterangan5, retur5, kode_retur6, tgl_retur6, penerima6, keterangan6, retur6, kode_retur7, tgl_retur7, penerima7, keterangan7, retur7, kode_retur8, tgl_retur8, penerima8, keterangan8, retur8, kode_retur9, tgl_retur9, penerima9, keterangan9, retur9, kode_retur10, tgl_retur10, penerima10, keterangan10, retur10, client_id, type) {
-
 	$$(".input1").prop('required', true);
 	$$(".input2").removeAttr("required");
 	$$(".input3").removeAttr("required");
@@ -663,13 +657,7 @@ function suratJalan(kendaraan1, kendaraan2, kendaraan3, kendaraan4, kendaraan5, 
 	}
 }
 
-function fotoSuratJalan(id, foto_surat_jalan) {
-	console.log(id);
-	console.log(foto_surat_jalan);
-}
-
 function lihatFotoSuratJalan(src) {
-	console.log('KLIK');
 	var gambar_zoom = BASE_PATH_IMAGE_SURAT_JALAN + '/' + src;
 	var myPhotoBrowserPopupDark = app.photoBrowser.create({
 		photos: [
@@ -684,7 +672,7 @@ function lihatFotoSuratJalan(src) {
 function getSuratJalanList(penjualan_id, penjualan_qty, client_nama, kode_spk) {
 	jQuery.ajax({
 		type: 'POST',
-		url: "" + BASE_API + "/get-surat-jalan-list",
+		url: BASE_API + "/get-surat-jalan-list",
 		dataType: 'JSON',
 		data: {
 			penjualan_id: penjualan_id
@@ -789,7 +777,7 @@ function editSuratJalan(no_surat_jalan, no_transaksi, penjualan_id) {
 	var penjualan_value = '';
 	jQuery.ajax({
 		type: 'POST',
-		url: "" + BASE_API + "/get-surat-jalan-list-sj",
+		url: BASE_API + "/get-surat-jalan-list-sj",
 		dataType: 'JSON',
 		data: {
 			no_surat_jalan: no_surat_jalan,
@@ -851,18 +839,15 @@ function editSuratJalan(no_surat_jalan, no_transaksi, penjualan_id) {
 	});
 }
 
-//Config Get Image From Camera
 function setOptions(srcType) {
 	var options = {
-		// Some common settings are 20, 50, and 100
 		quality: 50,
 		destinationType: Camera.DestinationType.FILE_URI,
-		// In this app, dynamically set the picture source, Camera or photo gallery
 		sourceType: srcType,
 		encodingType: Camera.EncodingType.JPEG,
 		mediaType: Camera.MediaType.PICTURE,
 		allowEdit: false,
-		correctOrientation: true  //Corrects Android orientation quirks
+		correctOrientation: true
 	}
 	return options;
 }
@@ -870,29 +855,16 @@ function setOptions(srcType) {
 
 function getFileEntry(imgUri) {
 	window.resolveLocalFileSystemURL(imgUri, function success(fileEntry) {
-
-		// Do something with the FileEntry object, like write to it, upload it, etc.
-		// writeFile(fileEntry, imgUri);
 		alert("got file: " + fileEntry.nativeURL);
-		// displayFileData(fileEntry.nativeURL, "Native URL");
-
 	}, function () {
-		// If don't get the FileEntry (which may happen when testing
-		// on some emulators), copy to a new FileEntry.
 		createNewFileEntry(imgUri);
 	});
 }
 
 function createNewFileEntry(imgUri) {
 	window.resolveLocalFileSystemURL(cordova.file.cacheDirectory, function success(dirEntry) {
-		// JPEG file
 		dirEntry.getFile("tempFile.jpeg", { create: true, exclusive: false }, function (fileEntry) {
-			// Do something with it, like write to it, upload it, etc.
-			// writeFile(fileEntry, imgUri);
 			alert("got file file entry: " + fileEntry.fullPath);
-
-
-			// displayFileData(fileEntry.fullPath, "File copied to");
 		}, onErrorCreateFile);
 	}, onErrorResolveUrl);
 }
@@ -912,7 +884,6 @@ function getFileContentAsBase64(path, callback) {
 				var content = this.result;
 				callback(content);
 			};
-			// The most important point, use the readAsDatURL Method from the file plugin
 			reader.readAsDataURL(file);
 		});
 	}
@@ -925,25 +896,14 @@ function openCamera(selection) {
 	var func = createNewFileEntry;
 
 	navigator.camera.getPicture(function cameraSuccess(imageUri) {
-
-		// displayImage(imageUri);
-		// // You may choose to copy the picture, save it somewhere, or upload.
-
 		getFileContentAsBase64(imageUri, function (base64Image) {
-			//window.open(base64Image);
 			localStorage.setItem("file_foto_surat_jalan", base64Image);
 			changeTextFoto(imageUri);
-			// Then you'll be able to handle the myimage.png file as base64
 		});
-
 	}, function cameraError(error) {
 		console.debug("Unable to obtain picture: " + error, "app");
 		alert("Unable to obtain picture: ");
-
 	}, options);
-
-
-
 }
 
 
@@ -954,21 +914,13 @@ function openCameraEditSuratJalan(selection) {
 	var func = createNewFileEntry;
 
 	navigator.camera.getPicture(function cameraSuccess(imageUri) {
-
-		// displayImage(imageUri);
-		// // You may choose to copy the picture, save it somewhere, or upload.
-
 		getFileContentAsBase64(imageUri, function (base64Image) {
-			//window.open(base64Image);
 			localStorage.setItem("file_foto_edit_surat_jalan", base64Image);
 			changeTextFotoEdit(imageUri);
-			// Then you'll be able to handle the myimage.png file as base64
 		});
-
 	}, function cameraError(error) {
 		console.debug("Unable to obtain picture: " + error, "app");
 		alert("Unable to obtain picture: ");
-
 	}, options);
 }
 
@@ -983,7 +935,6 @@ function changeTextFotoEdit(imageUri) {
 }
 
 function prosesSuratJalan() {
-
 	var count_jumlah_item_sj = 0;
 	$$('.jumlah_item_sj').each(function () {
 		count_jumlah_item_sj++;
@@ -1005,7 +956,7 @@ function prosesSuratJalan() {
 				formData.append('file_foto_surat_jalan', localStorage.getItem("file_foto_surat_jalan"));
 				jQuery.ajax({
 					type: 'POST',
-					url: "" + BASE_API + "/surat-jalan-proses",
+					url: BASE_API + "/surat-jalan-proses",
 					dataType: 'JSON',
 					data: formData,
 					contentType: false,
@@ -1035,12 +986,11 @@ function prosesSuratJalan() {
 }
 
 const toInt = v => {
-	v = (v || '').toString().replace(/[.,\s]/g, ''); // hapus koma, titik, spasi
-	return v ? parseInt(v, 10) : null;               // kirim null jika kosong
+	v = (v || '').toString().replace(/[.,\s]/g, '');
+	return v ? parseInt(v, 10) : null;
 };
 
 function updateSuratJalan() {
-
 	var jumlah_item_edit_sj = 0;
 	$$('.jumlah_item_edit_sj').each(function () {
 		jumlah_item_edit_sj++;
@@ -1228,9 +1178,10 @@ function getSuratJalanDetail(penjualan_id, penjualan_qty, client_nama, kode_spk,
 						$.each(data.data_sj, function (stok_detail_qty_2, item_stok_detail_2) {
 							jumlah_pesanan += item_stok_detail_2.penjualan_qty;
 						});
+
 						var total_fix = parseInt(jumlah_pesanan) - parseInt(stock_item);
 						total_fix_qty_kirim += total_fix;
-						//	console.log(total_fix_qty_kirim);
+
 						$('#jumlah_stok_item_' + item2.penjualan_detail_performa_id + '').html(total_fix);
 						$('#kirim_stok_item_' + item2.penjualan_detail_performa_id + '').html(stock_item);
 						$('#total_stok_item_' + item2.penjualan_detail_performa_id + '').html(jumlah_pesanan);
@@ -1252,13 +1203,6 @@ function getSuratJalanDetail(penjualan_id, penjualan_qty, client_nama, kode_spk,
 				penjualan_value += '<td align="center" width="18%" style="border-left:1px solid gray;  border-right:1px solid gray; border-bottom:1px solid gray;"  class="label-cell" id="total_stok_item_' + item2.penjualan_detail_performa_id + '" ></td>';
 				penjualan_value += '<td align="center" width="18%" style="border-left:1px solid gray;  border-right:1px solid gray; border-bottom:1px solid gray;"  class="label-cell" id="kirim_stok_item_' + item2.penjualan_detail_performa_id + '" ></td>';
 				penjualan_value += '<td align="center" width="18%" style="border-left:1px solid gray;  border-right:1px solid gray; border-bottom:1px solid gray;"  class="label-cell" id="jumlah_stok_item_' + item2.penjualan_detail_performa_id + '" ></td>';
-
-				console.log(localStorage.getItem('total_fix_qty_sisa'));
-				// if (item2.status_produksi == 'selesai') {
-				// 	penjualan_value += '<td width="18%" style="border-left:1px solid gray;  border-right:1px solid gray; border-bottom:1px solid gray;"  class="label-cell td_jumlah_' + i2 + '"><input style="width:100%; height:28px; background-color:white; color:black;" type="number" class="jumlah_item_sj" id="jumlah_' + i2 + '" name="jumlah_' + i2 + '" placeholder="Jumlah" value="0" onclick="SJEmptyValue(' + i2 + ');" required validate/><input  type="hidden" id="kode_' + i2 + '" value="' + item2.penjualan_detail_performa_id + '" name="kode_' + i2 + '" /></td>';
-				// } else {
-				// 	penjualan_value += '<td width="18%" style="border-left:1px solid gray;  border-right:1px solid gray; border-bottom:1px solid gray;"  class="label-cell td_jumlah_' + i2 + '"><input style="width:100%; height:28px; background-color:red; color:white;" type="number" class="jumlah_item_sj" id="jumlah_' + i2 + '" name="jumlah_' + i2 + '" placeholder="Jumlah" value="0"  required validate readonly/><input  type="hidden" id="kode_' + i2 + '" value="' + item2.penjualan_detail_performa_id + '" name="kode_' + i2 + '" /></td>';
-				// }
 				penjualan_value += '<td width="18%" style="border-left:1px solid gray;  border-right:1px solid gray; border-bottom:1px solid gray;"  class="label-cell td_jumlah_' + i2 + '"><input style="width:100%; height:28px; background-color:white; color:black;" type="number" class="jumlah_item_sj" id="jumlah_' + i2 + '" name="jumlah_' + i2 + '" placeholder="Jumlah" value="0" onclick="SJEmptyValue(' + i2 + ');" required validate/><input  type="hidden" id="kode_' + i2 + '" value="' + item2.penjualan_detail_performa_id + '" name="kode_' + i2 + '" /></td>';
 
 			});
@@ -2031,11 +1975,35 @@ function getHeaderPenjualanKunjungan(page) {
 			var nota2 = '';
 			var nota = '';
 			app.dialog.close();
-			no = 1;
-			for (i = 0; i < data.data.last_page; i++) {
-				no = i + 1;
-				pagination_button += '<i onclick="getHeaderPenjualanKunjungan(' + no + ');"  style="border-radius:2px; width:40px; height:40px; background-color:#4c5269; padding-left:8px; padding-right:8px; margin:2px;">' + no + '</i>';
+
+			// Create pagination dengan style baru
+			var currentPage = data.data.current_page;
+			var totalPages = data.data.last_page;
+
+			if (totalPages > 1) {
+				pagination_button = '<div class="segmented segmented-raised" style="margin: 10px 0; width: 100%; display: flex; justify-content: space-between;">';
+
+				// Tombol Previous
+				if (currentPage > 1) {
+					pagination_button += '<button class="button button-outline text-add-colour-white" style="display: flex; align-items: center; border-color: #686665 !important; flex: 1;" onclick="getHeaderPenjualanKunjungan(' + (currentPage - 1) + ')"><i class="f7-icons">chevron_left</i> Previous</button>';
+				} else {
+					pagination_button += '<button class="button button-outline text-add-colour-white disabled" style="opacity: 0.3; display: flex; align-items: center; border-color: #686665 !important; flex: 1;"><i class="f7-icons">chevron_left</i> Previous</button>';
+				}
+
+				// Info halaman
+				pagination_button += '<button class="button text-add-colour-white" style="background-color: #686665; flex: 1;">' + currentPage + ' / ' + totalPages + '</button>';
+
+				// Tombol Next
+				if (currentPage < totalPages) {
+					pagination_button += '<button class="button button-outline text-add-colour-white" style="display: flex; align-items: center; border-color: #686665 !important; flex: 1;" onclick="getHeaderPenjualanKunjungan(' + (currentPage + 1) + ')">Next <i class="f7-icons">chevron_right</i></button>';
+				} else {
+					pagination_button += '<button class="button button-outline text-add-colour-white disabled" style="opacity: 0.3; display: flex; align-items: center; border-color: #686665 !important; flex: 1;">Next <i class="f7-icons">chevron_right</i></button>';
+				}
+
+				pagination_button += '</div>';
 			}
+
+			no = 1;
 			var warna_button_packing = '';
 			var num = 1;
 			$.each(data.data.data, function (i2, item2) {
@@ -2114,16 +2082,6 @@ function getHeaderPenjualanKunjungan(page) {
 						btn_alamat_kirim_penjualan = "card-color-brown";
 					}
 				}
-
-				console.log(data.bantuan_cabang[item2.penjualan_id]);
-				// if (data.bantuan_cabang[item2.penjualan_id][0].bantuan_cabang == 'Jakarta') {
-				// 	var cabang = 'Xinyao';
-				// } else if (data.bantuan_cabang[item2.penjualan_id][0].bantuan_cabang != null) {
-				// 	var cabang = data.bantuan_cabang[item2.penjualan_id][0].bantuan_cabang;
-				// } else if (data.bantuan_cabang[item2.penjualan_id][0].bantuan_cabang == null) {
-				// 	var cabang = 'Asia';
-				// }
-
 
 				if (sisa_kirim_sj <= 0) {
 					if (data.valid_count[item2.penjualan_id] > 0) {
@@ -2563,11 +2521,7 @@ function downloadPointPdf() {
 
 			point_popup_pdf += '</tbody>';
 
-
-
 			point_popup_pdf += '</table>';
-
-			console.log(point_popup_pdf);
 
 			let options = {
 				documentSize: 'A4',
@@ -3015,8 +2969,6 @@ function spkPo(penjualan_id_primary, performa_id_relation, performa_header_id, b
 			pdf.fromData(invoice_penjualan, options)
 				.then((stats) => console.log('status', stats))
 				.catch((err) => console.err(err))
-
-			console.log(invoice_penjualan);
 		},
 		error: function (xmlhttprequest, textstatus, message) {
 		}
@@ -3470,8 +3422,6 @@ function fillPenjualanTambahPopup(produk_detail_id, produk_grup_warna, produk_id
 	$$('#color_tambah_popup_1').html('<div id="penjualan_color_tambah_popup_1" data-color="' + produk_grup_warna + '" style="margin:5px;text-align:center;height:25px;background-color:' + produk_grup_warna + '"></div>');
 	$$('#penjualan_produk_detail_tambah_id_1').val(produk_detail_id);
 	$$('#penjualan_produk_tambah_id_1').val(produk_id);
-	// $$('#jenis_1').val(produk_id);
-
 }
 
 function gambarPenjualanTambahPopup(penjualan_table_id) {
@@ -3521,8 +3471,6 @@ function tambaHeaderPenjualanProses() {
 		}
 	}
 }
-
-//edit
 
 function doSearchByTypeEdit(text) {
 	clearTimeout(delayTimer);
@@ -3594,8 +3542,6 @@ function getKatalogEdit(tipe) {
 					$$('#file_edit_1').prop('required', true)
 					$$('#file_edit_1').prop('validate', true)
 				}
-
-
 			},
 			error: function (xmlhttprequest, textstatus, message) {
 			}
@@ -3617,7 +3563,6 @@ function getKatalogPopupEdit(tipe) {
 		},
 		success: function (data) {
 			$.each(data.data, function (i, item) {
-
 				katalog_data += '<div class="col-50" style="margin:4px;">';
 				katalog_data += '<div class="text-bold block-title text-align-center" style="background-color:white; color:black;  padding:-20px; margin: 0px;  border-radius:14px;">';
 				katalog_data += '   <img onclick="fillPenjualanEdit(\'' + item.produk_detail_id + '\',\'' + item.produk_grup_warna + '\',\'' + item.produk_id + '\');" src="' + BASE_PATH_IMAGE_PRODUCT_NEW + '/' + item.foto_depan + '" height="100%" width="100%" />';
@@ -3628,7 +3573,6 @@ function getKatalogPopupEdit(tipe) {
 				katalog_data += ' </div>';
 				katalog_data += '</div>';
 				katalog_data += ' </div>';
-
 			});
 
 			app.dialog.close();
@@ -3640,7 +3584,6 @@ function getKatalogPopupEdit(tipe) {
 }
 
 function fillPenjualanEdit(produk_detail_id, produk_grup_warna, produk_id) {
-
 	$("#close-katalog-popup-edit").click();
 	$$('#color_penjualan_edit_1').css("display", "inline");
 	$$('#type_penjualan_edit_1').removeClass('col-100');
@@ -3649,8 +3592,6 @@ function fillPenjualanEdit(produk_detail_id, produk_grup_warna, produk_id) {
 	$$('#color_edit_1').html('<div id="penjualan_color_edit_1" data-color="' + produk_grup_warna + '" style="margin:5px;text-align:center;height:25px;background-color:' + produk_grup_warna + '"></div>');
 	$$('#penjualan_produk_detail_edit_id_1').val(produk_detail_id);
 	$$('#penjualan_produk_id_edit_1').val(produk_id);
-	// $$('#jenis_1').val(produk_id);
-
 }
 
 function gambarPenjualanEdit(penjualan_id) {

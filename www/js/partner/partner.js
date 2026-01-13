@@ -125,7 +125,8 @@ function createTableRow(data, index) {
     return `
         <tr>
             <td class="label-cell text-align-left text-no-wrap" style="min-width: 100px !important;">${(moment(data.penjualan_tanggal).format('DDMMYY') + '-' + removePrefix(data.penjualan_id)) || '-'}</td>
-            <td class="label-cell text-no-wrap" style="min-width: 100px !important;">${data.nama_partner || '-'}</td>
+            <td class="label-cell text-no-wrap" style="text-align: left !important; min-width: 150px !important;">${data.client_nama || '-'}</td>
+            <td class="label-cell text-no-wrap" style="text-align: left !important; min-width: 150px !important;">${data.nama_partner || '-'}</td>
             <td class="label-cell text-no-wrap" style="min-width: 100px !important;">${formatDateIndonesia(data.tgl_deadline)}</td>
             <td class="label-cell display-flex justify-content-space-between align-items-center">
                 <button class="popup-open text-add-colour-black-soft bg-dark-gray-young button-small button text-bold" 
@@ -303,11 +304,11 @@ function filterDataByCompany(searchTerm) {
     } else {
         STATE.filteredData = STATE.partnerData.filter(item => {
             const company = sanitizeString(item.nama_partner || '');
-            const kota = sanitizeString(item.kota || '');
+            const client = sanitizeString(item.client_nama || '');
             const spk = sanitizeString(item.penjualan_id || '');
 
             return company.includes(search) ||
-                kota.includes(search) ||
+                client.includes(search) ||
                 spk.includes(search);
         });
     }
