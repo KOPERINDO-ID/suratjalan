@@ -1,10 +1,10 @@
 <div class="page" data-name="partner-page">
     <div class="page-content theme-dark">
         <!-- Text Marquee -->
-        <div class="card table-color-red border-actived" style="height:30px;">
+        <!-- <div class="card table-color-red border-actived" style="height:30px;">
             <marquee direction="left" style="vertical-align:middle; " id="data_surat_jalan_berjalan">
             </marquee>
-        </div>
+        </div> -->
 
         <!-- Top Menu -->
         <div class="card">
@@ -52,7 +52,7 @@
                             <input onkeyup="cariPerusahaan();" type="text"
                                 style="border-radius:3px; padding:6px; width:100%;  color:black; background-color:lightgray;"
                                 id="filter_perusahaan_partner" name="filter_perusahaan_partner"
-                                placeholder="Cari Perusahaan">
+                                placeholder="Cari SPK atau Perusahaan..">
                         </center>
                     </th>
                 </tr>
@@ -511,22 +511,42 @@
                                     <div class="col-100">
                                         <div class="card">
                                             <!-- Info Penerimaan -->
-                                            <div class="col-100"
-                                                style="padding: 15px; background-color: #f5f5f5; border-radius: 8px; margin-bottom: 15px;">
-                                                <div
-                                                    style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                                    <span style="font-weight: bold;">Tanggal:</span>
-                                                    <span id="upload_tanggal_display">-</span>
-                                                </div>
-                                                <div
-                                                    style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                                    <span style="font-weight: bold;">Jumlah Diterima:</span>
-                                                    <span id="upload_jumlah_display">-</span>
-                                                </div>
-                                                <div style="display: flex; justify-content: space-between;">
-                                                    <span style="font-weight: bold;">Penerima:</span>
-                                                    <span id="upload_penerima_display">-</span>
-                                                </div>
+                                            <div class="col-100" style="margin-bottom: 15px;">
+                                                <table width="100%"
+                                                    style="border-collapse: collapse; background-color: #CFECFE; border-radius: 8px; overflow: hidden;">
+                                                    <thead class="table-header-theme">
+                                                        <tr>
+                                                            <td
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border-bottom: 1px solid #B3E0FA; width: 40%;">
+                                                                Tanggal
+                                                            </td>
+                                                            <td
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;">
+                                                                Jumlah
+                                                            </td>
+                                                            <td
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D;">
+                                                                Penerima
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="table-body-theme">
+                                                        <tr>
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;"
+                                                                id="upload_tanggal_display">
+                                                                -
+                                                            </td>
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;"
+                                                                id="upload_jumlah_display">
+                                                                -
+                                                            </td>
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D;"
+                                                                id="upload_penerima_display">
+                                                                -
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
 
                                             <!-- Upload Bukti Penerimaan -->
@@ -556,9 +576,11 @@
                                                             style="max-width: 100%; max-height: 300px; border-radius: 8px;" />
                                                         <div style="margin-top: 10px;">
                                                             <button
-                                                                class="button button-small button-fill bg-color-orange"
+                                                                class="button button-small button-fill bg-color-red display-flex justify-content-center align-items-center"
                                                                 onclick="clearBuktiPenerimaan()">
-                                                                <i class="f7-icons">trash</i> Hapus
+                                                                <i class="f7-icons"
+                                                                    style="margin-right: 4px; font-size: 14px;">trash</i>
+                                                                Hapus
                                                             </button>
                                                         </div>
                                                     </div>
@@ -566,7 +588,7 @@
                                             </div>
 
                                             <!-- Upload Bukti Dokumen Penerimaan -->
-                                            <div class="col-100" style="margin-bottom: 20px;">
+                                            <div class="col-100" style="margin-bottom: 20px; display:none;">
                                                 <div style="font-weight: bold; margin-bottom: 10px; font-size: 16px;">
                                                     Bukti Dokumen Penerimaan (Opsional)
                                                 </div>
@@ -597,9 +619,11 @@
                                                         </div>
                                                         <div style="margin-top: 10px;">
                                                             <button
-                                                                class="button button-small button-fill bg-color-orange"
+                                                                class="button button-small button-fill bg-color-red display-flex justify-content-center align-items-center"
                                                                 onclick="clearBuktiDokumen()">
-                                                                <i class="f7-icons">trash</i> Hapus
+                                                                <i class="f7-icons"
+                                                                    style="margin-right: 4px; font-size: 14px;">trash</i>
+                                                                Hapus
                                                             </button>
                                                         </div>
                                                     </div>
@@ -608,13 +632,14 @@
 
                                             <!-- Action Buttons -->
                                             <div class="col-100" style="margin-top: 20px;">
-                                                <button class="button button-large button-fill bg-color-green"
+                                                <button
+                                                    class="button button-fill btn-primary-theme display-flex justify-content-center align-items-center"
                                                     id="btn_submit_penerimaan" onclick="submitPenerimaanWithFiles()"
                                                     style="width: 100%;">
-                                                    <i class="f7-icons">checkmark_circle_fill</i> Simpan Penerimaan
+                                                    Simpan
                                                 </button>
 
-                                                <button class="button button-large button-outline popup-close"
+                                                <button class="button button-large button-fill bg-color-red popup-close"
                                                     data-popup=".popup-upload-penerimaan"
                                                     style="width: 100%; margin-top: 10px;">
                                                     Batal
@@ -678,7 +703,7 @@
                                                                 id="viewer_tanggal_penerimaan">
                                                                 -
                                                             </td>
-                                                            <td style="padding: 12px; text-align: right; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;"
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;"
                                                                 id="viewer_jumlah_penerimaan">
                                                                 -
                                                             </td>
@@ -725,7 +750,7 @@
                                             </div>
 
                                             <!-- Bukti Dokumen Penerimaan -->
-                                            <div class="col-100" style="margin-bottom: 20px;">
+                                            <div class="col-100" style="margin-bottom: 20px; display: none;">
                                                 <div style="font-weight: bold; margin-bottom: 10px; font-size: 16px;">
                                                     Bukti Dokumen Penerimaan
                                                 </div>

@@ -337,7 +337,7 @@ function saveReceivingRow() {
 
     // Store temp data
     RECEIVING_STATE.tempReceivingData = {
-        id_partner_transaksi_detail: RECEIVING_STATE.currentPartnerTransaksiDetailId,
+        id_partner_transaksi: RECEIVING_STATE.currentPartnerTransaksiId,
         tanggal_diterima: tanggal,
         jumlah_diterima: jumlahDiterima,
         jumlah_belum_diterima: jumlahBelumDiterima,
@@ -472,7 +472,7 @@ function submitPenerimaanWithFiles() {
     const formData = new FormData();
 
     // Add basic data
-    formData.append('id_partner_transaksi_detail', RECEIVING_STATE.tempReceivingData.id_partner_transaksi_detail);
+    formData.append('id_partner_transaksi', RECEIVING_STATE.currentPartnerTransaksiId);
     formData.append('tanggal_diterima', RECEIVING_STATE.tempReceivingData.tanggal_diterima);
     formData.append('jumlah_diterima', RECEIVING_STATE.tempReceivingData.jumlah_diterima);
     formData.append('jumlah_belum_diterima', RECEIVING_STATE.tempReceivingData.jumlah_belum_diterima);
@@ -499,8 +499,8 @@ function submitPenerimaanWithFiles() {
         type: 'POST',
         url: BASE_API + '/delivery/add-delivery',
         data: formData,
-        processData: false,  // PENTING: jangan process data
-        contentType: false,  // PENTING: jangan set content type
+        processData: false,
+        contentType: false,
         beforeSend: function () {
             showLoading(true);
         },
@@ -549,7 +549,7 @@ function submitPenerimaanWithFiles() {
         },
         complete: function () {
             showLoading(false);
-            $('#btn_submit_penerimaan').prop('disabled', false).html('<i class="f7-icons">checkmark_circle_fill</i> Simpan Penerimaan');
+            $('#btn_submit_penerimaan').prop('disabled', false);
         }
     });
 }
