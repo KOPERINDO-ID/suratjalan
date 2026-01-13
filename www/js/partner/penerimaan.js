@@ -323,8 +323,8 @@ function saveReceivingRow() {
     }
 
     // Check if we have id_partner_transaksi_detail
-    if (!RECEIVING_STATE.currentPartnerTransaksiDetailId) {
-        showAlert('ID Partner Transaksi Detail tidak ditemukan', 'Error');
+    if (!RECEIVING_STATE.currentPartnerTransaksiId) {
+        showAlert('ID Partner Transaksi tidak ditemukan', 'Error');
         return;
     }
 
