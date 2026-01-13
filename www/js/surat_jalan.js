@@ -16,9 +16,9 @@ function getSuratJalanProduksi() {
 				var nota = '';
 				var idx = 0;
 				jQuery.each(data.data, function (i, val) {
-
 					var kurang_bayar = parseFloat(val.penjualan_grandtotal - val.penjualan_jumlah_pembayaran);
 					var kurang_bayar_bg = '';
+
 					if (kurang_bayar <= 0) {
 						if (nota != val.penjualan_id) {
 							nota = val.penjualan_id;
@@ -26,7 +26,6 @@ function getSuratJalanProduksi() {
 								data_produksi += ' &nbsp; &nbsp; <span style="color:black; font-weight:bold">|</span> &nbsp;  ';
 							}
 							idx++;
-
 
 							//data_produksi += moment(val.penjualan_tanggal_kirim).format('DD-MMM') + ' - ';
 							data_produksi += moment(val.penjualan_tanggal).format('DDMMYY') + '-' + val.penjualan_id.replace(/\INV_/g, '').replace(/^0+/, '') + ' - ';
@@ -38,11 +37,8 @@ function getSuratJalanProduksi() {
 
 				});
 				jQuery("#data_surat_jalan_berjalan").html(data_produksi);
-
 			} else {
-
 				jQuery("#data_surat_jalan_berjalan").html('Tidak Ada Data');
-
 			}
 		},
 		error: function (xmlhttprequest, textstatus, message) {

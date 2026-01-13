@@ -10,17 +10,80 @@
   <meta name="theme-color" content="#007aff">
   <meta name="format-detection" content="telephone=no">
   <meta name="msapplication-tap-highlight" content="no">
-  <title>Surat Jalan App</title>
+  <title>Surat Jalan</title>
   <link rel="stylesheet" href="framework7/css/framework7.bundle.min.css">
   <link rel="stylesheet" href="css/icons.css">
   <link rel="shortcut icon" href="#" />
   <link rel="stylesheet" href="css/lib/chart.min.css">
   <link rel="stylesheet" href="css/app.css">
   <style type="text/css">
-    .kotak {
-      border: solid 1px white;
-      width: 22px;
-      height: 22px;
+    .connection-indicator {
+      float: left;
+      margin: 0px 8px 0px 12px;
+      width: 16px;
+      height: 16px;
+      border: 1px dashed #fff;
+      border-radius: 50%;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    /* Status Connected - Hijau dengan glow */
+    .connection-indicator.connected {
+      background-color: #00ff00;
+      box-shadow: 0 0 10px #00ff00,
+        0 0 20px #00ff00,
+        0 0 30px #00ff00;
+      animation: pulse-green 2s ease-in-out infinite;
+      border: none;
+    }
+
+    /* Status Disconnected - Merah dengan glow */
+    .connection-indicator.disconnected {
+      background-color: #ff0000;
+      box-shadow: 0 0 10px #ff0000,
+        0 0 20px #ff0000,
+        0 0 30px #ff0000;
+      animation: pulse-red 1s ease-in-out infinite;
+      border: none;
+    }
+
+    /* Animasi kedip hijau (lebih lambat, smooth) */
+    @keyframes pulse-green {
+
+      0%,
+      100% {
+        opacity: 1;
+        box-shadow: 0 0 10px #00ff00,
+          0 0 20px #00ff00,
+          0 0 30px #00ff00;
+      }
+
+      50% {
+        opacity: 0.6;
+        box-shadow: 0 0 5px #00ff00,
+          0 0 10px #00ff00,
+          0 0 15px #00ff00;
+      }
+    }
+
+    /* Animasi kedip merah (lebih cepat, alert) */
+    @keyframes pulse-red {
+
+      0%,
+      100% {
+        opacity: 1;
+        box-shadow: 0 0 10px #ff0000,
+          0 0 20px #ff0000,
+          0 0 30px #ff0000;
+      }
+
+      50% {
+        opacity: 0.4;
+        box-shadow: 0 0 5px #ff0000,
+          0 0 10px #ff0000,
+          0 0 15px #ff0000;
+      }
     }
   </style>
 </head>
@@ -31,11 +94,10 @@
       <div class="navbar">
         <div class="navbar-bg"></div>
         <div class="navbar-inner bg-dark-gray-medium">
-          <div class="title" style="margin-left:-3px;"><img src="img/logo/logo_new.png" width="85px" /></div>
-          <div class="kotak" id="box_internet" style="float:right;">
-
+          <div class="connection-indicator" id="box_internet"></div>
+          <div class="text-bold" id="apk_name" style="float:left;">Gudang</div>
+          <div style="color:#dcdcdcfa; font-size:14px; padding:8px; text-align:right;" class="right" id="clock_view">
           </div>
-          <div style="color:#dcdcdcfa; font-size:14px; padding:8px; float:right;" class="right" id="clock_view"></div>
           <img onclick="logOut();" id="logout_logo" src="img/logo/logout.png" width="45px" />
         </div>
       </div>

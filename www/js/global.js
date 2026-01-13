@@ -24,8 +24,8 @@ function checkConnection() {
 	}
 }
 
-var BASE_API = 'https://tasindo-sale-webservice.digiseminar.id/api';
-// var BASE_API = 'https://tasindo-service-staging.digiseminar.id/api';
+// var BASE_API = 'https://tasindo-sale-webservice.digiseminar.id/api';
+var BASE_API = 'https://tasindo-service-staging.digiseminar.id/api';
 // var BASE_API = 'http://127.0.0.1:8000/api';
 
 var BASE_PATH_IMAGE = 'https://tasindo-sale-webservice.digiseminar.id/kunjungan';
@@ -42,10 +42,9 @@ function refreshPage() {
 }
 
 function checkInternet() {
-	console.log(app.views.main.router.currentRoute.url);
 	jQuery.ajax({
 		type: 'POST',
-		url: "" + BASE_API + "/check-internet-sj",
+		url: BASE_API + '/check-internet-sj',
 		dataType: 'JSON',
 		data: {
 			karyawan_id: localStorage.getItem("user_id"),
@@ -55,11 +54,9 @@ function checkInternet() {
 			app.dialog.close();
 		},
 		success: function (data) {
-			console.log(data.password);
-			console.log(localStorage.getItem("password"));
 			if (data.version.config_value_string == localStorage.getItem("versioon_app_now")) {
 				if (localStorage.getItem("password") == data.password) {
-					console.log('Password Accept')
+					console.log('Password Verified!')
 				} else {
 					app.dialog.alert('Password Anda Tidak Sesuai', function () {
 						logOut();
@@ -74,17 +71,16 @@ function checkInternet() {
 			}
 
 			localStorage.setItem("internet_koneksi", "good");
-			$("#box_internet").css("background-color", "green");
+
+			$("#box_internet").removeClass("disconnected").addClass("connected");
 		},
 		error: function (xmlhttprequest, textstatus, message) {
 			if (textstatus === "timeout") {
-				$("#box_internet").css("background-color", "red");
-				localStorage.setItem("internet_koneksi", "fail")
-
+				localStorage.setItem("internet_koneksi", "fail");
+				$("#box_internet").removeClass("connected").addClass("disconnected");
 			} else {
-				$("#box_internet").css("background-color", "red");
-				localStorage.setItem("internet_koneksi", "fail")
-
+				localStorage.setItem("internet_koneksi", "fail");
+				$("#box_internet").removeClass("connected").addClass("disconnected");
 			}
 		}
 	});
@@ -134,8 +130,6 @@ function checkLogin() {
 	if (localStorage.getItem("login") != "true") {
 		return app.views.main.router.navigate('/login');
 	} else {
-		console.log('is_login');
-		console.log(localStorage.getItem("login"));
 		console.log(localStorage.getItem("user_location"));
 	}
 }

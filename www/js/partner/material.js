@@ -24,13 +24,22 @@ let PURCHASE_STATE = {
     purchaseDetailList: []
 };
 
-let MATERIAL_STATE = {
+let PARTNER_STATE = {
     currentPartnerTransaksiId: null,
     currentPartnerName: null,
+    currentQuantity: 0,
+    currentCompleteQuantity: 0,
+};
+
+let MATERIAL_STATE = {
     currentItem: null,
     currentJumlah: 0,
     materialList: [],
-    tempMaterialRow: null
+    tempMaterialRow: null,
+    tempMaterialName: null,
+    tempMaterialJumlah: 0,
+    tempMaterialHarga: 0,
+    tempMaterialTotal: 0,
 };
 
 // =========================================
@@ -62,7 +71,7 @@ function openMaterialModal(id_partner_transaksi, partner_name = '') {
  */
 function loadMaterialData(id_partner_transaksi) {
 
-    MATERIAL_STATE.currentPartnerTransaksiId = id_partner_transaksi;
+    PARTNER_STATE.currentPartnerTransaksiId = id_partner_transaksi;
 
     $.ajax({
         type: "POST",
@@ -122,7 +131,7 @@ function populateMaterialHeader(data) {
         const partnerInfo = data.partner_info;
 
 
-        MATERIAL_STATE.currentPartnerName = partnerInfo.nama_partner || '-';
+        PARTNER_STATE.currentPartnerName = partnerInfo.nama_partner || '-';
         PURCHASE_STATE.currentItem = partnerInfo.item || '-';
 
         // Set partner name
@@ -132,13 +141,16 @@ function populateMaterialHeader(data) {
         if (partnerInfo.penjualan_id) {
             const spkCode = formatSPKCode(partnerInfo.penjualan_id, partnerInfo.penjualan_tanggal);
 
+            PURCHASE_STATE.currentSpkCode = spkCode;
+
             $('#material-spk-code').text(spkCode);
         }
     }
 
-    // Set quantity badge (could be sum of material quantities or from partner_info)
-    // const totalQty = data.material ? data.material.reduce((sum, item) => sum + parseInt(item.jumlah || 0), 0) : 0;
-    const totalQty = data.partner_info.penjualan_qty || 0;
+    const totalQty = data.partner_info.jumlah || 0;
+
+    PARTNER_STATE.currentQuantity = totalQty;
+
     $('#material-quantity').text(totalQty + ' pcs');
 }
 
@@ -233,7 +245,7 @@ function updateMaterialCount(count) {
 function addMaterialRow() {
 
     // Validasi
-    if (!MATERIAL_STATE.currentPartnerTransaksiId) {
+    if (!PARTNER_STATE.currentPartnerTransaksiId) {
         showAlert('ID Partner Transaksi tidak tersedia', 'Error');
         return;
     }
@@ -360,13 +372,17 @@ function saveMaterialRow() {
 
     // Prepare data
     const materialData = {
-        id_partner_transaksi: MATERIAL_STATE.currentPartnerTransaksiId,
+        id_partner_transaksi: PARTNER_STATE.currentPartnerTransaksiId,
         nama: nama,
         jumlah: jumlah,
         harga: harga,
         total_harga: total_harga
     };
 
+    MATERIAL_STATE.tempMaterialName = nama;
+    MATERIAL_STATE.tempMaterialJumlah = jumlah;
+    MATERIAL_STATE.tempMaterialHarga = harga;
+    MATERIAL_STATE.tempMaterialTotal = total_harga;
 
     // Check if editing existing row
     const rowId = $('.editing-row').data('id');
@@ -389,13 +405,14 @@ function openPhotoUploadPopup(materialData) {
 
     // Initialize Header Data
     $('#photo-spk-code').text(PURCHASE_STATE.currentSpkCode);
-    $('#photo-partner-name').text(MATERIAL_STATE.currentPartnerName);
-    $('#photo-purchase-qty').text(PURCHASE_STATE.currentQuantity + ' pcs');
+    $('#photo-partner-name').text(PARTNER_STATE.currentPartnerName);
+    $('#photo-purchase-qty').text(PARTNER_STATE.currentQuantity + ' pcs');
 
     // Initialize Table Data
-    $('#photo_type_purchase_tbl').text(PURCHASE_STATE.currentItem);
-    $('#photo_qty_purchase_tbl').text(PURCHASE_STATE.currentQuantity);
-    $('#photo_selesai_purchase_tbl').text(MATERIAL_STATE.currentJumlah);
+    $('#photo_type_purchase_tbl').text(MATERIAL_STATE.tempMaterialName);
+    $('#photo_qty_purchase_tbl').text(formatNumber(MATERIAL_STATE.tempMaterialJumlah));
+    $('#photo_selesai_purchase_tbl').text(formatNumber(MATERIAL_STATE.tempMaterialHarga));
+    $('#photo_sisa_purchase_tbl').text(formatNumber(MATERIAL_STATE.tempMaterialTotal));
 
     // Reset upload form
     $('#photo_upload_input').val('');
@@ -701,7 +718,7 @@ function viewMaterialPhoto(photoUrl) {
  */
 function refreshMaterialData() {
 
-    if (!MATERIAL_STATE.currentPartnerTransaksiId) {
+    if (!PARTNER_STATE.currentPartnerTransaksiId) {
         console.error('✗ No currentPartnerTransaksiId');
         showAlert('ID Partner Transaksi tidak tersedia', 'Error');
         return;
@@ -709,7 +726,7 @@ function refreshMaterialData() {
 
 
     // Call loadMaterialData
-    loadMaterialData(MATERIAL_STATE.currentPartnerTransaksiId);
+    loadMaterialData(PARTNER_STATE.currentPartnerTransaksiId);
 
     // Show notification
     showNotification('Data material diperbarui', 'success');
