@@ -121,9 +121,10 @@ function formatDateIndonesia(date) {
  * Membuat HTML untuk baris tabel
  */
 function createTableRow(data, index) {
+    console.log(data);
     return `
         <tr>
-            <td class="label-cell text-align-left text-no-wrap" style="min-width: 100px !important;">${(moment(data.penjualan_tanggal).format('DDMMYY') + '-' + removePrefix(data.penjualan_id)) || '-'}</td>
+            <td class="label-cell text-align-left text-no-wrap ${data.jumlah == data.jumlah_diterima ? 'text-add-colour-white bg-color-blue' : ''}" style="min-width: 100px !important;">${(moment(data.penjualan_tanggal).format('DDMMYY') + '-' + removePrefix(data.penjualan_id)) || '-'}</td>
             <td class="label-cell text-no-wrap" style="text-align: left !important; min-width: 150px !important;">${data.client_nama || '-'}</td>
             <td class="label-cell text-no-wrap" style="text-align: left !important; min-width: 150px !important;">${data.nama_partner || '-'}</td>
             <td class="label-cell text-no-wrap" style="min-width: 100px !important;">${formatDateIndonesia(data.tgl_deadline)}</td>
@@ -133,7 +134,7 @@ function createTableRow(data, index) {
                     onclick="openMaterialModal('${data.id_partner_transaksi}', '${data.nama_partner}')">
                     Material
                 </button>
-                <button class="text-add-colour-black-soft bg-dark-gray-young button-small button text-bold" style="width: 116px;"
+                <button class="button-small button text-bold ${data.jumlah == data.jumlah_diterima ? 'text-add-colour-white bg-color-blue' : 'text-add-colour-black-soft bg-dark-gray-young'}" style="width: 116px;"
                     onclick="openReceivingModal('${data.id_partner_transaksi}', '${data.nama_partner}')">
                     Penerimaan
                 </button>

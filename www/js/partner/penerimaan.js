@@ -22,6 +22,34 @@ let RECEIVING_STATE = {
 };
 
 // =========================================
+// STATE MANAGEMENT FUNCTIONS
+// =========================================
+
+/**
+ * Reset receiving state
+ */
+function resetReceivingState() {
+    RECEIVING_STATE = {
+        currentPartnerTransaksiId: null,
+        currentPartnerTransaksiDetailId: null,
+        currentPartnerName: null,
+        currentSpkCode: null,
+        currentQuantity: 0,
+        receivingList: [],
+        tempReceivingRow: null,
+        tempReceivingData: null
+    };
+}
+
+/**
+ * Clear temporary receiving data
+ */
+function clearTempReceivingData() {
+    RECEIVING_STATE.tempReceivingRow = null;
+    RECEIVING_STATE.tempReceivingData = null;
+}
+
+// =========================================
 // RECEIVING TABLE FUNCTIONS
 // =========================================
 
@@ -35,12 +63,31 @@ function openReceivingModal(id_partner_transaksi, partner_name = '') {
         return;
     }
 
+    // Reset state sebelum load data baru
+    resetReceivingState();
+
     // Load receiving data from API
     loadReceivingData(id_partner_transaksi);
 
     // Open modal
     if (typeof app !== 'undefined') {
         app.popup.open('.popup-penerimaan');
+    }
+}
+
+/**
+ * Close receiving modal and cleanup
+ */
+function closeReceivingModal() {
+    // Remove any editing rows
+    $('.editing-row').remove();
+
+    // Clear temporary data
+    clearTempReceivingData();
+
+    // Close modal
+    if (typeof app !== 'undefined') {
+        app.popup.close('.popup-penerimaan');
     }
 }
 
@@ -175,7 +222,7 @@ function createReceivingRow(item, no) {
         <tr class="receiving-data-row" data-id="${item.id}">
             <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">${no}</td>
             <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">
-                ${formatDateShow(item.tanggal_diterima)}
+                ${formatDateIndonesia(item.tanggal_diterima)}
             </td>
             <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">
                 ${formatNumber(item.jumlah_diterima)}
@@ -199,7 +246,7 @@ function createReceivingRow(item, no) {
  * Update receiving count
  */
 function updateReceivingCount(count) {
-    $('#receiving_count').text(count + ' item');
+    $('#receiving_count').text(count + ' data');
 }
 
 /**
@@ -223,6 +270,9 @@ function addReceivingRow() {
 
     // Remove any existing editing row
     $('.editing-row').remove();
+
+    // Clear temp data
+    clearTempReceivingData();
 
     if ($('#empty_receiving_row')) {
         $('#empty_receiving_row').remove();
@@ -252,19 +302,26 @@ function addReceivingRow() {
                     placeholder="0"
                     min="1"
                     max="${remaining}"
+                    value=""
                     style="width: 100%; padding: 4px; border: 1px solid #ddd; border-radius: 4px;" />
             </td>
             <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">
-                ${formatNumber(remaining)}
+                <input type="text" 
+                    id="input_sisa" 
+                    value="${formatNumber(remaining)}"
+                    readonly
+                    style="width: 100%; padding: 4px; border: 1px solid #ddd; border-radius: 4px; background-color: #f5f5f5;" />
             </td>
-            <td class="display-flex flex-direction-row justify-content-space-between align-items-center" style="padding: 8px; border: 1px solid #ddd;">
-                <button class="button button-small button-fill bg-color-green" 
-                    onclick="saveReceivingRow()" 
-                    style="margin-right: 4px;">
+            <td class="display-flex justify-content-space-between align-items-center" 
+                style="padding: 8px; border: 1px solid #ddd; gap: 4px;">
+                <button class="button button-small button-fill color-green text-bold" 
+                    onclick="saveReceiving()" 
+                    style="flex: 1; max-width: 70px;">
                     <i class="f7-icons">checkmark</i>
                 </button>
-                <button class="button button-small button-fill bg-color-red" 
-                    onclick="cancelReceivingRow()" >
+                <button class="button button-small button-fill color-red text-bold" 
+                    onclick="cancelReceiving()" 
+                    style="flex: 1; max-width: 70px;">
                     <i class="f7-icons">xmark</i>
                 </button>
             </td>
@@ -272,80 +329,104 @@ function addReceivingRow() {
     `;
 
     $('#receiving_table_body').prepend(newRow);
-    $('#input_jumlah_terima').focus();
+
+    // Add input event listener to update remaining
+    $('#input_jumlah_terima').on('input', function () {
+        const jumlahTerima = parseInt($(this).val()) || 0;
+        const sisa = remaining - jumlahTerima;
+        $('#input_sisa').val(formatNumber(Math.max(0, sisa)));
+    });
 }
 
 /**
  * Cancel receiving row
  */
-function cancelReceivingRow() {
+function cancelReceiving() {
     $('.editing-row').remove();
+    clearTempReceivingData();
 }
 
 /**
- * Save new receiving row - Open upload popup
+ * Save receiving data
  */
-function saveReceivingRow() {
+function saveReceiving() {
 
-    const tanggal = $('#input_tanggal_terima').val();
-    const jumlah = $('#input_jumlah_terima').val();
+    // Get input values
+    const tanggalTerima = $('#input_tanggal_terima').val();
+    const jumlahTerima = parseInt($('#input_jumlah_terima').val()) || 0;
 
     // Validation
-    if (!tanggal) {
-        showAlert('Tanggal harus diisi', 'Perhatian');
+    if (!tanggalTerima) {
+        showAlert('Tanggal penerimaan harus diisi', 'Warning');
         return;
     }
 
-    if (!jumlah || parseInt(jumlah) <= 0) {
-        showAlert('Jumlah harus lebih dari 0', 'Perhatian');
+    if (jumlahTerima <= 0) {
+        showAlert('Jumlah penerimaan harus lebih dari 0', 'Warning');
         return;
     }
 
-    // Calculate remaining
+    // Calculate total received and remaining
     const totalReceived = RECEIVING_STATE.receivingList
         .reduce((sum, r) => sum + parseInt(r.jumlah_diterima || 0), 0);
     const remaining = RECEIVING_STATE.currentQuantity - totalReceived;
 
-    if (parseInt(jumlah) > remaining) {
-        showAlert(`Jumlah tidak boleh lebih dari ${remaining}`, 'Perhatian');
+    if (jumlahTerima > remaining) {
+        showAlert(`Jumlah penerimaan tidak boleh lebih dari sisa (${formatNumber(remaining)} pcs)`, 'Warning');
         return;
     }
 
-    // Check if we have id_partner_transaksi_detail
-    if (!RECEIVING_STATE.currentPartnerTransaksiId) {
-        showAlert('ID Partner Transaksi tidak ditemukan', 'Error');
-        return;
-    }
+    // Calculate new remaining
+    const jumlahBelumTerima = remaining - jumlahTerima;
 
-    // Get username dari localStorage untuk nama_penerima
-    const namaPenerima = localStorage.getItem('username') || 'Unknown';
-
-    // Calculate jumlah_belum_diterima
-    const jumlahDiterima = parseInt(jumlah);
-    const jumlahBelumDiterima = remaining - jumlahDiterima;
+    const username = localStorage.getItem('username');
 
     // Store temp data
     RECEIVING_STATE.tempReceivingData = {
-        id_partner_transaksi: RECEIVING_STATE.currentPartnerTransaksiId,
-        tanggal_diterima: tanggal,
-        jumlah_diterima: jumlahDiterima,
-        jumlah_belum_diterima: jumlahBelumDiterima,
-        nama_penerima: namaPenerima
+        tanggal_diterima: formatDateIndonesia(tanggalTerima),
+        jumlah_diterima: jumlahTerima,
+        jumlah_belum_diterima: jumlahBelumTerima,
+        nama_penerima: username
     };
 
+    // Open upload popup for files
+    openUploadPopup();
+}
 
-    // Populate upload popup
-    $('#upload_tanggal_display').text(formatDateShow(tanggal));
-    $('#upload_jumlah_display').text(formatNumber(jumlahDiterima) + ' pcs');
-    $('#upload_penerima_display').text(namaPenerima);
+/**
+ * Open upload popup
+ */
+function openUploadPopup() {
+    $('#upload_tanggal_display').text(RECEIVING_STATE.tempReceivingData.tanggal_diterima);
+    $('#upload_jumlah_display').text(RECEIVING_STATE.tempReceivingData.jumlah_diterima);
+    $('#upload_penerima_display').text(RECEIVING_STATE.tempReceivingData.nama_penerima);
 
-    // Reset file inputs
+    // Reset upload form
+    $('#input_nama_penerima').val('');
     clearBuktiPenerimaan();
     clearBuktiDokumen();
+
+    // Reset submit button
+    $('#btn_submit_penerimaan').prop('disabled', false).text('SIMPAN');
 
     // Open upload popup
     if (typeof app !== 'undefined') {
         app.popup.open('.popup-upload-penerimaan');
+    }
+}
+
+/**
+ * Close upload popup and cleanup
+ */
+function closeUploadPopup() {
+    // Clear form
+    $('#input_nama_penerima').val('');
+    clearBuktiPenerimaan();
+    clearBuktiDokumen();
+
+    // Close popup
+    if (typeof app !== 'undefined') {
+        app.popup.close('.popup-upload-penerimaan');
     }
 }
 
@@ -362,7 +443,6 @@ $(document).on('change', '#input_bukti_penerimaan', function (e) {
     if (!file) {
         return;
     }
-
 
     // Validate file type
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
@@ -493,15 +573,13 @@ function submitPenerimaanWithFiles() {
                 showNotification('Penerimaan berhasil ditambahkan', 'success');
 
                 // Close upload popup
-                if (typeof app !== 'undefined') {
-                    app.popup.close('.popup-upload-penerimaan');
-                }
+                closeUploadPopup();
 
                 // Remove editing row from main table
                 $('.editing-row').remove();
 
                 // Clear temp data
-                RECEIVING_STATE.tempReceivingData = null;
+                clearTempReceivingData();
 
                 // Refresh data
                 setTimeout(() => {
@@ -531,7 +609,7 @@ function submitPenerimaanWithFiles() {
         },
         complete: function () {
             showLoading(false);
-            $('#btn_submit_penerimaan').prop('disabled', false);
+            $('#btn_submit_penerimaan').prop('disabled', false).text('SIMPAN');
         }
     });
 }
@@ -598,3 +676,34 @@ function viewBuktiPenerimaan(id_detail_pengiriman) {
         app.popup.open('.popup-viewer-penerimaan');
     }
 }
+
+// =========================================
+// EVENT LISTENERS FOR POPUP CLOSE
+// =========================================
+
+/**
+ * Initialize popup event listeners
+ * Panggil fungsi ini saat aplikasi dimulai
+ */
+function initializeReceivingPopupListeners() {
+    if (typeof app !== 'undefined') {
+        // Listen to popup close events
+        app.popup.on('closed', '.popup-penerimaan', function () {
+            // Cleanup when main popup closes
+            $('.editing-row').remove();
+            clearTempReceivingData();
+        });
+
+        app.popup.on('closed', '.popup-upload-penerimaan', function () {
+            // Cleanup when upload popup closes without saving
+            $('#input_nama_penerima').val('');
+            clearBuktiPenerimaan();
+            clearBuktiDokumen();
+        });
+    }
+}
+
+// Auto-initialize when document is ready
+$(document).ready(function () {
+    initializeReceivingPopupListeners();
+});

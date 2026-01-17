@@ -1,6 +1,3 @@
-
-
-// Configuration APP
 function checkConnection() {
 	var networkState = navigator.connection.type;
 

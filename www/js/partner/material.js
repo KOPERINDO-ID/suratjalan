@@ -236,7 +236,7 @@ function createMaterialRow(item, rowNumber) {
  * Update material count
  */
 function updateMaterialCount(count) {
-    $('#material_count').text(count + ' item');
+    $('#material_count').text(count + ' data');
 }
 
 /**
