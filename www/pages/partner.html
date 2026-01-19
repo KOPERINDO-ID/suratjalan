@@ -548,16 +548,20 @@
 
                                                 <div
                                                     style="border: 2px dashed #ddd; border-radius: 8px; padding: 20px; text-align: center; background-color: #fafafa;">
+                                                    <!-- Input file tetap ada tapi hidden -->
                                                     <input type="file" id="input_bukti_penerimaan"
                                                         accept="image/jpeg,image/jpg,image/png"
                                                         style="display: none;" />
 
+                                                    <!-- Ganti onclick untuk memanggil showPhotoUploadOptions -->
                                                     <div id="preview_bukti_penerimaan_empty" style="cursor: pointer;"
-                                                        onclick="$('#input_bukti_penerimaan').click();">
+                                                        onclick="showPhotoUploadOptions('input_bukti_penerimaan');">
                                                         <i class="f7-icons"
                                                             style="font-size: 48px; color: #999;">camera_fill</i>
-                                                        <p style="color: #999; margin-top: 10px;">Klik untuk pilih foto
+                                                        <p style="color: #999; margin-top: 10px;">Klik untuk upload foto
                                                         </p>
+                                                        <p style="color: #999; font-size: 12px;">Ambil foto atau pilih
+                                                            dari galeri</p>
                                                         <p style="color: #999; font-size: 12px;">JPG, JPEG, PNG (Max
                                                             5MB)</p>
                                                     </div>
@@ -569,49 +573,6 @@
                                                             <button
                                                                 class="button button-small button-fill bg-color-red display-flex justify-content-center align-items-center"
                                                                 onclick="clearBuktiPenerimaan()">
-                                                                <i class="f7-icons"
-                                                                    style="margin-right: 4px; font-size: 14px;">trash</i>
-                                                                Hapus
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Upload Bukti Dokumen Penerimaan -->
-                                            <div class="col-100" style="margin-bottom: 20px; display:none;">
-                                                <div style="font-weight: bold; margin-bottom: 10px; font-size: 16px;">
-                                                    Bukti Dokumen Penerimaan (Opsional)
-                                                </div>
-
-                                                <div
-                                                    style="border: 2px dashed #ddd; border-radius: 8px; padding: 20px; text-align: center; background-color: #fafafa;">
-                                                    <input type="file" id="input_bukti_dokumen_penerimaan"
-                                                        accept="image/jpeg,image/jpg,image/png,application/pdf"
-                                                        style="display: none;" />
-
-                                                    <div id="preview_bukti_dokumen_empty" style="cursor: pointer;"
-                                                        onclick="$('#input_bukti_dokumen_penerimaan').click();">
-                                                        <i class="f7-icons"
-                                                            style="font-size: 48px; color: #999;">doc_fill</i>
-                                                        <p style="color: #999; margin-top: 10px;">Klik untuk pilih file
-                                                        </p>
-                                                        <p style="color: #999; font-size: 12px;">JPG, PNG, PDF (Max 5MB)
-                                                        </p>
-                                                    </div>
-
-                                                    <div id="preview_bukti_dokumen_area" style="display: none;">
-                                                        <div id="preview_bukti_dokumen_info"
-                                                            style="padding: 15px; background-color: #e8f5e9; border-radius: 8px;">
-                                                            <i class="f7-icons"
-                                                                style="color: #4caf50;">checkmark_circle_fill</i>
-                                                            <span id="preview_bukti_dokumen_name"
-                                                                style="margin-left: 10px;">-</span>
-                                                        </div>
-                                                        <div style="margin-top: 10px;">
-                                                            <button
-                                                                class="button button-small button-fill bg-color-red display-flex justify-content-center align-items-center"
-                                                                onclick="clearBuktiDokumen()">
                                                                 <i class="f7-icons"
                                                                     style="margin-right: 4px; font-size: 14px;">trash</i>
                                                                 Hapus

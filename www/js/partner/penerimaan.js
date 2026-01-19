@@ -431,24 +431,178 @@ function closeUploadPopup() {
 }
 
 // =========================================
-// UPLOAD FUNCTIONS
+// PHOTO UPLOAD FUNCTIONS (KAMERA/GALERI)
 // =========================================
 
 /**
- * Handle bukti penerimaan file selection
+ * Fungsi untuk menampilkan action sheet pilihan upload foto
+ * Memberikan opsi: Ambil Foto atau Pilih dari Galeri
  */
-$(document).on('change', '#input_bukti_penerimaan', function (e) {
-    const file = e.target.files[0];
+function showPhotoUploadOptions(inputId) {
+    // Buat action sheet dengan Framework7
+    const actionSheet = app.actions.create({
+        buttons: [
+            {
+                text: 'Upload Bukti Penerimaan',
+                label: true
+            },
+            {
+                text: '<i class="f7-icons" style="margin-right: 8px;">camera_fill</i> Ambil Foto',
+                onClick: function () {
+                    capturePhoto(inputId);
+                }
+            },
+            {
+                text: '<i class="f7-icons" style="margin-right: 8px;">photo_fill</i> Pilih dari Galeri',
+                onClick: function () {
+                    selectFromGallery(inputId);
+                }
+            },
+            {
+                text: 'Batal',
+                color: 'red'
+            }
+        ]
+    });
 
-    if (!file) {
+    actionSheet.open();
+}
+
+/**
+ * Fungsi untuk mengambil foto langsung menggunakan kamera
+ */
+function capturePhoto(inputId) {
+    // Cek apakah cordova camera plugin tersedia
+    if (typeof navigator.camera === 'undefined') {
+        // Fallback untuk browser - gunakan input file dengan capture
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.capture = 'camera'; // Memaksa buka kamera
+
+        input.onchange = function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                handlePhotoFile(file, inputId);
+            }
+        };
+
+        input.click();
         return;
     }
 
+    // Gunakan Cordova Camera Plugin
+    navigator.camera.getPicture(
+        function (imageData) {
+            // Success callback - imageData adalah base64 string
+            displayCapturedPhoto(imageData, inputId);
+        },
+        function (message) {
+            // Error callback
+            console.error('Gagal mengambil foto: ' + message);
+            showAlert('Gagal mengambil foto', 'Error');
+        },
+        {
+            quality: 80,
+            destinationType: Camera.DestinationType.DATA_URL,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            encodingType: Camera.EncodingType.JPEG,
+            mediaType: Camera.MediaType.PICTURE,
+            correctOrientation: true,
+            saveToPhotoAlbum: false
+        }
+    );
+}
+
+/**
+ * Fungsi untuk memilih foto dari galeri
+ */
+function selectFromGallery(inputId) {
+    // Cek apakah cordova camera plugin tersedia
+    if (typeof navigator.camera === 'undefined') {
+        // Fallback untuk browser - gunakan input file biasa
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.click();
+        }
+        return;
+    }
+
+    // Gunakan Cordova Camera Plugin untuk akses galeri
+    navigator.camera.getPicture(
+        function (imageData) {
+            // Success callback - imageData adalah base64 string
+            displayCapturedPhoto(imageData, inputId);
+        },
+        function (message) {
+            // Error callback
+            console.error('Gagal memilih foto: ' + message);
+            showAlert('Gagal memilih foto', 'Error');
+        },
+        {
+            quality: 80,
+            destinationType: Camera.DestinationType.DATA_URL,
+            sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+            encodingType: Camera.EncodingType.JPEG,
+            mediaType: Camera.MediaType.PICTURE,
+            correctOrientation: true
+        }
+    );
+}
+
+/**
+ * Menampilkan foto yang diambil dari kamera
+ */
+function displayCapturedPhoto(imageData, inputId) {
+    const imageUrl = 'data:image/jpeg;base64,' + imageData;
+
+    // Konversi base64 ke File object untuk upload
+    fetch(imageUrl)
+        .then(res => res.blob())
+        .then(blob => {
+            const file = new File([blob], 'photo_' + Date.now() + '.jpg', { type: 'image/jpeg' });
+
+            // Validasi file
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            if (file.size > maxSize) {
+                showAlert('Ukuran foto maksimal 5MB', 'Error');
+                return;
+            }
+
+            // Simpan file ke input (untuk FormData nanti)
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            const input = document.getElementById(inputId);
+            if (input) {
+                input.files = dataTransfer.files;
+            }
+
+            // Preview foto
+            if (inputId === 'input_bukti_penerimaan') {
+                $('#preview_bukti_penerimaan_img').attr('src', imageUrl);
+                $('#preview_bukti_penerimaan_empty').hide();
+                $('#preview_bukti_penerimaan_area').show();
+            } else if (inputId === 'input_bukti_dokumen_penerimaan') {
+                // Untuk dokumen, tampilkan sebagai image preview
+                $('#preview_bukti_dokumen_name').text(file.name);
+                $('#preview_bukti_dokumen_empty').hide();
+                $('#preview_bukti_dokumen_area').show();
+            }
+        })
+        .catch(err => {
+            console.error('Error processing photo:', err);
+            showAlert('Gagal memproses foto', 'Error');
+        });
+}
+
+/**
+ * Handle file dari input file biasa (untuk galeri di browser)
+ */
+function handlePhotoFile(file, inputId) {
     // Validate file type
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     if (!validTypes.includes(file.type)) {
         showAlert('File harus berformat JPG, JPEG, atau PNG', 'Error');
-        $(this).val('');
         return;
     }
 
@@ -456,30 +610,48 @@ $(document).on('change', '#input_bukti_penerimaan', function (e) {
     const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
         showAlert('Ukuran file maksimal 5MB', 'Error');
-        $(this).val('');
         return;
     }
 
     // Preview image
     const reader = new FileReader();
     reader.onload = function (e) {
-        $('#preview_bukti_penerimaan_img').attr('src', e.target.result);
-        $('#preview_bukti_penerimaan_empty').hide();
-        $('#preview_bukti_penerimaan_area').show();
+        if (inputId === 'input_bukti_penerimaan') {
+            $('#preview_bukti_penerimaan_img').attr('src', e.target.result);
+            $('#preview_bukti_penerimaan_empty').hide();
+            $('#preview_bukti_penerimaan_area').show();
+        } else if (inputId === 'input_bukti_dokumen_penerimaan') {
+            $('#preview_bukti_dokumen_name').text(file.name);
+            $('#preview_bukti_dokumen_empty').hide();
+            $('#preview_bukti_dokumen_area').show();
+        }
     };
     reader.readAsDataURL(file);
+}
+
+// =========================================
+// UPLOAD FUNCTIONS
+// =========================================
+
+/**
+ * Handle bukti penerimaan file selection
+ * Update: Sekarang menggunakan handlePhotoFile untuk consistency
+ */
+$(document).off('change', '#input_bukti_penerimaan').on('change', '#input_bukti_penerimaan', function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    handlePhotoFile(file, 'input_bukti_penerimaan');
 });
 
 /**
  * Handle bukti dokumen file selection
  */
-$(document).on('change', '#input_bukti_dokumen_penerimaan', function (e) {
+$(document).off('change', '#input_bukti_dokumen_penerimaan').on('change', '#input_bukti_dokumen_penerimaan', function (e) {
     const file = e.target.files[0];
 
     if (!file) {
         return;
     }
-
 
     // Validate file type
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
