@@ -50,7 +50,6 @@ let MATERIAL_STATE = {
  * Membuka modal material dengan data dari API
  */
 function openMaterialModal(id_partner_transaksi, partner_name = '') {
-
     // Validasi
     if (!id_partner_transaksi) {
         showAlert('ID Partner Transaksi tidak valid', 'Error');

@@ -121,7 +121,6 @@ function formatDateIndonesia(date) {
  * Membuat HTML untuk baris tabel
  */
 function createTableRow(data, index) {
-    console.log(data);
     return `
         <tr>
             <td class="label-cell text-align-left text-no-wrap ${data.jumlah == data.jumlah_diterima ? 'text-add-colour-white bg-color-blue' : ''}" style="min-width: 100px !important;">${(moment(data.penjualan_tanggal).format('DDMMYY') + '-' + removePrefix(data.penjualan_id)) || '-'}</td>
@@ -347,7 +346,7 @@ function renderData() {
     }
 
     if (dataCountElement.length > 0) {
-        dataCountElement.text(`${STATE.filteredData.length} Partner`);
+        dataCountElement.text(`${STATE.filteredData.length} Transaksi`);
     }
 
     const totalPages = getTotalPages();
