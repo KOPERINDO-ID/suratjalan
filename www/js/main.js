@@ -866,8 +866,8 @@ function startTimeMain() {
   var s = today.getSeconds();
 
   // Array nama bulan dalam Bahasa Indonesia
-  var namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
-    "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+  var namaBulan = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
+    "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
 
   m = checkTimeMain(m);
   s = checkTimeMain(s);

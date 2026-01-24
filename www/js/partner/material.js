@@ -251,7 +251,7 @@ function addMaterialRow() {
 
     // Check if there's already an editing row
     if ($('.editing-row').length > 0) {
-        showAlert('Selesaikan penambahan material yang sedang berlangsung', 'Perhatian');
+        $('.editing-row').remove();
         return;
     }
 
@@ -453,7 +453,7 @@ function editMaterialRow(id) {
 
     // Check if there's already an editing row
     if ($('.editing-row').length > 0) {
-        showAlert('Selesaikan pengeditan yang sedang berlangsung', 'Perhatian');
+        $('.editing-row').remove();
         return;
     }
 
