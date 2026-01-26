@@ -915,7 +915,6 @@ function openCamera() {
 	);
 }
 
-
 function openCameraEditSuratJalan(selection) {
 
 	var srcType = Camera.PictureSourceType.CAMERA;
