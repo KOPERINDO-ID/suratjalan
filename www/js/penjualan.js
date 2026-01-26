@@ -29,7 +29,7 @@ function spkPo(penjualan_id_primary, performa_id_relation, performa_header_id, b
 			karyawan_id: localStorage.getItem("user_id"),
 			performa_header_id: performa_header_id,
 			jenis_penjualan: jenis_penjualan,
-			penjualan_id_primary:penjualan_id
+			penjualan_id_primary: penjualan_id
 		},
 		beforeSend: function () {
 			invoice_penjualan += '<table width="100%" border="0">';
@@ -136,7 +136,7 @@ function spkPo(penjualan_id_primary, performa_id_relation, performa_header_id, b
 				invoice_penjualan += '			<td colspan="1" style=" border-top: solid 1px; border-left: solid 1px; border-right: solid 1px; border-bottom: solid 1px; font-weight:bold;" align="left">';
 				if (number_format(data.data[0].pembayaran_1) != 0) {
 					invoice_penjualan += '			 <font style="float:right;">' + number_format(parseFloat(penjualan_total) - parseFloat(data.data[0].pembayaran_1)) + '</font>';
-				}else{
+				} else {
 					invoice_penjualan += '			 <font style="float:right;">' + number_format(parseFloat(penjualan_total)) + '</font>';
 
 				}
@@ -1741,7 +1741,7 @@ function invoicePenjualan(performa_header_id, biaya_kirim, client_alamat, client
 										var penjualan_tgl_kirim_no = 0;
 										jQuery.each(data.data, function (ikrm, valkrm) {
 											var myString = valkrm.penjualan_id;
-										
+
 											penjualan_tgl_kirim += '<tr>';
 											penjualan_tgl_kirim += '<td colspan="5">';
 											penjualan_tgl_kirim += '	- Kirim ' + myString[myString.length - 1] + ' : ' + valkrm.penjualan_qty + ' Pcs, Tgl ' + moment(valkrm.penjualan_tanggal_kirim).format('DD-MMM-YYYY') + '';
@@ -2323,7 +2323,7 @@ function detailPembayaran(penjualan_tanggal_choose, performa_id_relation, bank_1
 								history_pembayaran_multiple += ' class="numeric-cell text-align-center">Bayar 2';
 								history_pembayaran_multiple += '</td>';
 								history_pembayaran_multiple += '<td width="18%" style="border-collapse: collapse; border:1px solid white;"';
-								history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input   style="width:105px;" id="tanggal_2_' + val.pembayaran_id + '" name="tanggal_2_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="'+moment().format('YYYY-MM-DD')+'"  readonly/></td>';
+								history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input   style="width:105px;" id="tanggal_2_' + val.pembayaran_id + '" name="tanggal_2_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="' + moment().format('YYYY-MM-DD') + '"  readonly/></td>';
 
 								history_pembayaran_multiple += '<td width="15%" style="border-collapse: collapse; border:1px solid white;" class="numeric-cell text-align-center">';
 								history_pembayaran_multiple += '<select style="width:60%; background-color:#1c1c1d;" class="performa-input input-item-bank" id="bank_2_' + val.pembayaran_id + '" name="bank_2_' + val.pembayaran_id + '" required validate>';
@@ -2369,7 +2369,7 @@ function detailPembayaran(penjualan_tanggal_choose, performa_id_relation, bank_1
 								history_pembayaran_multiple += ' class="numeric-cell text-align-center">Bayar 3';
 								history_pembayaran_multiple += '</td>';
 								history_pembayaran_multiple += '<td width="18%" style="border-collapse: collapse; border:1px solid white;"';
-								history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input  style="width:105px;" id="tanggal_3_' + val.pembayaran_id + '" name="tanggal_3_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="'+moment().format('YYYY-MM-DD')+'"  readonly/></td>';
+								history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input  style="width:105px;" id="tanggal_3_' + val.pembayaran_id + '" name="tanggal_3_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="' + moment().format('YYYY-MM-DD') + '"  readonly/></td>';
 
 								history_pembayaran_multiple += '<td width="15%" style="border-collapse: collapse; border:1px solid white;" class="numeric-cell text-align-center">';
 								history_pembayaran_multiple += '<select style="width:60%; background-color:#1c1c1d;" class="performa-input input-item-bank" id="bank_3_' + val.pembayaran_id + '" name="bank_3_' + val.pembayaran_id + '" required validate>';
@@ -2416,7 +2416,7 @@ function detailPembayaran(penjualan_tanggal_choose, performa_id_relation, bank_1
 								history_pembayaran_multiple += ' class="numeric-cell text-align-center">Bayar 4';
 								history_pembayaran_multiple += '</td>';
 								history_pembayaran_multiple += '<td width="18%" style="border-collapse: collapse; border:1px solid white;"';
-								history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input  style="width:105px;" id="tanggal_4_' + val.pembayaran_id + '" name="tanggal_4_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="'+moment().format('YYYY-MM-DD')+'"  readonly /></td>';
+								history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input  style="width:105px;" id="tanggal_4_' + val.pembayaran_id + '" name="tanggal_4_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="' + moment().format('YYYY-MM-DD') + '"  readonly /></td>';
 
 								history_pembayaran_multiple += '<td width="15%" style="border-collapse: collapse; border:1px solid white;" class="numeric-cell text-align-center">';
 								history_pembayaran_multiple += '<select style="width:60%; background-color:#1c1c1d;" class="performa-input input-item-bank" id="bank_4_' + val.pembayaran_id + '" name="bank_4_' + val.pembayaran_id + '" required validate>';
@@ -2461,7 +2461,7 @@ function detailPembayaran(penjualan_tanggal_choose, performa_id_relation, bank_1
 								history_pembayaran_multiple += ' class="numeric-cell text-align-center">Bayar 5';
 								history_pembayaran_multiple += '</td>';
 								history_pembayaran_multiple += '<td width="18%" style="border-collapse: collapse; border:1px solid white;"';
-								history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input  style="width:105px;" id="tanggal_5_' + val.pembayaran_id + '" name="tanggal_5_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="'+moment().format('YYYY-MM-DD')+'"  readonly/></td>';
+								history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input  style="width:105px;" id="tanggal_5_' + val.pembayaran_id + '" name="tanggal_5_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="' + moment().format('YYYY-MM-DD') + '"  readonly/></td>';
 
 								history_pembayaran_multiple += '<td width="15%" style="border-collapse: collapse; border:1px solid white;" class="numeric-cell text-align-center">';
 								history_pembayaran_multiple += '<select style="width:60%; background-color:#1c1c1d;" class="performa-input input-item-bank" id="bank_5_' + val.pembayaran_id + '" name="bank_5_' + val.pembayaran_id + '" required validate>';
@@ -2508,7 +2508,7 @@ function detailPembayaran(penjualan_tanggal_choose, performa_id_relation, bank_1
 							history_pembayaran_multiple += ' class="numeric-cell text-align-center">Bayar 6';
 							history_pembayaran_multiple += '</td>';
 							history_pembayaran_multiple += '<td width="18%" style="border-collapse: collapse; border:1px solid white;"';
-							history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input  style="width:105px;" id="tanggal_6_' + val.pembayaran_id + '" name="tanggal_6_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="'+moment().format('YYYY-MM-DD')+'"  readonly/></td>';
+							history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input  style="width:105px;" id="tanggal_6_' + val.pembayaran_id + '" name="tanggal_6_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="' + moment().format('YYYY-MM-DD') + '"  readonly/></td>';
 
 							history_pembayaran_multiple += '<td width="15%" style="border-collapse: collapse; border:1px solid white;" class="numeric-cell text-align-center">';
 							history_pembayaran_multiple += '<select style="width:60%; background-color:#1c1c1d;" class="performa-input input-item-bank" id="bank_6_' + val.pembayaran_id + '" name="bank_6_' + val.pembayaran_id + '" required validate>';
@@ -2550,7 +2550,7 @@ function detailPembayaran(penjualan_tanggal_choose, performa_id_relation, bank_1
 							history_pembayaran_multiple += ' class="numeric-cell text-align-center">Bayar 7';
 							history_pembayaran_multiple += '</td>';
 							history_pembayaran_multiple += '<td width="18%" style="border-collapse: collapse; border:1px solid white;"';
-							history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input  style="width:105px;" id="tanggal_7_' + val.pembayaran_id + '" name="tanggal_7_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="'+moment().format('YYYY-MM-DD')+'"  readonly/></td>';
+							history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input  style="width:105px;" id="tanggal_7_' + val.pembayaran_id + '" name="tanggal_7_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="' + moment().format('YYYY-MM-DD') + '"  readonly/></td>';
 
 							history_pembayaran_multiple += '<td width="15%" style="border-collapse: collapse; border:1px solid white;" class="numeric-cell text-align-center">';
 							history_pembayaran_multiple += '<select style="width:60%; background-color:#1c1c1d;" class="performa-input input-item-bank" id="bank_7_' + val.pembayaran_id + '" name="bank_7_' + val.pembayaran_id + '" required validate>';
@@ -2591,7 +2591,7 @@ function detailPembayaran(penjualan_tanggal_choose, performa_id_relation, bank_1
 							history_pembayaran_multiple += ' class="numeric-cell text-align-center">Bayar 8';
 							history_pembayaran_multiple += '</td>';
 							history_pembayaran_multiple += '<td width="18%" style="border-collapse: collapse; border:1px solid white;"';
-							history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input  style="width:105px;" id="tanggal_8_' + val.pembayaran_id + '" name="tanggal_8_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="'+moment().format('YYYY-MM-DD')+'"  readonly/></td>';
+							history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input  style="width:105px;" id="tanggal_8_' + val.pembayaran_id + '" name="tanggal_8_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="' + moment().format('YYYY-MM-DD') + '"  readonly/></td>';
 
 							history_pembayaran_multiple += '<td width="15%" style="border-collapse: collapse; border:1px solid white;" class="numeric-cell text-align-center">';
 							history_pembayaran_multiple += '<select style="width:60%; background-color:#1c1c1d;" class="performa-input input-item-bank" id="bank_8_' + val.pembayaran_id + '" name="bank_8_' + val.pembayaran_id + '" required validate>';
@@ -2631,7 +2631,7 @@ function detailPembayaran(penjualan_tanggal_choose, performa_id_relation, bank_1
 							history_pembayaran_multiple += ' class="numeric-cell text-align-center">Bayar 9';
 							history_pembayaran_multiple += '</td>';
 							history_pembayaran_multiple += '<td width="18%" style="border-collapse: collapse; border:1px solid white;"';
-							history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input  style="width:105px;" id="tanggal_9_' + val.pembayaran_id + '" name="tanggal_9_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="'+moment().format('YYYY-MM-DD')+'"  readonly/></td>';
+							history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input  style="width:105px;" id="tanggal_9_' + val.pembayaran_id + '" name="tanggal_9_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="' + moment().format('YYYY-MM-DD') + '"  readonly/></td>';
 
 							history_pembayaran_multiple += '<td width="15%" style="border-collapse: collapse; border:1px solid white;" class="numeric-cell text-align-center">';
 							history_pembayaran_multiple += '<select style="width:60%; background-color:#1c1c1d;" class="performa-input input-item-bank" id="bank_9_' + val.pembayaran_id + '" name="bank_9_' + val.pembayaran_id + '" required validate>';
@@ -2671,7 +2671,7 @@ function detailPembayaran(penjualan_tanggal_choose, performa_id_relation, bank_1
 							history_pembayaran_multiple += ' class="numeric-cell text-align-center">Bayar 10';
 							history_pembayaran_multiple += '</td>';
 							history_pembayaran_multiple += '<td width="18%" style="border-collapse: collapse; border:1px solid white;"';
-							history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input  style="width:105px;" id="tanggal_10_' + val.pembayaran_id + '" name="tanggal_10_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="'+moment().format('YYYY-MM-DD')+'"  readonly/></td>';
+							history_pembayaran_multiple += ' class="numeric-cell text-align-center"><input  style="width:105px;" id="tanggal_10_' + val.pembayaran_id + '" name="tanggal_10_' + val.pembayaran_id + '"  type="date" class="date-multiple-penbayaran" value="' + moment().format('YYYY-MM-DD') + '"  readonly/></td>';
 
 							history_pembayaran_multiple += '<td width="15%" style="border-collapse: collapse; border:1px solid white;" class="numeric-cell text-align-center">';
 							history_pembayaran_multiple += '<select style="width:60%; background-color:#1c1c1d;" class="performa-input input-item-bank" id="bank_10_' + val.pembayaran_id + '" name="bank_10_' + val.pembayaran_id + '" required validate>';

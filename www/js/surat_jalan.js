@@ -843,7 +843,8 @@ function setOptions(srcType) {
 		encodingType: Camera.EncodingType.JPEG,
 		mediaType: Camera.MediaType.PICTURE,
 		allowEdit: false,
-		correctOrientation: true
+		correctOrientation: true,
+		saveToPhotoAlbum: false
 	}
 	return options;
 }
@@ -885,21 +886,33 @@ function getFileContentAsBase64(path, callback) {
 	}
 }
 
-function openCamera(selection) {
+function openCamera() {
+	console.log('openCamera called');
+	console.log('Camera available?', typeof navigator.camera !== 'undefined');
+
+	if (!navigator.camera) {
+		alert('Camera plugin tidak tersedia!');
+		return;
+	}
 
 	var srcType = Camera.PictureSourceType.CAMERA;
 	var options = setOptions(srcType);
-	var func = createNewFileEntry;
 
-	navigator.camera.getPicture(function cameraSuccess(imageUri) {
-		getFileContentAsBase64(imageUri, function (base64Image) {
-			localStorage.setItem("file_foto_surat_jalan", base64Image);
-			changeTextFoto(imageUri);
-		});
-	}, function cameraError(error) {
-		console.debug("Unable to obtain picture: " + error, "app");
-		alert("Unable to obtain picture: ");
-	}, options);
+	navigator.camera.getPicture(
+		function cameraSuccess(imageUri) {
+			console.log('Camera success: ' + imageUri);
+
+			getFileContentAsBase64(imageUri, function (base64Image) {
+				localStorage.setItem("file_foto_surat_jalan", base64Image);
+				changeTextFoto(imageUri);
+			});
+		},
+		function cameraError(error) {
+			console.log("Camera error: " + error);
+			alert("Gagal membuka kamera: " + error);
+		},
+		options
+	);
 }
 
 
