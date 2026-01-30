@@ -594,7 +594,8 @@ function submitPenerimaanWithFiles() {
                 // Refresh data
                 setTimeout(() => {
                     refreshReceivingData();
-                }, 300);
+                    muatUlangData();
+                }, 1000);
 
             } else {
                 showAlert(response.message || 'Gagal menambahkan penerimaan', 'Error');

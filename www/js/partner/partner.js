@@ -135,7 +135,7 @@ function createTableRow(data, index) {
                 </button>
                 <button class="button-small button text-bold ${data.jumlah == data.jumlah_diterima ? 'text-add-colour-white bg-color-blue' : 'text-add-colour-black-soft bg-dark-gray-young'}" style="width: 116px;"
                     onclick="openReceivingModal('${data.id_partner_transaksi}', '${data.nama_partner}')">
-                    Penerimaan
+                    Terima
                 </button>
             </td>
         </tr>
