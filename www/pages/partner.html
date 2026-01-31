@@ -992,5 +992,91 @@
                 </div>
             </div>
         </div>
+
+        <!-- Popup Viewer Retur -->
+        <div class="popup popup-viewer-retur">
+            <div class="view view-init">
+                <div class="page">
+                    <div class="navbar">
+                        <div class="navbar-bg"></div>
+                        <div class="navbar-inner bg-dark-gray-medium">
+                            <div class="title">Detail Retur</div>
+                            <div class="right">
+                                <a class="link popup-close" data-popup=".popup-viewer-retur">
+                                    <i class="f7-icons" style="margin-right:5px; color: #fff;">xmark_rectangle_fill</i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="page-content">
+                        <div class="card card-outline margin-top">
+                            <div class="card-content">
+                                <div class="row">
+                                    <div class="col-100">
+                                        <div class="card">
+
+                                            <!-- Info Retur -->
+                                            <div class="col-100" style="margin-bottom: 15px;">
+                                                <table width="100%"
+                                                    style="border-collapse: collapse; background-color: #CFECFE; border-radius: 8px; overflow: hidden;">
+                                                    <thead class="table-header-theme">
+                                                        <tr>
+                                                            <td
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;">
+                                                                Tanggal Retur
+                                                            </td>
+                                                            <td
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;">
+                                                                Jumlah Retur
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="table-body-theme">
+                                                        <tr>
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;"
+                                                                id="viewer_retur_tanggal">-</td>
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;"
+                                                                id="viewer_retur_jumlah">-</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <!-- Keterangan -->
+                                            <div class="col-100" style="margin-bottom: 15px;">
+                                                <div style="font-weight: bold; margin-bottom: 6px; font-size: 16px;">
+                                                    Keterangan
+                                                </div>
+                                                <div id="viewer_retur_keterangan"
+                                                    style="padding: 10px; border: 1px solid #ddd; border-radius: 8px; background-color: #fafafa; color: #1C1C1D; font-size: 14px; min-height: 40px;">
+                                                    -
+                                                </div>
+                                            </div>
+
+                                            <!-- Bukti Kirim Retur (ditampilkan hanya jika sudah ada) -->
+                                            <div class="col-100" id="viewer_retur_bukti_kirim_section"
+                                                style="margin-bottom: 20px; display: none;">
+                                                <div style="font-weight: bold; margin-bottom: 10px; font-size: 16px;">
+                                                    Bukti Pengiriman Retur
+                                                </div>
+                                                <div
+                                                    style="border: 1px solid #ddd; border-radius: 8px; padding: 10px; background-color: #fff; text-align: center;">
+                                                    <img id="viewer_retur_bukti_kirim_img" src=""
+                                                        alt="Bukti Kirim Retur"
+                                                        style="max-width: 100%; max-height: 400px; border-radius: 8px; cursor: pointer;"
+                                                        onclick="window.open(this.src, '_blank')" />
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

@@ -240,11 +240,7 @@ function createReceivingRow(item, no) {
                     style="width: 72px;">
                     BUKTI
                 </button>
-                <button class="button button-small bg-dark-gray-young text-add-colour-white text-bold" 
-                    onclick="openReturModal('${item.id}', ${item.jumlah_diterima || 0}, ${item.jumlah_retur || 0})" 
-                    style="width: 72px;">
-                    RETUR
-                </button>
+                ${renderReturButton(item)}
             </td>
         </tr>
     `;

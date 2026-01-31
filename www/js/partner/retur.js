@@ -96,6 +96,94 @@ function closeReturModal() {
 }
 
 // =========================================
+// RETUR BUTTON RENDERER
+// =========================================
+
+/**
+ * Mengembalikan HTML tombol RETUR yang sesuai dengan state data.
+ *
+ * Tiga state:
+ *   1. jumlah_retur == 0               → Gray  → onclick buka popup-retur (input baru)
+ *   2. jumlah_retur > 0, tanpa bukti kirim → Green → onclick buka popup-viewer-retur (detail saja)
+ *   3. jumlah_retur > 0, ada bukti kirim   → Blue  → onclick buka popup-viewer-retur (detail + foto kirim)
+ *
+ * @param {Object} item – data satu baris dari receivingList (dari API delivery)
+ * @returns {string} HTML string tombol
+ */
+function renderReturButton(item) {
+    const jumlahRetur = parseInt(item.jumlah_retur || 0);
+
+    // State 1: belum ada retur → Gray, buka form input retur
+    if (jumlahRetur === 0) {
+        return `<button class="button button-small bg-dark-gray-young text-add-colour-white text-bold"
+                    onclick="openReturModal('${item.id}', ${item.jumlah_diterima || 0}, 0)"
+                    style="width: 72px;">
+                    RETUR
+                </button>`;
+    }
+
+    // Ada retur — tentukan apakah bukti kirim sudah ada
+    const buktiKirimUrl = item.bukti_kirim_retur_url || '';
+
+    // State 3: bukti kirim sudah ada → Blue
+    if (buktiKirimUrl) {
+        return `<button class="button button-small button-fill color-blue text-bold"
+                    onclick="viewReturDetail('${item.id}')"
+                    style="width: 72px;">
+                    RETUR
+                </button>`;
+    }
+
+    // State 2: retur ada tapi belum dikirim → Green
+    return `<button class="button button-small button-fill color-green text-bold"
+                onclick="viewReturDetail('${item.id}')"
+                style="width: 72px;">
+                RETUR
+            </button>`;
+}
+
+/**
+ * Isi popup-viewer-retur dan buka.
+ * Data diambil dari RECEIVING_STATE.receivingList yang sudah ada di memori.
+ *
+ * @param {string|number} idDetailPengiriman – ID partner_detail_pengiriman
+ */
+function viewReturDetail(idDetailPengiriman) {
+
+    // Ambil data dari receivingList yang sudah di-load
+    const item = (typeof RECEIVING_STATE !== 'undefined' && RECEIVING_STATE.receivingList)
+        ? RECEIVING_STATE.receivingList.find(function (r) { return r.id == idDetailPengiriman; })
+        : null;
+
+    if (!item) {
+        showAlert('Data penerimaan tidak ditemukan', 'Error');
+        return;
+    }
+
+    // Isi tanggal & jumlah retur
+    $('#viewer_retur_tanggal').text(formatDateIndonesia(item.tanggal_retur) || '-');
+    $('#viewer_retur_jumlah').text(formatNumber(item.jumlah_retur) + ' pcs');
+
+    // Isi keterangan
+    $('#viewer_retur_keterangan').text(item.keterangan_retur || '-');
+
+    // Bukti kirim: tampilkan section hanya kalau URL ada
+    const buktiKirimUrl = item.bukti_kirim_retur_url || '';
+    if (buktiKirimUrl) {
+        $('#viewer_retur_bukti_kirim_img').attr('src', buktiKirimUrl);
+        $('#viewer_retur_bukti_kirim_section').show();
+    } else {
+        $('#viewer_retur_bukti_kirim_img').attr('src', '');
+        $('#viewer_retur_bukti_kirim_section').hide();
+    }
+
+    // Buka popup
+    if (typeof app !== 'undefined') {
+        app.popup.open('.popup-viewer-retur');
+    }
+}
+
+// =========================================
 // FORM HELPERS
 // =========================================
 
