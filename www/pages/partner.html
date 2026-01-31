@@ -30,7 +30,9 @@
                 <div class="data-table-title">
                     <h3>Data | <i id="jumlah_data_partner"> </i></h3>
                 </div>
-                <div class="display-flex align-content-center">
+                <div class="display-flex align-content-center" style="gap: 4px;">
+                    <i class="text-align-right f7-icons" onclick="historyData();"
+                        style="font-size:30px; color:#fff;">clock_fill</i>
                     <i class="text-align-right f7-icons" onclick="muatUlangData();"
                         style="font-size:30px; color:#009100;">arrow_2_circlepath_circle_fill</i>
                 </div>
@@ -64,6 +66,49 @@
             </div>
             <div id="tombol_paginasi" class="text-align-center"
                 style="margin:5px; font-size:16px; width: 100%; display: block;">
+            </div>
+        </div>
+
+        <!-- Popup History -->
+        <div class="popup popup-history">
+            <div class="view">
+                <div class="page">
+                    <div class="navbar">
+                        <div class="navbar-bg bg-dark-gray-medium"></div>
+                        <div class="navbar-inner bg-dark-gray-medium">
+                            <div class="title">History Pengiriman</div>
+                            <div class="right">
+                                <a href="#" class="link popup-close">
+                                    <i class="f7-icons" style="color: #fff;">xmark_rectangle_fill</i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-content">
+                        <div class="card border-actived">
+                            <div class="card-header bg-dark-gray-young" style="height: 32px;">
+                                <div class="data-table-title">
+                                    <h3>History | <span id="jumlah_history_data">0</span></h3>
+                                </div>
+                            </div>
+                            <div class="card-content" style="overflow-x:auto;">
+                                <table align="center" cellspacing="1" cellpadding="1" width="100%">
+                                    <thead class="bg-dark-gray-medium text-align-center">
+                                        <tr>
+                                            <th class="label-cell" style="border-bottom:1px solid gray;">SPK</th>
+                                            <th class="label-cell" style="border-bottom:1px solid gray;">Perusahaan</th>
+                                            <th class="label-cell" style="border-bottom:1px solid gray;">Partner</th>
+                                            <th class="label-cell" style="border-bottom:1px solid gray;">Deadline</th>
+                                            <th class="label-cell" style="border-bottom:1px solid gray;">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-align-center" id="data_history_partner">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -352,7 +397,7 @@
             </div>
         </div>
 
-        <!-- Goods Receive Modal -->
+        <!-- Popup Penerimaan -->
         <div class="popup popup-penerimaan">
             <div class="view view-init">
                 <div class="page">
