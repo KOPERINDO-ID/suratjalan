@@ -1088,21 +1088,3 @@ function initPartnerPage() {
 
     console.log('Partner page initialized');
 }
-
-// =========================================
-// AUTO INITIALIZATION
-// =========================================
-
-// Initialize saat halaman partner dibuka
-$$(document).on('page:init', '.page[data-name="partner-page"]', function () {
-    console.log('Partner page mounted');
-    initPartnerPage();
-});
-
-// Fallback untuk jQuery ready
-jQuery(document).ready(function () {
-    if (jQuery('[data-name="partner-page"]').length > 0) {
-        console.log('Partner page found on ready');
-        initPartnerPage();
-    }
-});

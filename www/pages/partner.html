@@ -491,6 +491,10 @@
                                                                 Jumlah
                                                             </th>
                                                             <th
+                                                                style="padding: 12px; text-align: center; border: 1px solid #1C1C1D; min-width: 100px;">
+                                                                Retur
+                                                            </th>
+                                                            <th
                                                                 style="padding: 12px; text-align: center; border: 1px solid #1C1C1D; min-width: 120px;">
                                                                 Kurang
                                                             </th>
@@ -809,6 +813,176 @@
                                                     </div> -->
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popup Retur -->
+        <div class="popup popup-retur">
+            <div class="view view-init">
+                <div class="page">
+                    <div class="navbar">
+                        <div class="navbar-bg"></div>
+                        <div class="navbar-inner bg-dark-gray-medium">
+                            <div class="title">Ex Retur</div>
+                            <div class="right">
+                                <a class="link popup-close" id="close_retur_modal" data-popup=".popup-retur">
+                                    <i class="f7-icons" style="margin-right:5px; color: #fff;">xmark_rectangle_fill</i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="page-content">
+                        <div class="card card-outline margin-top">
+                            <div class="card-content">
+                                <div class="row">
+                                    <div class="col-100">
+                                        <div class="card">
+
+                                            <!-- Header Information -->
+                                            <div class="information-card-header col-100"
+                                                style="margin-bottom: 10px; padding: 10px;">
+                                                <div class="spk-info">
+                                                    <div class="spk-code" id="retur-spk-code"
+                                                        style="font-weight: bold; font-size: 16px;">-</div>
+                                                    <div class="client-name" id="retur-partner-name"
+                                                        style="color: #1C1C1D;">-</div>
+                                                </div>
+                                                <div class="quantity-badge" id="retur-jumlah-diterima">
+                                                    0 pcs
+                                                </div>
+                                            </div>
+
+                                            <!-- Header Action -->
+                                            <!-- <div class="col-100"
+                                                style="background-color: #CFECFE; overflow-x: auto; padding: 10px; margin-bottom: 10px; border-radius: 4px;">
+                                                <div
+                                                    style="display: flex; justify-content: space-between; align-items: center;">
+                                                    <div
+                                                        style="display: flex; align-items: center; gap: 10px; color: #1C1C1D;">
+                                                        <div
+                                                            style="font-weight: bold; font-size: 16px; padding-right: 10px; border-right: 1px solid #1C1C1D;">
+                                                            Retur</div>
+                                                        <div style="font-size: 14px;" id="retur_count">0 data</div>
+                                                    </div>
+                                                </div>
+                                            </div> -->
+
+                                            <!-- Retur Form -->
+                                            <div class="col-100" style="padding: 10px;">
+
+                                                <!-- Jumlah Retur -->
+                                                <div style="margin-bottom: 12px;">
+                                                    <label
+                                                        style="display: block; font-size: 13px; color: #fff; margin-bottom: 4px; font-weight: 500;">
+                                                        Jumlah Retur <span style="color: red;">*</span>
+                                                        <span id="retur-max-label"
+                                                            style="color: #888; font-weight: 400;">(maks: 0)</span>
+                                                    </label>
+                                                    <input type="number" id="input_jumlah_retur" placeholder="0" min="1"
+                                                        value=""
+                                                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
+                                                </div>
+
+
+                                                <!-- Alasan Retur -->
+                                                <div style="margin-bottom: 12px;">
+                                                    <label
+                                                        style="display: block; font-size: 13px; color: #fff; margin-bottom: 4px; font-weight: 500;">
+                                                        Alasan Retur <span style="color: red;">*</span>
+                                                    </label>
+                                                    <select id="input_alasan_retur"
+                                                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; background-color: #fff; appearance: auto;">
+                                                        <option value="" disabled selected>-- Pilih Alasan --</option>
+                                                        <option value="RUSAK">Rusak</option>
+                                                        <option value="CACAT_PRODUKSI">Cacat Produksi</option>
+                                                        <option value="TIDAK_SESUAI_SPEK">Tidak Sesuai Spek</option>
+                                                        <option value="SALAH_KIRIM">Salah Kirim</option>
+                                                        <option value="LAINNYA">Lainnya</option>
+                                                    </select>
+                                                </div>
+
+                                                <!-- Keterangan -->
+                                                <div style="margin-bottom: 12px;">
+                                                    <label
+                                                        style="display: block; font-size: 13px; color: #fff; margin-bottom: 4px; font-weight: 500;">
+                                                        Keterangan
+                                                    </label>
+                                                    <textarea id="input_keterangan_retur"
+                                                        placeholder="Tambahkan keterangan retur..." rows="3"
+                                                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; resize: vertical; font-family: inherit;"></textarea>
+                                                </div>
+
+                                                <!-- Upload Foto Bukti Retur -->
+                                                <div style="margin-bottom: 12px;">
+                                                    <label
+                                                        style="display: block; font-size: 13px; color: #fff; margin-bottom: 4px; font-weight: 500;">
+                                                        Foto Bukti Retur
+                                                    </label>
+
+                                                    <!-- Hidden file input -->
+                                                    <input type="file" id="input_foto_bukti_retur"
+                                                        accept="image/jpeg,image/jpg,image/png"
+                                                        style="display: none;" />
+
+                                                    <!-- Upload Buttons -->
+                                                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                                        <button class="button button-small button-fill color-blue"
+                                                            onclick="uploadFromGalleryRetur()" style="flex: 1;">
+                                                            <i class="f7-icons"
+                                                                style="margin-right: 4px;">photo_on_rectangle</i>
+                                                            Galeri
+                                                        </button>
+                                                        <button class="button button-small button-fill color-blue"
+                                                            onclick="captureFromCameraRetur()" style="flex: 1;">
+                                                            <i class="f7-icons" style="margin-right: 4px;">camera</i>
+                                                            Kamera
+                                                        </button>
+                                                    </div>
+
+                                                    <!-- Preview Area (hidden by default) -->
+                                                    <div id="preview_foto_retur_area"
+                                                        style="display: none; position: relative; margin-top: 8px;">
+                                                        <img id="preview_foto_retur_img" src=""
+                                                            alt="Preview Bukti Retur"
+                                                            style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;" />
+                                                        <!-- Remove button -->
+                                                        <button class="button button-small button-fill color-red"
+                                                            onclick="clearFotoBuktiRetur()"
+                                                            style="position: absolute; top: 6px; right: 6px; height: 28px; min-width: 28px; padding: 0 6px;">
+                                                            <i class="f7-icons" style="font-size: 16px;">xmark</i>
+                                                        </button>
+                                                    </div>
+
+                                                    <!-- Empty placeholder -->
+                                                    <div id="preview_foto_retur_empty"
+                                                        style="border: 2px dashed #ccc; border-radius: 4px; padding: 16px; text-align: center; color: #999; font-size: 13px;">
+                                                        <i class="f7-icons"
+                                                            style="font-size: 28px; color: #bbb;">photo</i>
+                                                        <p style="margin: 4px 0 0;">Belum ada foto</p>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Action Buttons -->
+                                                <div style="display: flex; gap: 8px; margin-top: 16px;">
+                                                    <button class="button button-fill color-green text-bold"
+                                                        id="btn_submit_retur" onclick="submitRetur()" style="flex: 1;">
+                                                        SIMPAN
+                                                    </button>
+                                                    <!-- <button class="button button-fill color-gray text-bold"
+                                                        onclick="closeReturModal()" style="flex: 1;">
+                                                        BATAL
+                                                    </button> -->
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>

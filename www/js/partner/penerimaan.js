@@ -199,7 +199,7 @@ function renderEmptyReceivingTable() {
 
     const emptyRow = `
         <tr id="empty_receiving_row">
-            <td colspan="5" align="center" style="padding: 20px; border: 1px solid #ddd;">
+            <td colspan="6" align="center" style="padding: 20px; border: 1px solid #ddd;">
                 <i class="f7-icons" style="font-size: 40px; color: #999;">cube_box</i>
                 <p style="color: #999; margin-top: 10px;">Belum ada data penerimaan</p>
             </td>
@@ -228,14 +228,22 @@ function createReceivingRow(item, no) {
                 ${formatNumber(item.jumlah_diterima)}
             </td>
             <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">
+                ${formatNumber(item.jumlah_retur || 0)}
+            </td>
+            <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">
                 ${formatNumber(item.jumlah_belum_diterima || remaining)}
             </td>
             <td class="display-flex justify-content-space-between align-items-center" 
-                style="padding: 8px; border: 1px solid #ddd;">
+                style="padding: 8px; border: 1px solid #ddd; gap: 4px;">
                 <button class="button button-small button-fill color-blue text-bold" 
                     onclick="viewBuktiPenerimaan('${item.id}')" 
-                    style="width: 116px;">
+                    style="width: 72px;">
                     BUKTI
+                </button>
+                <button class="button button-small bg-dark-gray-young text-add-colour-white text-bold" 
+                    onclick="openReturModal('${item.id}', ${item.jumlah_diterima || 0}, ${item.jumlah_retur || 0})" 
+                    style="width: 72px;">
+                    RETUR
                 </button>
             </td>
         </tr>
@@ -289,7 +297,9 @@ function addReceivingRow() {
 
     const newRow = `
         <tr class="editing-row">
-            <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">-</td>
+            <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">
+                <i class="f7-icons" style="color: #2cd048;">checkmark_alt_circle_fill</i>
+            </td>
             <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">
                 <input type="date" 
                     id="input_tanggal_terima" 
@@ -304,6 +314,9 @@ function addReceivingRow() {
                     max="${remaining}"
                     value=""
                     style="width: 100%; padding: 4px; border: 1px solid #ddd; border-radius: 4px;" />
+            </td>
+            <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">
+                <span id="editing_row_retur_value">0</span>
             </td>
             <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">
                 <input type="text" 
