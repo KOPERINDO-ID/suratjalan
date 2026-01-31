@@ -166,7 +166,7 @@ function createMaterialRow(material, index) {
 function createPaginationButtons(currentPage, totalPages) {
     if (totalPages <= 1) return '';
 
-    let html = '<div class="segmented segmented-raised" style="margin: 10px 0; width: 100%; display: flex; justify-content: space-between;">';
+    let html = '<div class="segmented segmented-raised" style="margin-top: 8px; width: 100%; display: flex; justify-content: space-between;">';
 
     // Tombol Previous
     if (currentPage > 1) {
@@ -245,7 +245,25 @@ function fetchPartnerData() {
         success: function (result) {
             console.log('Data partner berhasil dimuat:', result);
 
-            STATE.partnerData = result.data || [];
+            // Hitung tanggal 1 tahun yang lalu dari sekarang
+            const sekarang = moment();
+            const satuTahunLalu = moment().subtract(1, 'years');
+
+            console.log('Tahun sekarang:', sekarang.year());
+            console.log('Satu tahun lalu:', satuTahunLalu.format('YYYY-MM-DD'));
+
+            // Filter data yang dt_record-nya dalam 1 tahun terakhir (tahun ini dan tahun lalu)
+            const allData = result.data || [];
+            STATE.partnerData = allData.filter(data => {
+                if (!data.dt_record) return false;
+
+                const dtRecord = moment(data.dt_record);
+                // Data valid jika dt_record >= 1 tahun yang lalu
+                return dtRecord.isAfter(satuTahunLalu) || dtRecord.isSame(satuTahunLalu);
+            });
+
+            console.log('Total data dari server:', allData.length);
+            console.log('Data 1 tahun terakhir:', STATE.partnerData.length);
 
             // Pisahkan data aktif dan history berdasarkan filter
             STATE.filteredData = STATE.partnerData.filter(data => data.jumlah != data.jumlah_diterima);
@@ -253,8 +271,8 @@ function fetchPartnerData() {
 
             STATE.totalData = STATE.filteredData.length;
 
-            console.log('Filtered data:', STATE.filteredData.length);
-            console.log('History data:', STATE.historyData.length);
+            console.log('Filtered data (aktif):', STATE.filteredData.length);
+            console.log('History data (selesai):', STATE.historyData.length);
 
             renderData();
             showNotification('Data berhasil dimuat', 'success');
