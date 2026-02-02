@@ -199,7 +199,7 @@ function openReturModal(idDetailPengiriman, jumlahDiterima, jumlahReturAktif) {
     resetReturForm();
 
     // Update label max dengan format display
-    // $('#retur-max-label').text('(maks: ' + formatNumberToDisplay(RETUR_STATE.maxRetur) + ')');
+    $('#retur-max-label').text('(maks: ' + formatNumberToDisplay(RETUR_STATE.maxRetur) + ')');
 
     // Update header badge dengan format display
     $('#retur-jumlah-diterima').text(formatNumberToDisplay(RETUR_STATE.jumlahDiterima) + ' pcs');
@@ -344,16 +344,25 @@ function closePenerimaanReturModal() {
  * Tiga state:
  *   1. jumlah_retur == 0               → Gray  → onclick buka popup-retur (input baru)
  *   2. jumlah_retur > 0, status BELUM/PROSES → Green → onclick buka popup-penerimaan-retur
- *   3. jumlah_retur > 0, status SELESAI → Blue  → onclick buka popup-viewer-penerimaan-retur
+ *   3. jumlah_retur > 0, status SELESAI → Blue → onclick buka popup-viewer-retur
  *
  * @param {Object} item – data satu baris dari receivingList (dari API delivery)
  * @returns {string} HTML string tombol
  */
 function renderReturButton(item) {
-    const jumlahRetur = parseInt(item.jumlah_retur || 0);
+    // Parse jumlah_retur dengan handling berbagai format
+    let jumlahRetur = 0;
+
+    // Coba dari berbagai field yang mungkin
+    if (item.jumlah_retur !== undefined && item.jumlah_retur !== null) {
+        jumlahRetur = parseInt(item.jumlah_retur) || 0;
+    }
+
+    // Cek juga apakah ada id_retur sebagai indikator ada retur
+    const adaRetur = jumlahRetur > 0 || (item.id_retur !== undefined && item.id_retur !== null);
 
     // State 1: belum ada retur → Gray, buka form input retur
-    if (jumlahRetur === 0) {
+    if (!adaRetur) {
         return `<button class="button button-small bg-dark-gray-young text-add-colour-white text-bold"
                     onclick="openReturModal('${item.id}', ${item.jumlah_diterima || 0}, 0)"
                     style="width: 72px;">
@@ -361,13 +370,21 @@ function renderReturButton(item) {
                 </button>`;
     }
 
-    // Ada retur - cek status retur
-    const statusRetur = item.status_retur || 'BELUM';
+    // Ada retur - cek status retur (dari API: status_retur)
+    // Handle berbagai kemungkinan: status_retur, status, atau default BELUM
+    let statusRetur = 'BELUM';
 
-    // State 3: Status SELESAI → Blue, buka popup-viewer-penerimaan-retur
+    if (item.status_retur) {
+        statusRetur = String(item.status_retur).toUpperCase().trim();
+    } else if (item.status && jumlahRetur > 0) {
+        // Fallback ke item.status jika status_retur tidak ada
+        statusRetur = String(item.status).toUpperCase().trim();
+    }
+
+    // State 3: Status SELESAI → Blue, buka popup-viewer-retur (merged)
     if (statusRetur === 'SELESAI') {
         return `<button class="button button-small button-fill color-blue text-bold"
-                    onclick="viewPenerimaanReturDetail('${item.id}')"
+                    onclick="viewReturDetail('${item.id}')"
                     style="width: 72px;">
                     RETUR
                 </button>`;
@@ -399,104 +416,85 @@ function viewReturDetail(idDetailPengiriman) {
         return;
     }
 
-    // Isi tanggal & jumlah retur
-    $('#viewer_retur_tanggal').text(formatDateIndonesia(item.tanggal_retur) || '-');
-    $('#viewer_retur_jumlah').text(formatNumber(item.jumlah_retur) + ' pcs');
+    // Isi header info (SPK, Partner, Badge Jumlah)
+    if (typeof RECEIVING_STATE !== 'undefined') {
+        $('#viewer_retur_spk_code').text(RECEIVING_STATE.currentSpkCode || '-');
+        $('#viewer_retur_partner_name').text(RECEIVING_STATE.currentPartnerName || '-');
+    }
 
-    // Isi keterangan
+    // Badge jumlah retur
+    $('#viewer_retur_jumlah_badge').text(formatNumberToDisplay(item.jumlah_retur) + ' pcs');
+
+    // Isi tabel detail retur
+    $('#viewer_retur_tanggal').text(formatDateToDisplay(item.tanggal_retur) || '-');
+    $('#viewer_retur_jumlah').text(formatNumberToDisplay(item.jumlah_retur) + ' pcs');
     $('#viewer_retur_keterangan').text(item.keterangan_retur || '-');
 
-    // Bukti kirim: tampilkan section hanya kalau URL ada
-    const buktiKirimUrl = item.bukti_kirim_retur_url || '';
-    if (buktiKirimUrl) {
-        $('#viewer_retur_bukti_kirim_img').attr('src', buktiKirimUrl);
-        $('#viewer_retur_bukti_kirim_section').show();
+    // Foto Bukti Retur (support multiple field names)
+    const fotoBuktiReturUrl = item.foto_bukti_retur_url || item.bukti_kirim_retur_url || '';
+    if (fotoBuktiReturUrl) {
+        $('#viewer_retur_foto_bukti_img').attr('src', fotoBuktiReturUrl).show();
+        $('#viewer_retur_foto_bukti_empty').hide();
     } else {
-        $('#viewer_retur_bukti_kirim_img').attr('src', '');
-        $('#viewer_retur_bukti_kirim_section').hide();
+        $('#viewer_retur_foto_bukti_img').attr('src', '').hide();
+        $('#viewer_retur_foto_bukti_empty').show();
+    }
+
+    // Foto Bukti Terima Retur
+    const fotoBuktiTerimaUrl = item.foto_bukti_terima_retur_url || '';
+    if (fotoBuktiTerimaUrl) {
+        $('#viewer_retur_foto_terima_img').attr('src', fotoBuktiTerimaUrl).show();
+        $('#viewer_retur_foto_terima_empty').hide();
+    } else {
+        $('#viewer_retur_foto_terima_img').attr('src', '').hide();
+        $('#viewer_retur_foto_terima_empty').show();
+    }
+
+    // Setup Framework7 Photo Browser untuk zoom foto
+    if (typeof app !== 'undefined') {
+        // Buat array foto yang tersedia
+        const photos = [];
+        if (fotoBuktiReturUrl) {
+            photos.push({
+                url: fotoBuktiReturUrl,
+                caption: 'Foto Bukti Retur'
+            });
+        }
+        if (fotoBuktiTerimaUrl) {
+            photos.push({
+                url: fotoBuktiTerimaUrl,
+                caption: 'Foto Bukti Terima Retur'
+            });
+        }
+
+        // Jika ada foto, setup photo browser
+        if (photos.length > 0) {
+            const photoBrowser = app.photoBrowser.create({
+                photos: photos,
+                theme: 'dark',
+                type: 'standalone',
+                navbar: true,
+                toolbar: true,
+                backLinkText: 'Tutup'
+            });
+
+            // Bind click event untuk foto retur
+            $('#viewer_retur_foto_bukti_img').off('click').on('click', function () {
+                photoBrowser.open(0); // Open first photo
+            });
+
+            // Bind click event untuk foto terima
+            $('#viewer_retur_foto_terima_img').off('click').on('click', function () {
+                const index = fotoBuktiReturUrl ? 1 : 0; // Jika foto retur ada, terima di index 1
+                photoBrowser.open(index);
+            });
+        }
     }
 
     // Buka popup
     if (typeof app !== 'undefined') {
         app.popup.open('.popup-viewer-retur');
     }
-}
-
-// =========================================
-// VIEWER PENERIMAAN RETUR
-// =========================================
-
-/**
- * Lihat detail penerimaan retur yang sudah SELESAI
- * @param {string|number} idDetailPengiriman - ID partner_detail_pengiriman
- */
-function viewPenerimaanReturDetail(idDetailPengiriman) {
-
-    // Load detail retur dari API
-    $.ajax({
-        type: 'GET',
-        url: BASE_API + '/retur/get-retur-by-pengiriman/' + idDetailPengiriman,
-        beforeSend: function () {
-            showLoading(true);
-        },
-        success: function (response) {
-
-            if (response.status === true && response.data && response.data.length > 0) {
-                // Ambil retur pertama (seharusnya hanya ada 1 retur yang SELESAI)
-                const returData = response.data[0];
-
-                // Isi tanggal & jumlah dengan format display
-                $('#viewer_penerimaan_retur_tanggal').text(formatDateToDisplay(returData.tanggal_diterima) || '-');
-                $('#viewer_penerimaan_retur_jumlah').text(formatNumberToDisplay(returData.jumlah_diterima) + ' pcs');
-
-                // Isi total retur & sisa dengan format display
-                $('#viewer_penerimaan_retur_total').text(formatNumberToDisplay(returData.jumlah_retur) + ' pcs');
-                $('#viewer_penerimaan_retur_total_diterima').text(formatNumberToDisplay(returData.jumlah_diterima) + ' pcs');
-                $('#viewer_penerimaan_retur_sisa').text(formatNumberToDisplay(returData.sisa_retur) + ' pcs');
-
-                // Status badge
-                const statusBadge = $('#viewer_penerimaan_retur_status_badge');
-                if (returData.status === 'SELESAI') {
-                    statusBadge.text('SELESAI')
-                        .css('background-color', '#28a745')
-                        .css('color', 'white');
-                } else if (returData.status === 'PROSES') {
-                    statusBadge.text('PROSES')
-                        .css('background-color', '#ffc107')
-                        .css('color', '#1C1C1D');
-                } else {
-                    statusBadge.text('BELUM')
-                        .css('background-color', '#6c757d')
-                        .css('color', 'white');
-                }
-
-                // Foto bukti terima retur: tampilkan section hanya kalau URL ada
-                const fotoBuktiTerimaUrl = returData.foto_bukti_terima_retur_url || '';
-                if (fotoBuktiTerimaUrl) {
-                    $('#viewer_foto_bukti_terima_img').attr('src', fotoBuktiTerimaUrl);
-                    $('#viewer_foto_bukti_terima_section').show();
-                } else {
-                    $('#viewer_foto_bukti_terima_img').attr('src', '');
-                    $('#viewer_foto_bukti_terima_section').hide();
-                }
-
-                // Buka popup viewer
-                if (typeof app !== 'undefined') {
-                    app.popup.open('.popup-viewer-penerimaan-retur');
-                }
-
-            } else {
-                showAlert('Data retur tidak ditemukan', 'Error');
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error('Error loading retur detail:', error);
-            showAlert('Gagal memuat data retur', 'Error');
-        },
-        complete: function () {
-            showLoading(false);
-        }
-    });
 }
 
 
