@@ -860,21 +860,6 @@
                                                 </div>
                                             </div>
 
-                                            <!-- Header Action -->
-                                            <!-- <div class="col-100"
-                                                style="background-color: #CFECFE; overflow-x: auto; padding: 10px; margin-bottom: 10px; border-radius: 4px;">
-                                                <div
-                                                    style="display: flex; justify-content: space-between; align-items: center;">
-                                                    <div
-                                                        style="display: flex; align-items: center; gap: 10px; color: #1C1C1D;">
-                                                        <div
-                                                            style="font-weight: bold; font-size: 16px; padding-right: 10px; border-right: 1px solid #1C1C1D;">
-                                                            Retur</div>
-                                                        <div style="font-size: 14px;" id="retur_count">0 data</div>
-                                                    </div>
-                                                </div>
-                                            </div> -->
-
                                             <!-- Retur Form -->
                                             <div class="col-100" style="padding: 10px;">
 
@@ -882,31 +867,11 @@
                                                 <div style="margin-bottom: 12px;">
                                                     <label
                                                         style="display: block; font-size: 13px; color: #fff; margin-bottom: 4px; font-weight: 500;">
-                                                        Jumlah Retur <span style="color: red;">*</span>
-                                                        <span id="retur-max-label"
-                                                            style="color: #888; font-weight: 400;">(maks: 0)</span>
+                                                        Jumlah <span style="color: red;">*</span>
                                                     </label>
-                                                    <input type="number" id="input_jumlah_retur" placeholder="0" min="1"
-                                                        value=""
-                                                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;" />
-                                                </div>
-
-
-                                                <!-- Alasan Retur -->
-                                                <div style="margin-bottom: 12px;">
-                                                    <label
-                                                        style="display: block; font-size: 13px; color: #fff; margin-bottom: 4px; font-weight: 500;">
-                                                        Alasan Retur <span style="color: red;">*</span>
-                                                    </label>
-                                                    <select id="input_alasan_retur"
-                                                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; background-color: #fff; appearance: auto;">
-                                                        <option value="" disabled selected>-- Pilih Alasan --</option>
-                                                        <option value="RUSAK">Rusak</option>
-                                                        <option value="CACAT_PRODUKSI">Cacat Produksi</option>
-                                                        <option value="TIDAK_SESUAI_SPEK">Tidak Sesuai Spek</option>
-                                                        <option value="SALAH_KIRIM">Salah Kirim</option>
-                                                        <option value="LAINNYA">Lainnya</option>
-                                                    </select>
+                                                    <input type="text" id="input_jumlah_retur" placeholder="0"
+                                                        oninput="formatJumlahReturInput(this)"
+                                                        style="width: 100%; padding: 8px; font-size: 14px;" />
                                                 </div>
 
                                                 <!-- Keterangan -->
@@ -917,13 +882,13 @@
                                                     </label>
                                                     <textarea id="input_keterangan_retur"
                                                         placeholder="Tambahkan keterangan retur..." rows="3"
-                                                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; resize: vertical; font-family: inherit;"></textarea>
+                                                        style="width: 100%; padding: 8px; font-size: 14px; resize: vertical; font-family: inherit;"></textarea>
                                                 </div>
 
                                                 <!-- Upload Foto Bukti Retur -->
                                                 <div style="margin-bottom: 12px;">
                                                     <label
-                                                        style="display: block; font-size: 13px; color: #fff; margin-bottom: 4px; font-weight: 500;">
+                                                        style="display: block; font-size: 13px; color: #fff; margin-bottom: 8px; font-weight: 500;">
                                                         Foto Bukti Retur
                                                     </label>
 
@@ -932,41 +897,59 @@
                                                         accept="image/jpeg,image/jpg,image/png"
                                                         style="display: none;" />
 
-                                                    <!-- Upload Buttons -->
-                                                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                                                        <button class="button button-small button-fill color-blue"
-                                                            onclick="uploadFromGalleryRetur()" style="flex: 1;">
-                                                            <i class="f7-icons"
-                                                                style="margin-right: 4px;">photo_on_rectangle</i>
-                                                            Galeri
-                                                        </button>
-                                                        <button class="button button-small button-fill color-blue"
-                                                            onclick="captureFromCameraRetur()" style="flex: 1;">
-                                                            <i class="f7-icons" style="margin-right: 4px;">camera</i>
-                                                            Kamera
-                                                        </button>
+                                                    <!-- Empty State dengan 2 Tombol (sama seperti Upload Bukti Penerimaan) -->
+                                                    <div id="preview_foto_retur_empty"
+                                                        style="border: 2px dashed #ddd; border-radius: 8px; padding: 20px; text-align: center; background-color: #fafafa;">
+                                                        <i class="f7-icons"
+                                                            style="font-size: 48px; color: #999;">camera_fill</i>
+                                                        <p style="color: #999; margin: 10px 0 15px 0;">Upload Foto Bukti
+                                                            Retur</p>
+
+                                                        <!-- Tombol Upload -->
+                                                        <div class="row"
+                                                            style="gap: 10px; margin: 0 auto; max-width: 300px;">
+                                                            <div class="col-50">
+                                                                <button
+                                                                    class="button button-fill bg-color-green button-small display-flex justify-content-center align-items-center"
+                                                                    onclick="uploadFromGalleryRetur()" type="button"
+                                                                    style="width: 100%; height: 40px;">
+                                                                    <i class="f7-icons"
+                                                                        style="margin-right: 4px; font-size: 18px;">photo</i>
+                                                                    Galeri
+                                                                </button>
+                                                            </div>
+                                                            <div class="col-50">
+                                                                <button
+                                                                    class="button button-fill bg-color-green button-small display-flex justify-content-center align-items-center"
+                                                                    onclick="captureFromCameraRetur()" type="button"
+                                                                    style="width: 100%; height: 40px;">
+                                                                    <i class="f7-icons"
+                                                                        style="margin-right: 4px; font-size: 18px;">camera</i>
+                                                                    Kamera
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <p style="color: #999; font-size: 12px; margin-top: 10px;">JPG,
+                                                            JPEG, PNG (Max 2MB)</p>
                                                     </div>
 
-                                                    <!-- Preview Area (hidden by default) -->
+                                                    <!-- Preview Area (sama seperti Upload Bukti Penerimaan) -->
                                                     <div id="preview_foto_retur_area"
-                                                        style="display: none; position: relative; margin-top: 8px;">
+                                                        style="display: none; border: 2px solid #4CAF50; border-radius: 8px; padding: 15px; background-color: #fafafa;">
                                                         <img id="preview_foto_retur_img" src=""
                                                             alt="Preview Bukti Retur"
-                                                            style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;" />
-                                                        <!-- Remove button -->
-                                                        <button class="button button-small button-fill color-red"
-                                                            onclick="clearFotoBuktiRetur()"
-                                                            style="position: absolute; top: 6px; right: 6px; height: 28px; min-width: 28px; padding: 0 6px;">
-                                                            <i class="f7-icons" style="font-size: 16px;">xmark</i>
-                                                        </button>
-                                                    </div>
-
-                                                    <!-- Empty placeholder -->
-                                                    <div id="preview_foto_retur_empty"
-                                                        style="border: 2px dashed #ccc; border-radius: 4px; padding: 16px; text-align: center; color: #999; font-size: 13px;">
-                                                        <i class="f7-icons"
-                                                            style="font-size: 28px; color: #bbb;">photo</i>
-                                                        <p style="margin: 4px 0 0;">Belum ada foto</p>
+                                                            style="width: 100%; max-height: 300px; object-fit: contain; border-radius: 8px; margin-bottom: 10px;" />
+                                                        <div style="text-align: center;">
+                                                            <button
+                                                                class="button button-small button-fill bg-color-red display-flex justify-content-center align-items-center"
+                                                                onclick="clearFotoBuktiRetur()" type="button"
+                                                                style="margin: 0 auto; max-width: 150px;">
+                                                                <i class="f7-icons"
+                                                                    style="margin-right: 4px; font-size: 14px;">trash</i>
+                                                                Hapus
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -976,10 +959,6 @@
                                                         id="btn_submit_retur" onclick="submitRetur()" style="flex: 1;">
                                                         SIMPAN
                                                     </button>
-                                                    <!-- <button class="button button-fill color-gray text-bold"
-                                                        onclick="closeReturModal()" style="flex: 1;">
-                                                        BATAL
-                                                    </button> -->
                                                 </div>
                                             </div>
 
@@ -1064,6 +1043,330 @@
                                                     style="border: 1px solid #ddd; border-radius: 8px; padding: 10px; background-color: #fff; text-align: center;">
                                                     <img id="viewer_retur_bukti_kirim_img" src=""
                                                         alt="Bukti Kirim Retur"
+                                                        style="max-width: 100%; max-height: 400px; border-radius: 8px; cursor: pointer;"
+                                                        onclick="window.open(this.src, '_blank')" />
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popup Penerimaan Retur -->
+        <div class="popup popup-penerimaan-retur">
+            <div class="view view-init">
+                <div class="page">
+                    <!-- Navbar Header -->
+                    <div class="navbar">
+                        <div class="navbar-bg"></div>
+                        <div class="navbar-inner bg-dark-gray-medium">
+                            <div class="title">In Retur</div>
+                            <div class="right">
+                                <a class="link popup-close" data-popup=".popup-penerimaan-retur">
+                                    <i class="f7-icons" style="margin-right:5px; color: #fff;">xmark_rectangle_fill</i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page Content -->
+                    <div class="page-content">
+                        <div class="card card-outline margin-top">
+                            <div class="card-content">
+                                <div class="row">
+                                    <div class="col-100">
+                                        <div class="card">
+                                            <!-- Header Info (SPK & Partner) -->
+                                            <div class="col-100" style="margin-bottom: 15px;">
+                                                <table width="100%"
+                                                    style="border-collapse: collapse; background-color: #CFECFE; border-radius: 8px; overflow: hidden;">
+                                                    <thead class="table-header-theme">
+                                                        <tr>
+                                                            <td
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;">
+                                                                SPK
+                                                            </td>
+                                                            <td
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;">
+                                                                Partner
+                                                            </td>
+                                                            <td
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;">
+                                                                Jumlah Retur
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="table-body-theme">
+                                                        <tr>
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;"
+                                                                id="penerimaan_retur_spk_code">-</td>
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;"
+                                                                id="penerimaan_retur_partner_name">-</td>
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;"
+                                                                id="penerimaan_retur_jumlah_retur">-</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <!-- Form Input -->
+                                            <div class="col-100">
+                                                <!-- Tanggal dan Jumlah Diterima dalam 1 Baris -->
+                                                <div class="row" style="margin-bottom: 15px; gap: 10px;">
+                                                    <!-- Tanggal Diterima -->
+                                                    <div class="col-50">
+                                                        <div class="list no-hairlines-md" style="margin: 0;">
+                                                            <ul>
+                                                                <li>
+                                                                    <div class="item-content item-input">
+                                                                        <div class="item-inner">
+                                                                            <div class="item-title item-label text-bold"
+                                                                                style="font-size: 16px; color: #fff;">
+                                                                                Tanggal <span
+                                                                                    style="color: red;">*</span>
+                                                                            </div>
+                                                                            <div class="item-input-wrap">
+                                                                                <input type="text"
+                                                                                    id="input_tanggal_penerimaan_retur"
+                                                                                    placeholder="DD-MMM-YY"
+                                                                                    class="text-align-left"
+                                                                                    style="font-weight: bold; color: #fff;"
+                                                                                    readonly
+                                                                                    onclick="openDatePickerPenerimaanRetur()" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Jumlah Diterima -->
+                                                    <div class="col-50">
+                                                        <div class="list no-hairlines-md" style="margin: 0;">
+                                                            <ul>
+                                                                <li>
+                                                                    <div class="item-content item-input">
+                                                                        <div class="item-inner">
+                                                                            <div class="item-title item-label text-bold"
+                                                                                style="font-size: 16px; color: #fff;">
+                                                                                Jumlah (pcs) <span
+                                                                                    style="color: red;">*</span>
+                                                                                <span id="penerimaan_retur_max_label"
+                                                                                    style="font-size: 12px; color: #666;"></span>
+                                                                            </div>
+                                                                            <div class="item-input-wrap">
+                                                                                <input type="text"
+                                                                                    id="input_jumlah_penerimaan_retur"
+                                                                                    placeholder="0"
+                                                                                    class="text-align-left"
+                                                                                    style="font-weight: bold; color: #fff;"
+                                                                                    oninput="formatJumlahPenerimaanReturInput(this)" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Upload Bukti Terima Retur -->
+                                                <div class="col-100" style="margin-bottom: 20px;">
+                                                    <div
+                                                        style="font-weight: bold; margin-bottom: 10px; font-size: 16px; color: #fff;">
+                                                        Bukti Terima Retur
+                                                    </div>
+
+                                                    <!-- Input file (hidden) -->
+                                                    <input type="file" id="input_foto_bukti_terima_retur"
+                                                        accept="image/jpeg,image/jpg,image/png"
+                                                        style="display: none;" />
+
+                                                    <!-- Empty State dengan 2 Tombol -->
+                                                    <div id="preview_foto_terima_retur_empty"
+                                                        style="border: 2px dashed #ddd; border-radius: 8px; padding: 20px; text-align: center; background-color: #fafafa;">
+                                                        <i class="f7-icons"
+                                                            style="font-size: 48px; color: #999;">camera_fill</i>
+                                                        <p style="color: #999; margin: 10px 0 15px 0;">Upload Bukti
+                                                            Terima Retur</p>
+
+                                                        <!-- Tombol Upload -->
+                                                        <div class="row"
+                                                            style="gap: 10px; margin: 0 auto; max-width: 300px;">
+                                                            <div class="col-50">
+                                                                <button
+                                                                    class="button button-fill bg-color-green button-small display-flex justify-content-center align-items-center"
+                                                                    onclick="uploadFromGalleryPenerimaanRetur()"
+                                                                    type="button" style="width: 100%; height: 40px;">
+                                                                    <i class="f7-icons"
+                                                                        style="margin-right: 4px; font-size: 18px;">photo</i>
+                                                                    Galeri
+                                                                </button>
+                                                            </div>
+                                                            <div class="col-50">
+                                                                <button
+                                                                    class="button button-fill bg-color-green button-small display-flex justify-content-center align-items-center"
+                                                                    onclick="captureFromCameraPenerimaanRetur()"
+                                                                    type="button" style="width: 100%; height: 40px;">
+                                                                    <i class="f7-icons"
+                                                                        style="margin-right: 4px; font-size: 18px;">camera</i>
+                                                                    Kamera
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <p style="color: #999; font-size: 12px; margin-top: 10px;">JPG,
+                                                            JPEG, PNG (Max 2MB)</p>
+                                                    </div>
+
+                                                    <!-- Preview Area -->
+                                                    <div id="preview_foto_terima_retur_area"
+                                                        style="display: none; border: 2px solid #4CAF50; border-radius: 8px; padding: 15px; background-color: #fafafa;">
+                                                        <img id="preview_foto_terima_retur_img"
+                                                            style="width: 100%; max-height: 300px; object-fit: contain; border-radius: 8px; margin-bottom: 10px;" />
+                                                        <div style="text-align: center;">
+                                                            <button
+                                                                class="button button-small button-fill bg-color-red display-flex justify-content-center align-items-center"
+                                                                onclick="clearFotoBuktiTerimaRetur()" type="button"
+                                                                style="margin: 0 auto; max-width: 150px;">
+                                                                <i class="f7-icons"
+                                                                    style="margin-right: 4px; font-size: 14px;">trash</i>
+                                                                Hapus
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Action Buttons -->
+                                                <div style="display: flex; gap: 8px; margin-top: 20px;">
+                                                    <button class="button button-fill color-green text-bold"
+                                                        id="btn_submit_penerimaan_retur"
+                                                        onclick="submitPenerimaanRetur()" style="flex: 1;">
+                                                        SIMPAN
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Popup Viewer Penerimaan Retur -->
+        <div class="popup popup-viewer-penerimaan-retur">
+            <div class="view view-init">
+                <div class="page">
+                    <!-- Navbar Header -->
+                    <div class="navbar">
+                        <div class="navbar-bg"></div>
+                        <div class="navbar-inner bg-dark-gray-medium">
+                            <div class="title">Detail Penerimaan Retur</div>
+                            <div class="right">
+                                <a class="link popup-close" data-popup=".popup-viewer-penerimaan-retur">
+                                    <i class="f7-icons" style="margin-right:5px; color: #fff;">xmark_rectangle_fill</i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page Content -->
+                    <div class="page-content">
+                        <div class="card card-outline margin-top">
+                            <div class="card-content">
+                                <div class="row">
+                                    <div class="col-100">
+                                        <div class="card">
+                                            <!-- Info Penerimaan Retur -->
+                                            <div class="col-100" style="margin-bottom: 15px;">
+                                                <table width="100%"
+                                                    style="border-collapse: collapse; background-color: #CFECFE; border-radius: 8px; overflow: hidden;">
+                                                    <thead class="table-header-theme">
+                                                        <tr>
+                                                            <td
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;">
+                                                                Tanggal Diterima
+                                                            </td>
+                                                            <td
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;">
+                                                                Jumlah Diterima
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="table-body-theme">
+                                                        <tr>
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;"
+                                                                id="viewer_penerimaan_retur_tanggal">-</td>
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;"
+                                                                id="viewer_penerimaan_retur_jumlah">-</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <!-- Info Retur (Jumlah Total & Status) -->
+                                            <div class="col-100" style="margin-bottom: 15px;">
+                                                <table width="100%"
+                                                    style="border-collapse: collapse; background-color: #FFF3CD; border-radius: 8px; overflow: hidden;">
+                                                    <thead class="table-header-theme">
+                                                        <tr>
+                                                            <td
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border-bottom: 1px solid #FFE69C;">
+                                                                Total Jumlah Retur
+                                                            </td>
+                                                            <td
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border-bottom: 1px solid #FFE69C;">
+                                                                Total Diterima
+                                                            </td>
+                                                            <td
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border-bottom: 1px solid #FFE69C;">
+                                                                Sisa Belum Diterima
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="table-body-theme">
+                                                        <tr>
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border-bottom: 1px solid #FFE69C;"
+                                                                id="viewer_penerimaan_retur_total">-</td>
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border-bottom: 1px solid #FFE69C;"
+                                                                id="viewer_penerimaan_retur_total_diterima">-</td>
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border-bottom: 1px solid #FFE69C;"
+                                                                id="viewer_penerimaan_retur_sisa">-</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <!-- Status Badge -->
+                                            <div class="col-100" style="margin-bottom: 15px; text-align: center;">
+                                                <div style="font-weight: bold; margin-bottom: 6px; font-size: 16px;">
+                                                    Status
+                                                </div>
+                                                <span id="viewer_penerimaan_retur_status_badge"
+                                                    style="display: inline-block; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 14px; background-color: #28a745; color: white;">
+                                                    -
+                                                </span>
+                                            </div>
+
+                                            <!-- ✅ FOTO BUKTI TERIMA RETUR (NEW) -->
+                                            <div class="col-100" id="viewer_foto_bukti_terima_section"
+                                                style="margin-bottom: 20px; display: none;">
+                                                <div style="font-weight: bold; margin-bottom: 10px; font-size: 16px;">
+                                                    Foto Bukti Terima Retur
+                                                </div>
+                                                <div
+                                                    style="border: 1px solid #ddd; border-radius: 8px; padding: 10px; background-color: #fff; text-align: center;">
+                                                    <img id="viewer_foto_bukti_terima_img" src=""
+                                                        alt="Bukti Terima Retur"
                                                         style="max-width: 100%; max-height: 400px; border-radius: 8px; cursor: pointer;"
                                                         onclick="window.open(this.src, '_blank')" />
                                                 </div>

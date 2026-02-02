@@ -149,7 +149,7 @@ function populateReceivingHeader(data) {
     // Data adalah array dari response.data
     const headerData = data[0] || {};
 
-    RECEIVING_STATE.currentPartnerName = headerData.nama || '-';
+    RECEIVING_STATE.currentPartnerName = headerData.nama_partner || '-';
     RECEIVING_STATE.currentQuantity = parseInt(headerData.jumlah || 0);
     RECEIVING_STATE.currentPartnerTransaksiDetailId = headerData.id_partner_transaksi_detail || null;
 

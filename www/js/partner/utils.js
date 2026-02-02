@@ -18,6 +18,32 @@ function formatNumber(num) {
 }
 
 /**
+ * Format angka untuk display dengan separator ribuan (1.234.567)
+ * @param {number|string} num - Angka yang akan diformat
+ * @returns {string} - Angka terformat dengan separator titik
+ */
+function formatNumberToDisplay(num) {
+    if (!num && num !== 0) return '';
+    // Hapus semua karakter non-digit
+    let cleanNum = num.toString().replace(/\D/g, '');
+    // Format dengan separator titik
+    return cleanNum.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+/**
+ * Parse angka dari format display (1.234.567) ke angka biasa
+ * @param {string} displayNum - Angka dalam format display dengan separator titik
+ * @returns {number} - Angka tanpa separator
+ */
+function parseNumberFromDisplay(displayNum) {
+    if (!displayNum) return 0;
+    // Hapus semua titik separator
+    let cleanNum = displayNum.toString().replace(/\./g, '');
+    return parseInt(cleanNum, 10) || 0;
+}
+
+
+/**
  * Format mata uang Rupiah
  */
 function formatCurrency(amount) {
@@ -56,6 +82,64 @@ function formatDateShow(dateString) {
     let year = date.getFullYear().toString().slice(-2);
 
     return `${day} ${month} ${year}`;
+}
+
+/**
+ * Format tanggal ke format display DD-MMM-YY (24-Des-25)
+ * @param {string|Date} dateString - Tanggal yang akan diformat (format: YYYY-MM-DD)
+ * @returns {string} - Tanggal dalam format "DD-MMM-YY"
+ */
+function formatDateToDisplay(dateString) {
+    if (!dateString) return '';
+
+    const monthNames = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+        'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
+    ];
+
+    let date = new Date(dateString);
+    let day = ('0' + date.getDate()).slice(-2);
+    let month = monthNames[date.getMonth()];
+    let year = date.getFullYear().toString().slice(-2);
+
+    return `${day}-${month}-${year}`;
+}
+
+/**
+ * Parse tanggal dari format display DD-MMM-YY ke YYYY-MM-DD
+ * @param {string} displayDate - Tanggal dalam format "DD-MMM-YY" (24-Des-25)
+ * @returns {string} - Tanggal dalam format "YYYY-MM-DD"
+ */
+function parseDateFromDisplay(displayDate) {
+    if (!displayDate) return '';
+
+    const monthNames = {
+        'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'Mei': 4, 'Jun': 5,
+        'Jul': 6, 'Agu': 7, 'Sep': 8, 'Okt': 9, 'Nov': 10, 'Des': 11
+    };
+
+    try {
+        const parts = displayDate.split('-');
+        if (parts.length !== 3) return '';
+
+        const day = parseInt(parts[0], 10);
+        const monthIndex = monthNames[parts[1]];
+        const year = parseInt('20' + parts[2], 10); // Tambahkan '20' di depan tahun
+
+        if (monthIndex === undefined) return '';
+
+        const date = new Date(year, monthIndex, day);
+
+        // Format ke YYYY-MM-DD
+        const yyyy = date.getFullYear();
+        const mm = ('0' + (date.getMonth() + 1)).slice(-2);
+        const dd = ('0' + date.getDate()).slice(-2);
+
+        return `${yyyy}-${mm}-${dd}`;
+    } catch (error) {
+        console.error('Error parsing date:', error);
+        return '';
+    }
 }
 
 /**
