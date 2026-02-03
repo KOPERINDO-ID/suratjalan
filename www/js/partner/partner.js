@@ -46,13 +46,6 @@ function sanitizeString(str) {
 }
 
 /**
- * Format nomor urut dengan padding
- */
-function formatNumberPadding(num) {
-    return num.toString().padStart(3, '0');
-}
-
-/**
  * Membersihkan prefix dari ID
  */
 function removePrefix(str, prefix = 'INV_') {
@@ -61,73 +54,15 @@ function removePrefix(str, prefix = 'INV_') {
 }
 
 /**
- * Format angka dengan separator ribuan
- */
-function formatNumber(num) {
-    if (!num) return '0';
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
-
-/**
- * Format mata uang Rupiah
- */
-function formatCurrency(amount) {
-    if (!amount) return 'Rp 0';
-    return 'Rp ' + formatNumber(amount);
-}
-
-/**
- * Format tanggal ke format Indonesia: "10 Des 2024"
- * @param {string|Date} date - Tanggal yang akan diformat (format: YYYY-MM-DD atau Date object)
- * @returns {string} Tanggal dalam format "10 Des 2024"
- */
-function formatDateIndonesia(date) {
-    if (!date) return '-';
-
-    // Array nama bulan dalam bahasa Indonesia (singkat)
-    const bulanIndonesia = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-        'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
-    ];
-
-    try {
-        // Parse tanggal menggunakan moment.js jika tersedia
-        if (typeof moment !== 'undefined') {
-            const m = moment(date);
-            if (!m.isValid()) return '-';
-
-            const tanggal = m.date();
-            const bulan = bulanIndonesia[m.month()];
-            const tahun = m.year();
-
-            return `${tanggal} ${bulan} ${tahun}`;
-        }
-
-        // Fallback jika moment.js tidak tersedia
-        const d = new Date(date);
-        if (isNaN(d.getTime())) return '-';
-
-        const tanggal = d.getDate();
-        const bulan = bulanIndonesia[d.getMonth()];
-        const tahun = d.getFullYear();
-
-        return `${tanggal} ${bulan} ${tahun}`;
-    } catch (error) {
-        console.error('Error formatting date:', error);
-        return '-';
-    }
-}
-
-/**
  * Membuat HTML untuk baris tabel
  */
 function createTableRow(data, index) {
     return `
         <tr>
-            <td class="label-cell text-align-left text-no-wrap" style="min-width: 100px !important;">${(moment(data.penjualan_tanggal).format('DDMMYY') + '-' + removePrefix(data.penjualan_id)) || '-'}</td>
-            <td class="label-cell text-no-wrap" style="text-align: left !important; min-width: 150px !important;">${data.client_nama || '-'}</td>
-            <td class="label-cell text-no-wrap" style="text-align: left !important; min-width: 150px !important;">${data.nama_partner || '-'}</td>
-            <td class="label-cell text-no-wrap" style="min-width: 100px !important;">${formatDateIndonesia(data.tgl_deadline)}</td>
+            <td class="label-cell text-align-left text-no-wrap" style="min-width: 100px !important; border-right: 1px solid grey; border-bottom: 1px solid grey;">${(moment(data.penjualan_tanggal).format('DDMMYY') + '-' + removePrefix(data.penjualan_id)) || '-'}</td>
+            <td class="label-cell text-no-wrap" style="text-align: left !important; min-width: 150px !important; border-right: 1px solid grey; border-bottom: 1px solid grey;">${data.client_nama || '-'}</td>
+            <td class="label-cell text-no-wrap" style="text-align: left !important; min-width: 150px !important; border-right: 1px solid grey; border-bottom: 1px solid grey;">${data.nama_partner || '-'}</td>
+            <td class="label-cell text-no-wrap" style="min-width: 100px !important; border-right: 1px solid grey; border-bottom: 1px solid grey;">${formatDateToDisplay(data.tgl_deadline)}</td>
             <td class="label-cell display-flex justify-content-space-between align-items-center">
                 ${data.jumlah != data.jumlah_diterima ? `
                     <button class="popup-open text-add-colour-black-soft bg-dark-gray-young button-small button text-bold" 

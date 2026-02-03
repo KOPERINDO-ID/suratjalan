@@ -6,27 +6,17 @@
  */
 
 // =========================================
-// FORMAT HELPERS
+// FORMAT HELPERS - NUMBER
 // =========================================
 
 /**
- * Format angka dengan separator ribuan
- */
-function formatNumber(num) {
-    if (!num) return '0';
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
-
-/**
- * Format angka untuk display dengan separator ribuan (1.234.567)
+ * Format angka dengan separator ribuan (1.234.567)
  * @param {number|string} num - Angka yang akan diformat
  * @returns {string} - Angka terformat dengan separator titik
  */
-function formatNumberToDisplay(num) {
-    if (!num && num !== 0) return '';
-    // Hapus semua karakter non-digit
+function formatNumber(num) {
+    if (!num && num !== 0) return '0';
     let cleanNum = num.toString().replace(/\D/g, '');
-    // Format dengan separator titik
     return cleanNum.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
@@ -37,11 +27,9 @@ function formatNumberToDisplay(num) {
  */
 function parseNumberFromDisplay(displayNum) {
     if (!displayNum) return 0;
-    // Hapus semua titik separator
     let cleanNum = displayNum.toString().replace(/\./g, '');
     return parseInt(cleanNum, 10) || 0;
 }
-
 
 /**
  * Format mata uang Rupiah
@@ -51,37 +39,20 @@ function formatCurrency(amount) {
     return 'Rp ' + formatNumber(amount);
 }
 
+// =========================================
+// FORMAT HELPERS - DATE
+// =========================================
+
 /**
- * Format tanggal ke format dd/mm/yyyy
+ * Format tanggal ke format YYYY-MM-DD untuk database
  */
 function formatDate(dateString) {
     if (!dateString) return '-';
-
     let date = new Date(dateString);
     let day = ('0' + date.getDate()).slice(-2);
     let month = ('0' + (date.getMonth() + 1)).slice(-2);
     let year = date.getFullYear();
-
     return `${year}-${month}-${day}`;
-}
-
-/**
- * Format tanggal untuk ditampilkan (format: "10 Des 25")
- */
-function formatDateShow(dateString) {
-    if (!dateString) return '-';
-
-    const monthNames = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-        'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
-    ];
-
-    let date = new Date(dateString);
-    let day = date.getDate();
-    let month = monthNames[date.getMonth()];
-    let year = date.getFullYear().toString().slice(-2);
-
-    return `${day} ${month} ${year}`;
 }
 
 /**
@@ -124,13 +95,12 @@ function parseDateFromDisplay(displayDate) {
 
         const day = parseInt(parts[0], 10);
         const monthIndex = monthNames[parts[1]];
-        const year = parseInt('20' + parts[2], 10); // Tambahkan '20' di depan tahun
+        const year = parseInt('20' + parts[2], 10);
 
         if (monthIndex === undefined) return '';
 
         const date = new Date(year, monthIndex, day);
 
-        // Format ke YYYY-MM-DD
         const yyyy = date.getFullYear();
         const mm = ('0' + (date.getMonth() + 1)).slice(-2);
         const dd = ('0' + date.getDate()).slice(-2);
@@ -154,17 +124,6 @@ function formatDateIndonesia(date) {
     ];
 
     try {
-        if (typeof moment !== 'undefined') {
-            const m = moment(date);
-            if (!m.isValid()) return '-';
-
-            const tanggal = m.date();
-            const bulan = bulanIndonesia[m.month()];
-            const tahun = m.year();
-
-            return `${tanggal} ${bulan} ${tahun}`;
-        }
-
         const d = new Date(date);
         if (isNaN(d.getTime())) return '-';
 
@@ -178,6 +137,10 @@ function formatDateIndonesia(date) {
         return '-';
     }
 }
+
+// =========================================
+// FORMAT HELPERS - OTHERS
+// =========================================
 
 /**
  * Format SPK Code dari penjualan_id dan tanggal
@@ -202,6 +165,14 @@ function formatSPKCode(penjualan_id, tanggal) {
 function removePrefix(str, prefix = 'INV_') {
     if (!str) return '-';
     return str.toString().replace(prefix, '').replace(/^0/, '');
+}
+
+/**
+ * Membersihkan string untuk pencarian
+ */
+function sanitizeString(str) {
+    if (!str) return '';
+    return str.toString().toLowerCase().trim();
 }
 
 // =========================================
@@ -262,10 +233,45 @@ function showConfirm(message, title = 'Konfirmasi', callback) {
     }
 }
 
+// =========================================
+// PHOTO BROWSER HELPER
+// =========================================
+
 /**
- * Membersihkan string untuk pencarian
+ * Open Framework7 Photo Browser untuk zoom gambar
+ * @param {string|Array} photos - URL foto atau array of photo objects
+ * @param {number} startIndex - Index foto yang akan dibuka pertama kali (default: 0)
+ * @param {string} caption - Caption foto (optional, hanya jika photos adalah string)
  */
-function sanitizeString(str) {
-    if (!str) return '';
-    return str.toString().toLowerCase().trim();
+function openPhotoBrowser(photos, startIndex = 0, caption = '') {
+    if (typeof app === 'undefined') {
+        console.warn('Framework7 app not initialized');
+        return;
+    }
+
+    // Convert to array format if single photo
+    let photoArray = [];
+    if (typeof photos === 'string') {
+        photoArray = [{
+            url: photos,
+            caption: caption || 'Foto'
+        }];
+    } else if (Array.isArray(photos)) {
+        photoArray = photos;
+    } else {
+        console.error('Invalid photo format');
+        return;
+    }
+
+    // Create and open photo browser
+    const photoBrowser = app.photoBrowser.create({
+        photos: photoArray,
+        theme: 'dark',
+        type: 'standalone',
+        navbar: true,
+        toolbar: true,
+        backLinkText: 'Tutup'
+    });
+
+    photoBrowser.open(startIndex);
 }

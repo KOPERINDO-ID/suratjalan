@@ -1,11 +1,5 @@
 <div class="page" data-name="partner-page">
     <div class="page-content theme-dark">
-        <!-- Text Marquee -->
-        <!-- <div class="card table-color-red border-actived" style="height:30px;">
-            <marquee direction="left" style="vertical-align:middle; " id="data_surat_jalan_berjalan">
-            </marquee>
-        </div> -->
-
         <!-- Top Menu -->
         <div class="card">
             <div class="row no-gap">
@@ -26,7 +20,7 @@
 
         <!-- Main Table -->
         <div class="card border-actived">
-            <div class="card-header bg-dark-gray-young" style="height: 32px;">
+            <div class="card-header bg-dark-gray-medium" style="height: 32px;">
                 <div class="data-table-title">
                     <h3>Data | <i id="jumlah_data_partner"> </i></h3>
                 </div>
@@ -34,7 +28,7 @@
                     <i class="text-align-right f7-icons" onclick="historyData();"
                         style="font-size:30px; color:#fff;">clock_fill</i>
                     <i class="text-align-right f7-icons" onclick="muatUlangData();"
-                        style="font-size:30px; color:#009100;">arrow_2_circlepath_circle_fill</i>
+                        style="font-size:30px; color:#fff;">arrow_2_circlepath_circle_fill</i>
                 </div>
             </div>
 
@@ -161,8 +155,8 @@
                                                         style="display: flex; align-items: center; gap: 10px; color: #1C1C1D;">
                                                         <div
                                                             style="font-weight: bold; font-size: 16px; padding-right: 10px; border-right: 1px solid #1C1C1D;">
-                                                            Material</div>
-                                                        <div style="font-size: 14px;" id="material_count">0 item</div>
+                                                            Data</div>
+                                                        <div style="font-size: 14px;" id="material_count">0</div>
                                                     </div>
 
                                                     <!-- Right: Action Buttons -->
@@ -445,8 +439,8 @@
                                                         style="display: flex; align-items: center; gap: 10px; color: #1C1C1D;">
                                                         <div
                                                             style="font-weight: bold; font-size: 16px; padding-right: 10px; border-right: 1px solid #1C1C1D;">
-                                                            Penerimaan</div>
-                                                        <div style="font-size: 14px;" id="receiving_count">0 data</div>
+                                                            Data</div>
+                                                        <div style="font-size: 14px;" id="receiving_count">0</div>
                                                     </div>
 
                                                     <!-- Right: Action Buttons -->
@@ -716,7 +710,7 @@
                                                                 Jumlah
                                                             </td>
                                                             <td
-                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D;">
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border: 1px solid #1C1C1D;">
                                                                 Penerima
                                                             </td>
                                                         </tr>
@@ -731,7 +725,7 @@
                                                                 id="viewer_jumlah_penerimaan">
                                                                 -
                                                             </td>
-                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D;"
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border: 1px solid #1C1C1D;"
                                                                 id="viewer_nama_penerima">
                                                                 -
                                                             </td>
@@ -758,9 +752,8 @@
                                                 <div id="viewer_bukti_penerimaan_area" style="display: none;">
                                                     <div
                                                         style="border: 1px solid #ddd; border-radius: 8px; padding: 10px; background-color: #fff; text-align: center;">
-                                                        <img id="viewer_bukti_penerimaan_img"
-                                                            style="max-width: 100%; max-height: 400px; border-radius: 8px; cursor: pointer;"
-                                                            onclick="window.open(this.src, '_blank')" />
+                                                        <img id="viewer_bukti_penerimaan_img" class="photo-browser-link"
+                                                            style="max-width: 100%; max-height: 400px; border-radius: 8px; cursor: pointer;" />
                                                     </div>
                                                     <!-- <div style="margin-top: 10px;">
                                                         <a id="viewer_bukti_penerimaan_download"
@@ -931,7 +924,7 @@
                                                         </div>
 
                                                         <p style="color: #999; font-size: 12px; margin-top: 10px;">JPG,
-                                                            JPEG, PNG (Max 2MB)</p>
+                                                            JPEG, PNG (Max 10MB)</p>
                                                     </div>
 
                                                     <!-- Preview Area (sama seperti Upload Bukti Penerimaan) -->
@@ -1123,26 +1116,26 @@
                                                     <thead class="table-header-theme">
                                                         <tr>
                                                             <td
-                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;">
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border: 1px solid #1C1C1D;">
                                                                 SPK
                                                             </td>
                                                             <td
-                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;">
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border: 1px solid #1C1C1D;">
                                                                 Partner
                                                             </td>
                                                             <td
-                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;">
+                                                                style="padding: 12px; text-align: center; font-weight: bold; color: #1C1C1D; border: 1px solid #1C1C1D;">
                                                                 Jumlah Retur
                                                             </td>
                                                         </tr>
                                                     </thead>
                                                     <tbody class="table-body-theme">
                                                         <tr>
-                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;"
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border: 1px solid #1C1C1D;"
                                                                 id="penerimaan_retur_spk_code">-</td>
-                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;"
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border: 1px solid #1C1C1D;"
                                                                 id="penerimaan_retur_partner_name">-</td>
-                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border-bottom: 1px solid #B3E0FA;"
+                                                            <td style="padding: 12px; text-align: center; color: #1C1C1D; border: 1px solid #1C1C1D;"
                                                                 id="penerimaan_retur_jumlah_retur">-</td>
                                                         </tr>
                                                     </tbody>
@@ -1257,7 +1250,7 @@
                                                         </div>
 
                                                         <p style="color: #999; font-size: 12px; margin-top: 10px;">JPG,
-                                                            JPEG, PNG (Max 2MB)</p>
+                                                            JPEG, PNG (Max 10MB)</p>
                                                     </div>
 
                                                     <!-- Preview Area -->

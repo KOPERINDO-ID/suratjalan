@@ -50,6 +50,22 @@ function clearTempReceivingData() {
 }
 
 // =========================================
+// FORMAT HELPERS
+// =========================================
+
+/**
+ * Format input jumlah penerimaan saat user mengetik
+ */
+function formatJumlahPenerimaanInput(input) {
+    let value = input.value.replace(/\D/g, '');
+    if (value) {
+        input.value = formatNumber(value);
+    } else {
+        input.value = '';
+    }
+}
+
+// =========================================
 // RECEIVING TABLE FUNCTIONS
 // =========================================
 
@@ -222,7 +238,7 @@ function createReceivingRow(item, no) {
         <tr class="receiving-data-row" data-id="${item.id}">
             <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">${no}</td>
             <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">
-                ${formatDateIndonesia(item.tanggal_diterima)}
+                ${formatDateToDisplay(item.tanggal_diterima)}
             </td>
             <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">
                 ${formatNumber(item.jumlah_diterima)}
@@ -250,7 +266,7 @@ function createReceivingRow(item, no) {
  * Update receiving count
  */
 function updateReceivingCount(count) {
-    $('#receiving_count').text(count + ' data');
+    $('#receiving_count').text(count);
 }
 
 /**
@@ -303,12 +319,11 @@ function addReceivingRow() {
                     style="width: 100%; padding: 4px; border: 1px solid #ddd; border-radius: 4px;" />
             </td>
             <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">
-                <input type="number" 
+                <input type="text" 
                     id="input_jumlah_terima" 
                     placeholder="0"
-                    min="1"
-                    max="${remaining}"
                     value=""
+                    oninput="formatJumlahPenerimaanInput(this)"
                     style="width: 100%; padding: 4px; border: 1px solid #ddd; border-radius: 4px;" />
             </td>
             <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">
@@ -341,7 +356,8 @@ function addReceivingRow() {
 
     // Add input event listener to update remaining
     $('#input_jumlah_terima').on('input', function () {
-        const jumlahTerima = parseInt($(this).val()) || 0;
+        const jumlahTerimaDisplay = $(this).val();
+        const jumlahTerima = parseNumberFromDisplay(jumlahTerimaDisplay);
         const sisa = remaining - jumlahTerima;
         $('#input_sisa').val(formatNumber(Math.max(0, sisa)));
     });
@@ -362,7 +378,7 @@ function saveReceiving() {
 
     // Get input values
     const tanggalTerima = $('#input_tanggal_terima').val();
-    const jumlahTerima = parseInt($('#input_jumlah_terima').val()) || 0;
+    const jumlahTerima = parseNumberFromDisplay($('#input_jumlah_terima').val()) || 0;
 
     // Validation
     if (!tanggalTerima) {
@@ -392,7 +408,7 @@ function saveReceiving() {
 
     // Store temp data
     RECEIVING_STATE.tempReceivingData = {
-        tanggal_diterima: formatDateIndonesia(tanggalTerima),
+        tanggal_diterima: formatDate(tanggalTerima),
         jumlah_diterima: jumlahTerima,
         jumlah_belum_diterima: jumlahBelumTerima,
         nama_penerima: username
@@ -406,8 +422,9 @@ function saveReceiving() {
  * Open upload popup
  */
 function openUploadPopup() {
-    $('#upload_tanggal_display').text(RECEIVING_STATE.tempReceivingData.tanggal_diterima);
-    $('#upload_jumlah_display').text(RECEIVING_STATE.tempReceivingData.jumlah_diterima);
+    // Format display untuk tanggal dan jumlah
+    $('#upload_tanggal_display').text(formatDateToDisplay(RECEIVING_STATE.tempReceivingData.tanggal_diterima));
+    $('#upload_jumlah_display').text(formatNumber(RECEIVING_STATE.tempReceivingData.jumlah_diterima) + ' pcs');
     $('#upload_penerima_display').text(RECEIVING_STATE.tempReceivingData.nama_penerima);
 
     // Reset upload form
@@ -485,10 +502,10 @@ function handleBuktiPenerimaanFile(file) {
         return;
     }
 
-    // Validate file size (max 5MB)
-    const maxSize = 5 * 1024 * 1024;
+    // Validate file size (max 10MB)
+    const maxSize = 10 * 1024 * 1024;
     if (file.size > maxSize) {
-        showAlert('Ukuran file maksimal 5MB', 'Error');
+        showAlert('Ukuran file maksimal 10MB', 'Error');
         return;
     }
 
@@ -652,7 +669,7 @@ function viewBuktiPenerimaan(id_detail_pengiriman) {
     }
 
     // Populate viewer popup
-    $('#viewer_tanggal_penerimaan').text(formatDateShow(delivery.tanggal_diterima));
+    $('#viewer_tanggal_penerimaan').text(formatDateToDisplay(delivery.tanggal_diterima));
     $('#viewer_jumlah_penerimaan').text(formatNumber(delivery.jumlah_diterima) + ' pcs');
     $('#viewer_nama_penerima').text(delivery.nama_penerima || '-');
 
@@ -662,6 +679,11 @@ function viewBuktiPenerimaan(id_detail_pengiriman) {
         $('#viewer_bukti_penerimaan_download').attr('href', delivery.bukti_penerimaan_url);
         $('#viewer_bukti_penerimaan_area').show();
         $('#viewer_bukti_penerimaan_empty').hide();
+
+        // Setup Framework7 Photo Browser untuk zoom
+        $('#viewer_bukti_penerimaan_img').off('click').on('click', function () {
+            openPhotoBrowser(delivery.bukti_penerimaan_url, 0, 'Bukti Penerimaan');
+        });
     } else {
         $('#viewer_bukti_penerimaan_area').hide();
         $('#viewer_bukti_penerimaan_empty').show();
@@ -679,6 +701,11 @@ function viewBuktiPenerimaan(id_detail_pengiriman) {
         if (['jpg', 'jpeg', 'png'].includes(fileExt)) {
             $('#viewer_bukti_dokumen_img').attr('src', delivery.bukti_dokumen_penerimaan_url).show();
             $('#viewer_bukti_dokumen_icon').hide();
+
+            // Setup Framework7 Photo Browser untuk image
+            $('#viewer_bukti_dokumen_img').off('click').on('click', function () {
+                openPhotoBrowser(delivery.bukti_dokumen_penerimaan_url, 0, 'Bukti Dokumen');
+            });
         } else {
             $('#viewer_bukti_dokumen_img').hide();
             $('#viewer_bukti_dokumen_icon').show();

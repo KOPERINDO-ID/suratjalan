@@ -65,6 +65,34 @@ function openMaterialModal(id_partner_transaksi, partner_name = '') {
     }
 }
 
+// =========================================
+// FORMAT HELPERS
+// =========================================
+
+/**
+ * Format input jumlah material saat user mengetik
+ */
+function formatMaterialJumlahInput(input) {
+    let value = input.value.replace(/\D/g, '');
+    if (value) {
+        input.value = formatNumber(value);
+    } else {
+        input.value = '';
+    }
+}
+
+/**
+ * Format input harga material saat user mengetik
+ */
+function formatMaterialHargaInput(input) {
+    let value = input.value.replace(/\D/g, '');
+    if (value) {
+        input.value = formatNumber(value);
+    } else {
+        input.value = '';
+    }
+}
+
 /**
  * Load data material dari API
  */
@@ -196,7 +224,7 @@ function renderEmptyMaterialTable() {
  * Create material table row
  */
 function createMaterialRow(item, rowNumber) {
-    const tanggal = formatDateShow(item.dt_created);
+    const tanggal = formatDateToDisplay(item.dt_created);
     const materialName = item.nama || '-';
     const jumlah = formatNumber(item.jumlah || 0);
     const harga = formatNumber(item.harga || 0);
@@ -235,7 +263,7 @@ function createMaterialRow(item, rowNumber) {
  * Update material count
  */
 function updateMaterialCount(count) {
-    $('#material_count').text(count + ' data');
+    $('#material_count').text(count);
 }
 
 /**
@@ -304,21 +332,21 @@ function createEditableMaterialRow(item = null) {
                        style="width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px;">
             </td>
             <td style="padding: 8px; border: 1px solid #ddd; background-color: #FFF9E6;">
-                <input type="number" 
+                <input type="text" 
                        class="form-control" 
                        id="input_material_jumlah" 
                        placeholder="Jumlah"
                        value="${jumlah}"
-                       min="0"
+                       oninput="formatMaterialJumlahInput(this)"
                        style="width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px;">
             </td>
             <td style="padding: 8px; border: 1px solid #ddd; background-color: #FFF9E6;">
-                <input type="number" 
+                <input type="text" 
                        class="form-control" 
                        id="input_material_harga" 
                        placeholder="Harga"
                        value="${harga}"
-                       min="0"
+                       oninput="formatMaterialHargaInput(this)"
                        style="width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px;">
             </td>
             <td class="display-flex flex-direction-row justify-content-space-between align-items-center" style="padding: 8px; text-align: center; border: 1px solid #ddd; background-color: #FFF9E6;">
@@ -344,8 +372,12 @@ function saveMaterialRow() {
 
     // Get values
     const nama = $('#input_material_nama').val().trim();
-    const jumlah = parseInt($('#input_material_jumlah').val()) || 0;
-    const harga = parseInt($('#input_material_harga').val()) || 0;
+    const jumlahDisplay = $('#input_material_jumlah').val();
+    const hargaDisplay = $('#input_material_harga').val();
+
+    // Parse dari format display ke integer
+    const jumlah = parseNumberFromDisplay(jumlahDisplay);
+    const harga = parseNumberFromDisplay(hargaDisplay);
 
     // Validation
     if (!nama) {
@@ -687,7 +719,7 @@ function uploadMaterialPhoto() {
 }
 
 /**
- * View material photo
+ * View material photo dengan Framework7 Photo Browser
  */
 function viewMaterialPhoto(photoUrl) {
 
@@ -698,18 +730,8 @@ function viewMaterialPhoto(photoUrl) {
 
     const url = BASE_API.slice(0, -3) + photoUrl;
 
-    // ✅ URL sudah lengkap dari backend, tidak perlu concat lagi
-    $('#photo_viewer_image').attr('src', url);
-
-    // Set download link
-    $('#photo_download_link').attr('href', url);
-
-    // Open popup
-    if (typeof app !== 'undefined' && app.popup) {
-        app.popup.open('.popup-photo-viewer');
-    } else {
-        window.open(url, '_blank');
-    }
+    // Gunakan helper function dari utils.js
+    openPhotoBrowser(url, 0, 'Foto Bukti Material');
 }
 /**
  * Refresh material data

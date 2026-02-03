@@ -51,79 +51,10 @@ function resetPenerimaanReturState() {
 }
 
 // =========================================
-// FORMAT HELPERS (PENERIMAAN RETUR)
+// FORMAT HELPERS
 // =========================================
-
-/**
- * Format angka untuk display dengan separator ribuan (1.234.567)
- */
-function formatNumberToDisplay(num) {
-    if (!num && num !== 0) return '';
-    let cleanNum = num.toString().replace(/\D/g, '');
-    return cleanNum.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
-
-/**
- * Parse angka dari format display (1.234.567) ke angka biasa
- */
-function parseNumberFromDisplay(displayNum) {
-    if (!displayNum) return 0;
-    let cleanNum = displayNum.toString().replace(/\./g, '');
-    return parseInt(cleanNum, 10) || 0;
-}
-
-/**
- * Format tanggal ke format display DD-MMM-YY (24-Des-25)
- */
-function formatDateToDisplay(dateString) {
-    if (!dateString) return '';
-
-    const monthNames = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-        'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
-    ];
-
-    let date = new Date(dateString);
-    let day = ('0' + date.getDate()).slice(-2);
-    let month = monthNames[date.getMonth()];
-    let year = date.getFullYear().toString().slice(-2);
-
-    return `${day}-${month}-${year}`;
-}
-
-/**
- * Parse tanggal dari format display DD-MMM-YY ke YYYY-MM-DD
- */
-function parseDateFromDisplay(displayDate) {
-    if (!displayDate) return '';
-
-    const monthNames = {
-        'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'Mei': 4, 'Jun': 5,
-        'Jul': 6, 'Agu': 7, 'Sep': 8, 'Okt': 9, 'Nov': 10, 'Des': 11
-    };
-
-    try {
-        const parts = displayDate.split('-');
-        if (parts.length !== 3) return '';
-
-        const day = parseInt(parts[0], 10);
-        const monthIndex = monthNames[parts[1]];
-        const year = parseInt('20' + parts[2], 10);
-
-        if (monthIndex === undefined) return '';
-
-        const date = new Date(year, monthIndex, day);
-
-        const yyyy = date.getFullYear();
-        const mm = ('0' + (date.getMonth() + 1)).slice(-2);
-        const dd = ('0' + date.getDate()).slice(-2);
-
-        return `${yyyy}-${mm}-${dd}`;
-    } catch (error) {
-        console.error('Error parsing date:', error);
-        return '';
-    }
-}
+// NOTE: formatNumber, parseNumberFromDisplay, formatDateToDisplay, parseDateFromDisplay
+// sudah ada di utils.js - tidak perlu duplikat di sini
 
 /**
  * Format input jumlah penerimaan retur saat user mengetik
@@ -131,7 +62,7 @@ function parseDateFromDisplay(displayDate) {
 function formatJumlahPenerimaanReturInput(input) {
     let value = input.value.replace(/\D/g, '');
     if (value) {
-        input.value = formatNumberToDisplay(value);
+        input.value = formatNumber(value);
     } else {
         input.value = '';
     }
@@ -169,7 +100,7 @@ function openDatePickerPenerimaanRetur() {
 function formatJumlahReturInput(input) {
     let value = input.value.replace(/\D/g, '');
     if (value) {
-        input.value = formatNumberToDisplay(value);
+        input.value = formatNumber(value);
     } else {
         input.value = '';
     }
@@ -198,11 +129,8 @@ function openReturModal(idDetailPengiriman, jumlahDiterima, jumlahReturAktif) {
     // Reset form
     resetReturForm();
 
-    // Update label max dengan format display
-    $('#retur-max-label').text('(maks: ' + formatNumberToDisplay(RETUR_STATE.maxRetur) + ')');
-
     // Update header badge dengan format display
-    $('#retur-jumlah-diterima').text(formatNumberToDisplay(RETUR_STATE.jumlahDiterima) + ' pcs');
+    $('#retur-jumlah-diterima').text(formatNumber(RETUR_STATE.jumlahDiterima) + ' pcs');
 
     // Salin header penerimaan ke header retur (SPK & partner name sudah ada di RECEIVING_STATE)
     if (typeof RECEIVING_STATE !== 'undefined') {
@@ -295,10 +223,10 @@ function loadDetailReturForPenerimaan(idDetailPengiriman) {
                     $('#penerimaan_retur_spk_code').text(RECEIVING_STATE.currentSpkCode || '-');
                     $('#penerimaan_retur_partner_name').text(RECEIVING_STATE.currentPartnerName || '-');
                 }
-                $('#penerimaan_retur_jumlah_retur').text(formatNumberToDisplay(PENERIMAAN_RETUR_STATE.jumlahRetur) + ' pcs');
+                $('#penerimaan_retur_jumlah_retur').text(formatNumber(PENERIMAAN_RETUR_STATE.jumlahRetur) + ' pcs');
 
                 // Update label max dengan format display
-                $('#penerimaan_retur_max_label').text('(maks: ' + formatNumberToDisplay(PENERIMAAN_RETUR_STATE.maxPenerimaan) + ')');
+                $('#penerimaan_retur_max_label').text('(maks: ' + formatNumber(PENERIMAAN_RETUR_STATE.maxPenerimaan) + ')');
 
                 // Set tanggal hari ini dalam format display DD-MMM-YY
                 $('#input_tanggal_penerimaan_retur').val(formatDateToDisplay(new Date()));
@@ -423,11 +351,11 @@ function viewReturDetail(idDetailPengiriman) {
     }
 
     // Badge jumlah retur
-    $('#viewer_retur_jumlah_badge').text(formatNumberToDisplay(item.jumlah_retur) + ' pcs');
+    $('#viewer_retur_jumlah_badge').text(formatNumber(item.jumlah_retur) + ' pcs');
 
     // Isi tabel detail retur
     $('#viewer_retur_tanggal').text(formatDateToDisplay(item.tanggal_retur) || '-');
-    $('#viewer_retur_jumlah').text(formatNumberToDisplay(item.jumlah_retur) + ' pcs');
+    $('#viewer_retur_jumlah').text(formatNumber(item.jumlah_retur) + ' pcs');
     $('#viewer_retur_keterangan').text(item.keterangan_retur || '-');
 
     // Foto Bukti Retur (support multiple field names)
@@ -736,7 +664,7 @@ function submitRetur() {
     }
 
     if (jumlah > RETUR_STATE.maxRetur) {
-        showAlert('Jumlah retur tidak boleh lebih dari sisa (' + formatNumberToDisplay(RETUR_STATE.maxRetur) + ' pcs)', 'Warning');
+        showAlert('Jumlah retur tidak boleh lebih dari sisa (' + formatNumber(RETUR_STATE.maxRetur) + ' pcs)', 'Warning');
         return;
     }
 
@@ -835,7 +763,7 @@ function submitPenerimaanRetur() {
     }
 
     if (jumlahDiterima > PENERIMAAN_RETUR_STATE.maxPenerimaan) {
-        showAlert('Jumlah diterima tidak boleh lebih dari sisa (' + formatNumberToDisplay(PENERIMAAN_RETUR_STATE.maxPenerimaan) + ' pcs)', 'Warning');
+        showAlert('Jumlah diterima tidak boleh lebih dari sisa (' + formatNumber(PENERIMAAN_RETUR_STATE.maxPenerimaan) + ' pcs)', 'Warning');
         return;
     }
 
